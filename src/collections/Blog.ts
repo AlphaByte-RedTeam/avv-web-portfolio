@@ -54,10 +54,10 @@ export const Blog: CollectionConfig = {
       },
     },
     {
-      name: 'coverImage',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'Cover Image',
+      name: 'description',
+      type: 'textarea',
+      label: 'Short Summary',
+      required: true,
     },
     {
       name: 'content',
@@ -71,7 +71,7 @@ export const Blog: CollectionConfig = {
       label: 'Blog Date',
       admin: {
         date: {
-          pickerAppearance: 'day, month, year',
+          pickerAppearance: 'dayOnly',
           displayFormat: 'MMM d, yyyy',
         },
       },

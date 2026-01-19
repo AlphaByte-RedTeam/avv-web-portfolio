@@ -1,5 +1,4 @@
 import { ArrowLeft } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
@@ -39,7 +38,7 @@ export async function generateMetadata({ params }: Props) {
 
   return {
     title: `${post.title} | Blog`,
-    description: post.title,
+    description: post.description || post.title,
   }
 }
 
@@ -99,20 +98,13 @@ export default async function BlogPostPage({ params }: Props) {
               })}
             </p>
           </div>
-        </header>
 
-        {post.coverImage && typeof post.coverImage === 'object' && post.coverImage.url && (
-          <div className="aspect-video w-full overflow-hidden rounded-lg bg-secondary/30">
-            <Image
-              src={post.coverImage.url}
-              alt={post.title}
-              width={1200}
-              height={675}
-              className="w-full h-full object-cover"
-              priority
-            />
-          </div>
-        )}
+          {post.description && (
+            <p className="text-xl text-muted-foreground font-light leading-relaxed max-w-2xl mx-auto italic">
+              {post.description}
+            </p>
+          )}
+        </header>
 
         <div className="prose prose-neutral dark:prose-invert max-w-none leading-loose text-muted-foreground">
           <RichText content={post.content} />

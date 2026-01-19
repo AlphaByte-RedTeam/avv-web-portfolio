@@ -2,20 +2,48 @@ import { getPayload } from 'payload'
 import React from 'react'
 import config from '@/payload.config'
 import Link from 'next/link'
-import Image from 'next/image'
 import { ArrowLeft } from 'lucide-react'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { AutoRefresh } from '@/components/AutoRefresh'
+import { BlogFilters } from './BlogFilters'
 
-export default async function BlogPage() {
+type Props = {
+  searchParams: Promise<{
+    q?: string
+    category?: string
+  }>
+}
+
+export default async function BlogPage({ searchParams }: Props) {
+  const { q, category } = await searchParams
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
+
+  const query: any = {
+    and: [],
+  }
+
+  if (q) {
+    query.and.push({
+      title: {
+        like: q,
+      },
+    })
+  }
+
+  if (category && category !== 'all') {
+    query.and.push({
+      category: {
+        equals: category,
+      },
+    })
+  }
 
   const blogData = await payload.find({
     collection: 'blog',
     sort: '-date',
+    where: query.and.length > 0 ? query : undefined,
   })
 
   const posts = blogData.docs
@@ -34,18 +62,26 @@ export default async function BlogPage() {
           <Link href="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
           </Link>
-          <h1 className="text-4xl md:text-5xl font-light tracking-tight text-foreground">
-            Blog
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl">
-            Thoughts, tutorials, and insights on software development and design.
-          </p>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="space-y-2">
+                <h1 className="text-4xl md:text-5xl font-light tracking-tight text-foreground">
+                    Blog
+                </h1>
+                <p className="text-lg text-muted-foreground max-w-2xl">
+                    Thoughts, tutorials, and insights.
+                </p>
+            </div>
+            
+          </div>
+          <BlogFilters />
         </header>
 
         {/* Blog Grid */}
         <div className="grid gap-10 md:grid-cols-2">
             {posts.length === 0 ? (
-                <p className="text-muted-foreground">No posts found.</p>
+                <div className="col-span-2 text-center py-12 text-muted-foreground bg-secondary/10 rounded-lg">
+                    <p>No posts found matching your criteria.</p>
+                </div>
             ) : (
                 posts.map((post) => (
                     <Link 
@@ -53,23 +89,7 @@ export default async function BlogPage() {
                         href={`/blog/${post.slug}`}
                         className="group block space-y-4"
                     >
-                    <div className="aspect-[16/9] w-full overflow-hidden rounded-md bg-secondary/30">
-                        {post.coverImage && typeof post.coverImage === 'object' && post.coverImage.url ? (
-                        <Image
-                            src={post.coverImage.url}
-                            alt={post.title}
-                            width={600}
-                            height={400}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                        ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-secondary/50 text-muted-foreground">
-                            No Image
-                        </div>
-                        )}
-                    </div>
-
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                         <div className="flex items-center justify-between text-xs text-muted-foreground">
                             <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                             {post.category && (
@@ -81,6 +101,11 @@ export default async function BlogPage() {
                         <h2 className="text-xl font-medium text-foreground group-hover:text-primary transition-colors">
                             {post.title}
                         </h2>
+                        {post.description && (
+                          <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+                            {post.description}
+                          </p>
+                        )}
                     </div>
                     </Link>
                 ))

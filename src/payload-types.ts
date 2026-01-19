@@ -409,7 +409,7 @@ export interface Blog {
   id: number;
   title: string;
   slug: string;
-  coverImage?: (number | null) | Media;
+  description: string;
   content?: {
     root: {
       type: string;
@@ -710,7 +710,7 @@ export interface LanguagesSelect<T extends boolean = true> {
 export interface BlogSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  coverImage?: T;
+  description?: T;
   content?: T;
   date?: T;
   category?: T;
