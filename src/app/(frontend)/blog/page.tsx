@@ -90,12 +90,19 @@ export default async function BlogPage({ searchParams }: Props) {
                         className="group block space-y-4"
                     >
                     <div className="space-y-3">
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                            <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-                            {post.category && (
-                                <Badge variant="secondary" className="uppercase tracking-wider text-[10px]">
-                                    {post.category}
-                                </Badge>
+                        <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+                            <div className="flex items-center justify-between">
+                                <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                                {post.category && (
+                                    <Badge variant="secondary" className="uppercase tracking-wider text-[10px]">
+                                        {post.category}
+                                    </Badge>
+                                )}
+                            </div>
+                            {post.lastUpdated && new Date(post.lastUpdated) > new Date(post.date) && (
+                              <span className="text-[10px] opacity-70">
+                                Updated: {new Date(post.lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                              </span>
                             )}
                         </div>
                         <h2 className="text-xl font-medium text-foreground group-hover:text-primary transition-colors">

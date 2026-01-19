@@ -90,13 +90,24 @@ export default async function BlogPostPage({ params }: Props) {
             <h1 className="text-3xl md:text-5xl font-medium tracking-tight text-foreground leading-tight">
               {post.title}
             </h1>
-            <p className="text-sm text-muted-foreground">
-              {new Date(post.date).toLocaleDateString('en-US', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric',
-              })}
-            </p>
+            <div className="flex flex-col items-center gap-1 text-sm text-muted-foreground">
+              <span>
+                {new Date(post.date).toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
+              </span>
+              {post.lastUpdated && new Date(post.lastUpdated) > new Date(post.date) && (
+                <span className="text-xs opacity-70 italic">
+                  Last updated: {new Date(post.lastUpdated).toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </span>
+              )}
+            </div>
           </div>
 
           {post.description && (
