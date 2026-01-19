@@ -2,6 +2,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 import config from '@/payload.config'
 import { CV } from '@/components/CV'
+import { AutoRefresh } from '@/components/AutoRefresh'
 import './globals.css'
 
 export default async function HomePage() {
@@ -62,6 +63,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <AutoRefresh intervalMs={5000} />
       <CV 
         profile={profile}
         workExperience={workExperience}
