@@ -63,7 +63,7 @@ const serialize = (children: any[]): React.ReactNode[] => {
     }
     
     if (node.type === 'heading') {
-        const Tag = node.tag as keyof JSX.IntrinsicElements
+        const Tag = node.tag as keyof React.JSX.IntrinsicElements
         const sizes = {
           h1: "text-3xl font-bold mb-4",
           h2: "text-2xl font-semibold mb-3",
