@@ -10,6 +10,7 @@ import {
   Github,
   Globe,
   GraduationCap,
+  Instagram,
   Languages as LanguagesIcon,
   Linkedin,
   Mail,
@@ -97,6 +98,7 @@ export const CV: React.FC<Props> = ({
     const p = platform.toLowerCase()
     if (p.includes('github')) return <Github className="h-3.5 w-3.5" />
     if (p.includes('linkedin')) return <Linkedin className="h-3.5 w-3.5" />
+    if (p.includes('instagram')) return <Instagram className="h-3.5 w-3.5" />
     if (p.includes('mail') || p.includes('email')) return <Mail className="h-3.5 w-3.5" />
     return <Globe className="h-3.5 w-3.5" />
   }
@@ -163,7 +165,7 @@ export const CV: React.FC<Props> = ({
               </div>
             )}
             {socialLinks.map((link) => (
-              <a
+              <Link
                 key={link.id}
                 href={link.url}
                 target="_blank"
@@ -172,7 +174,7 @@ export const CV: React.FC<Props> = ({
               >
                 {getSocialIcon(link.platform)}
                 <span>{link.label || link.platform}</span>
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -184,9 +186,9 @@ export const CV: React.FC<Props> = ({
                 className="h-8 text-xs font-normal gap-2 rounded-full px-4"
                 asChild
               >
-                <a href={profile.resume.url} target="_blank" rel="noopener noreferrer">
+                <Link href={profile.resume.url} target="_blank" rel="noopener noreferrer">
                   <Download className="h-3.5 w-3.5" /> Resume
-                </a>
+                </Link>
               </Button>
             </div>
           )}
@@ -285,17 +287,11 @@ export const CV: React.FC<Props> = ({
                       </h3>
                       <div className="flex gap-2 shrink-0">
                         {project.repoUrl && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 rounded-full text-muted-foreground hover:text-primary"
-                            asChild
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-                              <Github className="h-4 w-4" />
-                              <span className="sr-only">Code</span>
-                            </a>
+                          <Button variant="outline" asChild onClick={(e) => e.stopPropagation()}>
+                            <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
+                              <Github className="h-4 w-4" /> View Code
+                              <span className="sr-only">View Code</span>
+                            </Link>
                           </Button>
                         )}
                         {project.demoUrl && (
@@ -306,10 +302,10 @@ export const CV: React.FC<Props> = ({
                             asChild
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
+                            <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
                               <ExternalLink className="h-4 w-4" />
                               <span className="sr-only">Demo</span>
-                            </a>
+                            </Link>
                           </Button>
                         )}
                       </div>
@@ -392,14 +388,14 @@ export const CV: React.FC<Props> = ({
                     </div>
                     <div className="text-sm text-primary">{org.role}</div>
                     {org.website && (
-                      <a
+                      <Link
                         href={org.website}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
                       >
                         Visit Website <ExternalLink className="h-2.5 w-2.5" />
-                      </a>
+                      </Link>
                     )}
                   </div>
                 ))}
@@ -559,16 +555,16 @@ export const CV: React.FC<Props> = ({
               <div className="flex gap-4 pt-6 border-t border-border/40">
                 {selectedProject?.repoUrl && (
                   <Button variant="outline" size="sm" className="h-9 gap-2 px-6" asChild>
-                    <a href={selectedProject.repoUrl} target="_blank" rel="noopener noreferrer">
-                      <Github className="h-4 w-4" /> Code
-                    </a>
+                    <Link href={selectedProject.repoUrl} target="_blank" rel="noopener noreferrer">
+                      <Github className="h-4 w-4" /> View Code
+                    </Link>
                   </Button>
                 )}
                 {selectedProject?.demoUrl && (
                   <Button variant="default" size="sm" className="h-9 gap-2 px-6" asChild>
-                    <a href={selectedProject.demoUrl} target="_blank" rel="noopener noreferrer">
+                    <Link href={selectedProject.demoUrl} target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="h-4 w-4" /> Live Demo
-                    </a>
+                    </Link>
                   </Button>
                 )}
               </div>
