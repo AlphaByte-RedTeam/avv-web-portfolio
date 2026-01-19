@@ -54,7 +54,7 @@ export default async function BlogPage() {
                         className="group block space-y-4"
                     >
                     <div className="aspect-[16/9] w-full overflow-hidden rounded-md bg-secondary/30">
-                        {post.coverImage && typeof post.coverImage !== 'string' && post.coverImage.url ? (
+                        {post.coverImage && typeof post.coverImage === 'object' && post.coverImage.url ? (
                         <Image
                             src={post.coverImage.url}
                             alt={post.title}
