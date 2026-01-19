@@ -25,7 +25,7 @@ export const Educations: CollectionConfig = {
       type: 'date',
       admin: {
         date: {
-          pickerAppearance: 'yearOnly',
+          pickerAppearance: 'monthOnly',
           displayFormat: 'yyyy',
         },
       },
@@ -35,7 +35,7 @@ export const Educations: CollectionConfig = {
       type: 'date',
       admin: {
         date: {
-          pickerAppearance: 'yearOnly',
+          pickerAppearance: 'monthOnly',
           displayFormat: 'yyyy',
         },
         description: 'Leave blank if currently studying',
