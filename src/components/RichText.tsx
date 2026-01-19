@@ -79,6 +79,24 @@ const serialize = (children: any[]): React.ReactNode[] => {
         )
     }
 
+    if (node.type === 'quote') {
+      return (
+        <blockquote key={index} className="border-l-4 border-primary pl-4 italic text-muted-foreground my-4">
+          {serialize(node.children)}
+        </blockquote>
+      )
+    }
+
+    if (node.type === 'code') {
+      return (
+        <pre key={index} className="bg-secondary/50 p-4 rounded-md overflow-x-auto my-4">
+          <code className="text-sm font-mono text-foreground">
+            {serialize(node.children)}
+          </code>
+        </pre>
+      )
+    }
+
     if (node.type === 'paragraph') {
         return (
             <p key={index} className="mb-4 last:mb-0 leading-relaxed">

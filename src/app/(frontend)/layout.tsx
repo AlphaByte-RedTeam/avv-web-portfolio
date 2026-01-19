@@ -1,10 +1,17 @@
 import type { Metadata } from 'next'
-import { Manrope } from 'next/font/google'
+import { IBM_Plex_Mono, Manrope } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from 'next-themes'
 
 const manrope = Manrope({
   variable: '--font-manrope',
+  subsets: ['latin'],
+  display: 'swap',
+})
+
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-ibm-plex-mono',
   subsets: ['latin'],
   display: 'swap',
 })
@@ -21,7 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${manrope.variable} antialiased bg-background text-foreground`}>
+      <body
+        className={`${manrope.variable} ${ibmPlexMono.variable} antialiased bg-background text-foreground`}
+      >
         <ThemeProvider
           disableTransitionOnChange
           enableSystem

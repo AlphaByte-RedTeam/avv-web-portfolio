@@ -3,17 +3,24 @@
 import {
   Briefcase,
   Building2,
+  Calendar,
+  Check,
   Code,
+  Copy,
   Database,
   Download,
   ExternalLink,
   Folder,
+  Github,
   Globe,
   GraduationCap,
+  Instagram,
   Languages as LanguagesIcon,
   Layers,
+  Linkedin,
   Mail,
   MapPin,
+  Share2,
   Trophy,
   User,
 } from 'lucide-react'
@@ -79,6 +86,29 @@ export const CV: React.FC<Props> = ({
   technologies = [],
 }) => {
   const [selectedProject, setSelectedProject] = useState<any>(null)
+  const [isCopied, setIsCopied] = useState(false)
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href)
+    setIsCopied(true)
+    setTimeout(() => setIsCopied(false), 2000)
+  }
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: profile?.name || 'Portfolio',
+          text: profile?.title || 'Check out this portfolio',
+          url: window.location.href,
+        })
+      } catch (err) {
+        console.error('Error sharing:', err)
+      }
+    } else {
+      handleCopyLink()
+    }
+  }
 
   const programmingLanguages = technologies
     .filter((t) => t.category === 'programming_language')
@@ -124,8 +154,26 @@ export const CV: React.FC<Props> = ({
       variants={containerVariants}
       className="max-w-5xl mx-auto py-20 px-6 sm:px-12 font-sans text-sm md:text-base leading-relaxed relative overflow-x-hidden"
     >
-      {/* Absolute Theme Toggle */}
-      <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-4 z-10">
+      {/* Absolute Theme Toggle & Actions */}
+      <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-2 z-10">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-9 w-9 rounded-full"
+          onClick={handleCopyLink}
+          title="Copy Link"
+        >
+          {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-9 w-9 rounded-full"
+          onClick={handleShare}
+          title="Share"
+        >
+          <Share2 className="h-4 w-4" />
+        </Button>
         <ThemeToggle />
         <Button variant="ghost" size="sm" asChild>
           <Link href="/blog">Blog</Link>
@@ -647,11 +695,16 @@ export const CV: React.FC<Props> = ({
 
       <motion.footer
         variants={itemVariants}
-        className="mt-32 pt-8 border-t border-border/40 text-center"
+        className="mt-32 pt-8 border-t border-border/40 text-center space-y-2"
       >
         <p className="text-xs text-muted-foreground/60 tracking-wide">
           © {new Date().getFullYear()} {profile?.name} • Built with minimal principles
         </p>
+        {profile?.updatedAt && (
+          <p className="text-[10px] text-muted-foreground/40 uppercase tracking-widest">
+            Last updated: {new Date(profile.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+          </p>
+        )}
       </motion.footer>
     </motion.div>
   )
