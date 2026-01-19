@@ -1,59 +1,77 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
 import { getPayload } from 'payload'
 import React from 'react'
-import { fileURLToPath } from 'url'
-
 import config from '@/payload.config'
-import './styles.css'
+import { CV } from '@/components/CV'
+import './globals.css'
 
 export default async function HomePage() {
-  const headers = await getHeaders()
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  // Fetch data from Payload
+  const [
+    profileData,
+    workExperienceData,
+    educationsData,
+    accomplishmentsData,
+    projectsData,
+    socialLinksData,
+    organizationsData,
+    languagesData,
+  ] = await Promise.all([
+    payload.find({
+      collection: 'profile',
+      limit: 1,
+    }),
+    payload.find({
+      collection: 'work-experience',
+      sort: '-startDate',
+    }),
+    payload.find({
+      collection: 'educations',
+      sort: '-startDate',
+    }),
+    payload.find({
+      collection: 'accomplishments',
+      sort: '-date',
+    }),
+    payload.find({
+      collection: 'projects',
+      sort: '-date',
+    }),
+    payload.find({
+      collection: 'social-links',
+    }),
+    payload.find({
+      collection: 'organizations',
+      sort: '-startDate',
+    }),
+    payload.find({
+      collection: 'languages',
+    }),
+  ])
+
+  const profile = profileData.docs[0] || null
+  const workExperience = workExperienceData.docs
+  const educations = educationsData.docs
+  const accomplishments = accomplishmentsData.docs
+  const projects = projectsData.docs
+  const socialLinks = socialLinksData.docs
+  const organizations = organizationsData.docs
+  const languages = languagesData.docs
 
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
-        </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
+    <div className="min-h-screen bg-background text-foreground">
+      <CV 
+        profile={profile}
+        workExperience={workExperience}
+        educations={educations}
+        accomplishments={accomplishments}
+        projects={projects}
+        socialLinks={socialLinks}
+        organizations={organizations}
+        languages={languages}
+      />
     </div>
   )
 }

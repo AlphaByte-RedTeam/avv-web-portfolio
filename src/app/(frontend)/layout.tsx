@@ -1,18 +1,35 @@
-import React from 'react'
-import './styles.css'
+import type { Metadata } from 'next'
+import { Manrope } from 'next/font/google'
+import './globals.css'
+import { ThemeProvider } from 'next-themes'
 
-export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+const manrope = Manrope({
+  variable: '--font-manrope',
+  subsets: ['latin'],
+  display: 'swap',
+})
+
+export const metadata: Metadata = {
+  title: 'Portfolio',
+  description: 'Andrew V. Personal Portfolio and Resume',
 }
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
-
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
   return (
     <html lang="en">
-      <body>
-        <main>{children}</main>
+      <body className={`${manrope.variable} antialiased bg-background text-foreground`}>
+        <ThemeProvider
+          disableTransitionOnChange
+          enableSystem
+          attribute="class"
+          defaultTheme="system"
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
