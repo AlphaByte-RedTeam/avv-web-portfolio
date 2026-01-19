@@ -3,24 +3,26 @@
 import {
   Briefcase,
   Building2,
-  Calendar,
   Code,
   Database,
   Download,
   ExternalLink,
   Folder,
-  Github,
   Globe,
   GraduationCap,
-  Instagram,
   Languages as LanguagesIcon,
   Layers,
-  Linkedin,
   Mail,
   MapPin,
   Trophy,
   User,
 } from 'lucide-react'
+import {
+  IconBrandGithub,
+  IconBrandInstagram,
+  IconBrandLinkedin,
+  IconBrandTiktok,
+} from '@tabler/icons-react'
 import * as motion from 'motion/react-client'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -30,14 +32,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 
 type Props = {
@@ -107,9 +102,10 @@ export const CV: React.FC<Props> = ({
 
   const getSocialIcon = (platform: string) => {
     const p = platform.toLowerCase()
-    if (p.includes('github')) return <Github className="h-3.5 w-3.5" />
-    if (p.includes('linkedin')) return <Linkedin className="h-3.5 w-3.5" />
-    if (p.includes('instagram')) return <Instagram className="h-3.5 w-3.5" />
+    if (p.includes('github')) return <IconBrandGithub className="h-3.5 w-3.5" />
+    if (p.includes('linkedin')) return <IconBrandLinkedin className="h-3.5 w-3.5" />
+    if (p.includes('instagram')) return <IconBrandInstagram className="h-3.5 w-3.5" />
+    if (p.includes('tiktok')) return <IconBrandTiktok className="h-3.5 w-3.5" />
     if (p.includes('mail') || p.includes('email')) return <Mail className="h-3.5 w-3.5" />
     return <Globe className="h-3.5 w-3.5" />
   }
@@ -126,13 +122,13 @@ export const CV: React.FC<Props> = ({
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="max-w-5xl mx-auto py-20 px-6 sm:px-12 font-sans text-sm md:text-base leading-relaxed"
+      className="max-w-5xl mx-auto py-20 px-6 sm:px-12 font-sans text-sm md:text-base leading-relaxed relative overflow-x-hidden"
     >
       {/* Absolute Theme Toggle */}
-      <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-4">
+      <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-4 z-10">
         <ThemeToggle />
         <Button variant="ghost" size="sm" asChild>
-            <Link href="/blog">Blog</Link>
+          <Link href="/blog">Blog</Link>
         </Button>
       </div>
 
@@ -303,7 +299,7 @@ export const CV: React.FC<Props> = ({
                         {project.repoUrl && (
                           <Button variant="outline" asChild onClick={(e) => e.stopPropagation()}>
                             <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-                              <Github className="h-4 w-4" /> View Code
+                              <IconBrandGithub className="h-4 w-4" /> View Code
                               <span className="sr-only">View Code</span>
                             </Link>
                           </Button>
@@ -517,7 +513,9 @@ export const CV: React.FC<Props> = ({
                 {programmingLanguages.map((tech, index) => (
                   <React.Fragment key={tech.id}>
                     <div className="py-2 text-sm text-foreground">{tech.name}</div>
-                    {index < programmingLanguages.length - 1 && <Separator className="bg-border/40" />}
+                    {index < programmingLanguages.length - 1 && (
+                      <Separator className="bg-border/40" />
+                    )}
                   </React.Fragment>
                 ))}
               </div>
@@ -630,7 +628,7 @@ export const CV: React.FC<Props> = ({
                 {selectedProject?.repoUrl && (
                   <Button variant="outline" size="sm" className="h-9 gap-2 px-6" asChild>
                     <Link href={selectedProject.repoUrl} target="_blank" rel="noopener noreferrer">
-                      <Github className="h-4 w-4" /> View Code
+                      <IconBrandGithub className="h-4 w-4" /> View Code
                     </Link>
                   </Button>
                 )}
