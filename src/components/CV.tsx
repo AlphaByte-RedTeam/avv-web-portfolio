@@ -118,8 +118,11 @@ export const CV: React.FC<Props> = ({
       className="max-w-5xl mx-auto py-20 px-6 sm:px-12 font-sans text-sm md:text-base leading-relaxed"
     >
       {/* Absolute Theme Toggle */}
-      <div className="absolute top-6 right-6 md:top-12 md:right-12">
+      <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-4">
         <ThemeToggle />
+        <Button variant="ghost" size="sm" asChild>
+            <Link href="/blog">Blog</Link>
+        </Button>
       </div>
 
       {/* Header / Hero Section */}

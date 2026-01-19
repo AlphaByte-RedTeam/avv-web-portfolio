@@ -77,6 +77,7 @@ export interface Config {
     projects: Project;
     organizations: Organization;
     languages: Language;
+    blog: Blog;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -94,6 +95,7 @@ export interface Config {
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     organizations: OrganizationsSelect<false> | OrganizationsSelect<true>;
     languages: LanguagesSelect<false> | LanguagesSelect<true>;
+    blog: BlogSelect<false> | BlogSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -401,6 +403,35 @@ export interface Language {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog".
+ */
+export interface Blog {
+  id: number;
+  title: string;
+  slug: string;
+  coverImage?: (number | null) | Media;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  date: string;
+  category?: ('technology' | 'personal' | 'tutorial' | 'review' | 'other') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -462,6 +493,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'languages';
         value: number | Language;
+      } | null)
+    | ({
+        relationTo: 'blog';
+        value: number | Blog;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -665,6 +700,20 @@ export interface OrganizationsSelect<T extends boolean = true> {
 export interface LanguagesSelect<T extends boolean = true> {
   language?: T;
   proficiency?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog_select".
+ */
+export interface BlogSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  coverImage?: T;
+  content?: T;
+  date?: T;
+  category?: T;
   updatedAt?: T;
   createdAt?: T;
 }

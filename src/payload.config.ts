@@ -6,6 +6,7 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 import { Accomplishments } from './collections/Accomplishments'
+import { Blog } from './collections/Blog'
 import { Educations } from './collections/Educations'
 import { Languages } from './collections/Languages'
 import { Media } from './collections/Media'
@@ -37,6 +38,7 @@ export default buildConfig({
     Projects,
     Organizations,
     Languages,
+    Blog,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
