@@ -410,6 +410,7 @@ export interface Blog {
   title: string;
   slug: string;
   description: string;
+  lastUpdated?: string | null;
   content?: {
     root: {
       type: string;
@@ -711,6 +712,7 @@ export interface BlogSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   description?: T;
+  lastUpdated?: T;
   content?: T;
   date?: T;
   category?: T;

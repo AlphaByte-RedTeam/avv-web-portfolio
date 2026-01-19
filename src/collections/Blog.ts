@@ -33,6 +33,14 @@ export const Blog: CollectionConfig = {
   hooks: {
     afterChange: [revalidatePage],
     afterDelete: [revalidatePage],
+    beforeChange: [
+      ({ data }) => {
+        return {
+          ...data,
+          lastUpdated: new Date().toISOString(),
+        }
+      },
+    ],
   },
   fields: [
     {
@@ -58,6 +66,17 @@ export const Blog: CollectionConfig = {
       type: 'textarea',
       label: 'Short Summary',
       required: true,
+    },
+    {
+      name: 'lastUpdated',
+      type: 'date',
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+        date: {
+          displayFormat: 'MMM d, yyyy HH:mm',
+        },
+      },
     },
     {
       name: 'content',
