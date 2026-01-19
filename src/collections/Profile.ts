@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidatePage } from '../hooks/revalidatePage'
 
 export const Profile: CollectionConfig = {
   slug: 'profile',
@@ -7,6 +8,10 @@ export const Profile: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidatePage],
+    afterDelete: [revalidatePage],
   },
   fields: [
     {

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidatePage } from '../hooks/revalidatePage'
 
 export const WorkExperience: CollectionConfig = {
   slug: 'work-experience',
@@ -7,6 +8,10 @@ export const WorkExperience: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidatePage],
+    afterDelete: [revalidatePage],
   },
   fields: [
     {

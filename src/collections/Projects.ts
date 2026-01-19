@@ -1,4 +1,5 @@
 import type { CollectionConfig, FieldHook } from 'payload'
+import { revalidatePage } from '../hooks/revalidatePage'
 
 const format = (val: string): string =>
   val
@@ -28,6 +29,10 @@ export const Projects: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidatePage],
+    afterDelete: [revalidatePage],
   },
   fields: [
     {

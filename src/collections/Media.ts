@@ -1,9 +1,14 @@
 import type { CollectionConfig } from 'payload'
+import { revalidatePage } from '../hooks/revalidatePage'
 
 export const Media: CollectionConfig = {
   slug: 'media',
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidatePage],
+    afterDelete: [revalidatePage],
   },
   fields: [
     {
