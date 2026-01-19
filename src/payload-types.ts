@@ -77,6 +77,7 @@ export interface Config {
     projects: Project;
     organizations: Organization;
     languages: Language;
+    technologies: Technology;
     blog: Blog;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -95,6 +96,7 @@ export interface Config {
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     organizations: OrganizationsSelect<false> | OrganizationsSelect<true>;
     languages: LanguagesSelect<false> | LanguagesSelect<true>;
+    technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -403,6 +405,18 @@ export interface Language {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "technologies".
+ */
+export interface Technology {
+  id: number;
+  name: string;
+  category: 'programming_language' | 'framework' | 'database';
+  priority?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "blog".
  */
 export interface Blog {
@@ -494,6 +508,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'languages';
         value: number | Language;
+      } | null)
+    | ({
+        relationTo: 'technologies';
+        value: number | Technology;
       } | null)
     | ({
         relationTo: 'blog';
@@ -701,6 +719,17 @@ export interface OrganizationsSelect<T extends boolean = true> {
 export interface LanguagesSelect<T extends boolean = true> {
   language?: T;
   proficiency?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "technologies_select".
+ */
+export interface TechnologiesSelect<T extends boolean = true> {
+  name?: T;
+  category?: T;
+  priority?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -19,6 +19,7 @@ export default async function HomePage() {
     socialLinksData,
     organizationsData,
     languagesData,
+    technologiesData,
   ] = await Promise.all([
     payload.find({
       collection: 'profile',
@@ -50,6 +51,11 @@ export default async function HomePage() {
     payload.find({
       collection: 'languages',
     }),
+    payload.find({
+      collection: 'technologies',
+      sort: '-priority',
+      limit: 100,
+    }),
   ])
 
   const profile = profileData.docs[0] || null
@@ -60,6 +66,7 @@ export default async function HomePage() {
   const socialLinks = socialLinksData.docs
   const organizations = organizationsData.docs
   const languages = languagesData.docs
+  const technologies = technologiesData.docs
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -73,6 +80,7 @@ export default async function HomePage() {
         socialLinks={socialLinks}
         organizations={organizations}
         languages={languages}
+        technologies={technologies}
       />
     </div>
   )

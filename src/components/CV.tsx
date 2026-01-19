@@ -4,6 +4,8 @@ import {
   Briefcase,
   Building2,
   Calendar,
+  Code,
+  Database,
   Download,
   ExternalLink,
   Folder,
@@ -12,6 +14,7 @@ import {
   GraduationCap,
   Instagram,
   Languages as LanguagesIcon,
+  Layers,
   Linkedin,
   Mail,
   MapPin,
@@ -46,6 +49,7 @@ type Props = {
   socialLinks: any[]
   organizations: any[]
   languages: any[]
+  technologies: any[]
 }
 
 const containerVariants: any = {
@@ -77,8 +81,15 @@ export const CV: React.FC<Props> = ({
   socialLinks,
   organizations,
   languages,
+  technologies = [],
 }) => {
   const [selectedProject, setSelectedProject] = useState<any>(null)
+
+  const programmingLanguages = technologies
+    .filter((t) => t.category === 'programming_language')
+    .slice(0, 5)
+  const frameworks = technologies.filter((t) => t.category === 'framework')
+  const databases = technologies.filter((t) => t.category === 'database')
 
   const formatDate = (dateString: string) => {
     if (!dateString) return 'Present'
@@ -488,6 +499,66 @@ export const CV: React.FC<Props> = ({
                       {formatProficiency(lang.proficiency)}
                     </Badge>
                   </div>
+                ))}
+              </div>
+            </motion.section>
+          )}
+
+          {/* Programming Languages */}
+          {programmingLanguages.length > 0 && (
+            <motion.section variants={itemVariants} className="space-y-6">
+              <div className="flex items-center gap-3 text-primary mb-6">
+                <Code className="h-4 w-4" />
+                <h2 className="text-lg tracking-widest uppercase text-muted-foreground">
+                  Most Used Languages
+                </h2>
+              </div>
+              <div className="flex flex-col">
+                {programmingLanguages.map((tech, index) => (
+                  <React.Fragment key={tech.id}>
+                    <div className="py-2 text-sm text-foreground">{tech.name}</div>
+                    {index < programmingLanguages.length - 1 && <Separator className="bg-border/40" />}
+                  </React.Fragment>
+                ))}
+              </div>
+            </motion.section>
+          )}
+
+          {/* Frameworks */}
+          {frameworks.length > 0 && (
+            <motion.section variants={itemVariants} className="space-y-6">
+              <div className="flex items-center gap-3 text-primary mb-6">
+                <Layers className="h-4 w-4" />
+                <h2 className="text-lg tracking-widest uppercase text-muted-foreground">
+                  Most Used Frameworks
+                </h2>
+              </div>
+              <div className="flex flex-col">
+                {frameworks.map((tech, index) => (
+                  <React.Fragment key={tech.id}>
+                    <div className="py-2 text-sm text-foreground">{tech.name}</div>
+                    {index < frameworks.length - 1 && <Separator className="bg-border/40" />}
+                  </React.Fragment>
+                ))}
+              </div>
+            </motion.section>
+          )}
+
+          {/* Databases */}
+          {databases.length > 0 && (
+            <motion.section variants={itemVariants} className="space-y-6">
+              <div className="flex items-center gap-3 text-primary mb-6">
+                <Database className="h-4 w-4" />
+                <h2 className="text-lg tracking-widest uppercase text-muted-foreground">
+                  Most Used DB
+                </h2>
+              </div>
+              <div className="flex flex-col">
+                {databases.map((tech, index) => (
+                  <React.Fragment key={tech.id}>
+                    <div className="py-2 text-sm text-foreground">{tech.name}</div>
+                    {index < databases.length - 1 && <Separator className="bg-border/40" />}
+                  </React.Fragment>
                 ))}
               </div>
             </motion.section>

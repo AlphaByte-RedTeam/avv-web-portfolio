@@ -14,6 +14,7 @@ import { Organizations } from './collections/Organizations'
 import { Profile } from './collections/Profile'
 import { Projects } from './collections/Projects'
 import { SocialLinks } from './collections/SocialLinks'
+import { Technologies } from './collections/Technologies'
 import { Users } from './collections/Users'
 import { WorkExperience } from './collections/WorkExperience'
 
@@ -38,6 +39,7 @@ export default buildConfig({
     Projects,
     Organizations,
     Languages,
+    Technologies,
     Blog,
   ],
   editor: lexicalEditor(),
