@@ -36,7 +36,7 @@ export const LanguageSwitcher: React.FC<Props> = ({
       <SelectTrigger className="w-auto h-9">
         <SelectValue placeholder="Select Language" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent position="popper">
         <SelectItem value="en">
           <span className="flex items-center gap-2">🇺🇸 EN</span>
         </SelectItem>
