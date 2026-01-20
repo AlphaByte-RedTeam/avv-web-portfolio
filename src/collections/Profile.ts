@@ -41,11 +41,5 @@ export const Profile: CollectionConfig = {
       type: 'richText',
       label: 'About Me',
     },
-    {
-      name: 'resume',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'Resume / CV',
-    },
   ],
 }

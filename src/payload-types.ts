@@ -220,6 +220,10 @@ export interface WorkExperience {
 export interface Education {
   id: number;
   degree?: string | null;
+  /**
+   * e.g. 3.80
+   */
+  gpa?: number | null;
   institution: string;
   startDate?: string | null;
   /**
@@ -300,7 +304,6 @@ export interface Profile {
     };
     [k: string]: unknown;
   } | null;
-  resume?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -621,6 +624,7 @@ export interface WorkExperienceSelect<T extends boolean = true> {
  */
 export interface EducationsSelect<T extends boolean = true> {
   degree?: T;
+  gpa?: T;
   institution?: T;
   startDate?: T;
   endDate?: T;
@@ -654,7 +658,6 @@ export interface ProfileSelect<T extends boolean = true> {
   location?: T;
   profilePicture?: T;
   about?: T;
-  resume?: T;
   updatedAt?: T;
   createdAt?: T;
 }

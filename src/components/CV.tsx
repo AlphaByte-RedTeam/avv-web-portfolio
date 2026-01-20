@@ -136,6 +136,9 @@ export const CV: React.FC<Props> = ({
       {/* Absolute Theme Toggle & Actions */}
       <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-2 z-10">
         <ThemeToggle />
+        <Button variant="outline" size="sm" asChild>
+          <Link href="/resume" target="_blank">Download CV</Link>
+        </Button>
         <Button variant="ghost" size="sm" asChild>
           <Link href="/blog">Blog</Link>
         </Button>
@@ -241,21 +244,6 @@ export const CV: React.FC<Props> = ({
               </div>
             )}
           </div>
-
-          {profile?.resume?.url && (
-            <div className="pt-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 text-xs font-normal gap-2 rounded-full px-4"
-                asChild
-              >
-                <Link href={profile.resume.url} target="_blank" rel="noopener noreferrer">
-                  <Download className="h-3.5 w-3.5" /> Resume
-                </Link>
-              </Button>
-            </div>
-          )}
         </div>
       </motion.header>
 
@@ -419,7 +407,14 @@ export const CV: React.FC<Props> = ({
                         {getYear(edu.startDate)} — {edu.endDate ? getYear(edu.endDate) : 'Pres.'}
                       </span>
                     </div>
-                    <div className="text-sm text-primary">{edu.degree}</div>
+                    <div className="text-sm text-primary flex items-center justify-between">
+                      <span>{edu.degree}</span>
+                      {edu.gpa && (
+                        <Badge variant="secondary" className="text-[10px] font-normal">
+                          GPA: {edu.gpa}
+                        </Badge>
+                      )}
+                    </div>
                     {edu.description && (
                       <div className="text-xs text-muted-foreground pt-1 leading-relaxed">
                         <RichText content={edu.description} />
