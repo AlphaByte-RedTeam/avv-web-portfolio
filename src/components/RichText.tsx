@@ -28,7 +28,6 @@ const serialize = (children: any[]): React.ReactNode[] => {
       
       const props: any = {
         href,
-        key: index,
         className: 'text-primary underline underline-offset-4 hover:text-primary/80 transition-colors',
       }
       
@@ -38,7 +37,7 @@ const serialize = (children: any[]): React.ReactNode[] => {
       }
 
       return (
-        <Link {...props}>
+        <Link key={index} {...props}>
           {serialize(node.children)}
         </Link>
       )

@@ -7,6 +7,7 @@ import { AutoRefresh } from '@/components/AutoRefresh'
 import { RichText } from '@/components/RichText'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Badge } from '@/components/ui/badge'
+import { PageActions } from '@/components/PageActions'
 import config from '@/payload.config'
 
 type Props = {
@@ -66,7 +67,8 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-background text-foreground py-20 px-6 sm:px-12 font-sans">
       <AutoRefresh intervalMs={5000} />
-      <div className="absolute top-6 right-6 md:top-12 md:right-12">
+      <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-2">
+        <PageActions title={post.title} text={post.description || undefined} />
         <ThemeToggle />
       </div>
 

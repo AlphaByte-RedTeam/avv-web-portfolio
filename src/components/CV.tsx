@@ -1,35 +1,28 @@
 'use client'
 
 import {
-  Briefcase,
-  Building2,
-  Calendar,
-  Check,
-  Code,
-  Copy,
-  Database,
-  Download,
-  ExternalLink,
-  Folder,
-  Github,
-  Globe,
-  GraduationCap,
-  Instagram,
-  Languages as LanguagesIcon,
-  Layers,
-  Linkedin,
-  Mail,
-  MapPin,
-  Share2,
-  Trophy,
-  User,
-} from 'lucide-react'
-import {
   IconBrandGithub,
   IconBrandInstagram,
   IconBrandLinkedin,
   IconBrandTiktok,
 } from '@tabler/icons-react'
+import {
+  Briefcase,
+  Building2,
+  Code,
+  Database,
+  Download,
+  ExternalLink,
+  Folder,
+  Globe,
+  GraduationCap,
+  Languages as LanguagesIcon,
+  Layers,
+  Mail,
+  MapPin,
+  Trophy,
+  User,
+} from 'lucide-react'
 import * as motion from 'motion/react-client'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -86,29 +79,6 @@ export const CV: React.FC<Props> = ({
   technologies = [],
 }) => {
   const [selectedProject, setSelectedProject] = useState<any>(null)
-  const [isCopied, setIsCopied] = useState(false)
-
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href)
-    setIsCopied(true)
-    setTimeout(() => setIsCopied(false), 2000)
-  }
-
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: profile?.name || 'Portfolio',
-          text: profile?.title || 'Check out this portfolio',
-          url: window.location.href,
-        })
-      } catch (err) {
-        console.error('Error sharing:', err)
-      }
-    } else {
-      handleCopyLink()
-    }
-  }
 
   const programmingLanguages = technologies
     .filter((t) => t.category === 'programming_language')
@@ -156,24 +126,6 @@ export const CV: React.FC<Props> = ({
     >
       {/* Absolute Theme Toggle & Actions */}
       <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-2 z-10">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-9 w-9 rounded-full"
-          onClick={handleCopyLink}
-          title="Copy Link"
-        >
-          {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-9 w-9 rounded-full"
-          onClick={handleShare}
-          title="Share"
-        >
-          <Share2 className="h-4 w-4" />
-        </Button>
         <ThemeToggle />
         <Button variant="ghost" size="sm" asChild>
           <Link href="/blog">Blog</Link>
@@ -329,10 +281,11 @@ export const CV: React.FC<Props> = ({
                     onClick={() => setSelectedProject(project)}
                   >
                     {project.coverImage && (
-                      <div className="aspect-[2/1] w-full overflow-hidden rounded-md bg-secondary/30 mb-4">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
+                      <div className="aspect-2/1 w-full overflow-hidden rounded-md bg-secondary/30 mb-4">
+                        <Image
                           src={project.coverImage.url}
+                          width={project.coverImage.width}
+                          height={project.coverImage.height}
                           alt={project.title}
                           className="w-full h-full object-cover transition-all duration-700 opacity-90 group-hover:opacity-100 group-hover:scale-[1.02]"
                         />
@@ -702,7 +655,12 @@ export const CV: React.FC<Props> = ({
         </p>
         {profile?.updatedAt && (
           <p className="text-[10px] text-muted-foreground/40 uppercase tracking-widest">
-            Last updated: {new Date(profile.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+            Last updated:{' '}
+            {new Date(profile.updatedAt).toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric',
+            })}
           </p>
         )}
       </motion.footer>
