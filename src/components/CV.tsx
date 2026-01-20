@@ -653,16 +653,6 @@ export const CV: React.FC<Props> = ({
         <p className="text-xs text-muted-foreground/60 tracking-wide">
           © {new Date().getFullYear()} {profile?.name} • Built with minimal principles
         </p>
-        {profile?.updatedAt && (
-          <p className="text-[10px] text-muted-foreground/40 uppercase tracking-widest">
-            Last updated:{' '}
-            {new Date(profile.updatedAt).toLocaleDateString('en-US', {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric',
-            })}
-          </p>
-        )}
       </motion.footer>
     </motion.div>
   )

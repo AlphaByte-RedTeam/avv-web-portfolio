@@ -1,13 +1,15 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Clock, CalendarDays } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import React from 'react'
 import { AutoRefresh } from '@/components/AutoRefresh'
+import { PageActions } from '@/components/PageActions'
 import { RichText } from '@/components/RichText'
+import { SummarizeButton } from '@/components/SummarizeButton'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Badge } from '@/components/ui/badge'
-import { PageActions } from '@/components/PageActions'
+import { calculateReadingTime, richTextToPlainText } from '@/lib/utils'
 import config from '@/payload.config'
 
 type Props = {
@@ -64,10 +66,14 @@ export default async function BlogPostPage({ params }: Props) {
     notFound()
   }
 
+  const plainTextContent = richTextToPlainText(post.content)
+  const readingTime = calculateReadingTime(plainTextContent)
+
   return (
     <div className="min-h-screen bg-background text-foreground py-20 px-6 sm:px-12 font-sans">
       <AutoRefresh intervalMs={5000} />
       <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-2">
+        <SummarizeButton content={plainTextContent} />
         <PageActions title={post.title} text={post.description || undefined} />
         <ThemeToggle />
       </div>
@@ -92,23 +98,34 @@ export default async function BlogPostPage({ params }: Props) {
             <h1 className="text-3xl md:text-5xl font-medium tracking-tight text-foreground leading-tight">
               {post.title}
             </h1>
-            <div className="flex flex-col items-center gap-1 text-sm text-muted-foreground">
-              <span>
-                {new Date(post.date).toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </span>
-              {post.lastUpdated && new Date(post.lastUpdated) > new Date(post.date) && (
-                <span className="text-xs opacity-70 italic">
-                  Last updated: {new Date(post.lastUpdated).toLocaleDateString('en-US', {
+            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1.5">
+                <CalendarDays className="h-4 w-4 opacity-70" />
+                <span className="font-medium text-foreground/80">Published:</span>
+                <span>
+                  {new Date(post.date).toLocaleDateString('en-US', {
                     month: 'long',
                     day: 'numeric',
                     year: 'numeric',
                   })}
                 </span>
+              </div>
+              {post.lastUpdated && (
+                <div className="flex items-center gap-1.5">
+                  <span className="font-medium text-foreground/80">Last Updated:</span>
+                  <span className="italic">
+                    {new Date(post.lastUpdated).toLocaleDateString('en-US', {
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </span>
+                </div>
               )}
+              <div className="flex items-center gap-1.5">
+                <Clock className="h-4 w-4 opacity-70" />
+                <span>{readingTime} min read</span>
+              </div>
             </div>
           </div>
 
