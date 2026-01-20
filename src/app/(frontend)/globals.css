@@ -160,3 +160,14 @@
 .prose h3 {
   @apply tracking-tight text-foreground font-normal;
 }
+
+::selection {
+  /* Using specific values */
+  background-color: #adff00; /* A custom highlight color, e.g., yellow-400 */
+  color: #000;
+  /* A custom text color, e.g., gray-800 */
+
+  /* Alternatively, you can use CSS variables provided by your Tailwind config (v4+) */
+  /* background-color: var(--color-custom-highlight); */
+  /* color: var(--color-text-primary); */
+}
