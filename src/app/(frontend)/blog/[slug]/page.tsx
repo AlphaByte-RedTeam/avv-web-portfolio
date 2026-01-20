@@ -13,6 +13,8 @@ import { Badge } from '@/components/ui/badge'
 import { calculateReadingTime, richTextToPlainText } from '@/lib/utils'
 import config from '@/payload.config'
 
+import { LanguageSwitcher } from './LanguageSwitcher'
+
 type Props = {
   params: Promise<{ slug: string }>
 }
@@ -140,14 +142,11 @@ export default async function BlogPostPage({ params }: Props) {
     <div className="min-h-screen bg-background text-foreground py-20 px-6 sm:px-12 font-sans">
       <AutoRefresh intervalMs={5000} />
       <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-2">
-        {alternateSlug && (
-          <Link
-            href={`/blog/${alternateSlug}`}
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
-          >
-            {locale === 'en' ? '🇮🇩 ID' : '🇺🇸 EN'}
-          </Link>
-        )}
+        <LanguageSwitcher
+          currentLocale={locale}
+          currentSlug={slug}
+          alternateSlug={alternateSlug}
+        />
         <SummarizeButton content={plainTextContent} />
         <PageActions title={post.title} text={post.description || undefined} />
         <ThemeToggle />
