@@ -20,6 +20,7 @@ import {
   Layers,
   Mail,
   MapPin,
+  Phone,
   Trophy,
   User,
 } from 'lucide-react'
@@ -106,6 +107,7 @@ export const CV: React.FC<Props> = ({
     if (p.includes('linkedin')) return <IconBrandLinkedin className="h-3.5 w-3.5" />
     if (p.includes('instagram')) return <IconBrandInstagram className="h-3.5 w-3.5" />
     if (p.includes('tiktok')) return <IconBrandTiktok className="h-3.5 w-3.5" />
+    if (p.includes('whatsapp')) return <Phone className="h-3.5 w-3.5" />
     if (p.includes('mail') || p.includes('email')) return <Mail className="h-3.5 w-3.5" />
     return <Globe className="h-3.5 w-3.5" />
   }
@@ -168,12 +170,6 @@ export const CV: React.FC<Props> = ({
           </div>
 
           <div className="flex flex-wrap justify-center md:justify-start gap-4 text-xs md:text-sm text-muted-foreground">
-            {profile?.location && (
-              <div className="flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5" />
-                <span>{profile.location}</span>
-              </div>
-            )}
             {socialLinks.map((link) => (
               <Link
                 key={link.id}
@@ -186,6 +182,15 @@ export const CV: React.FC<Props> = ({
                 <span>{link.label || link.platform}</span>
               </Link>
             ))}
+          </div>
+
+          <div className="flex flex-wrap justify-center md:justify-start gap-4 text-xs md:text-sm text-muted-foreground">
+            {profile?.location && (
+              <div className="flex items-center gap-1.5">
+                <MapPin className="h-3.5 w-3.5" />
+                <span>{profile.location}</span>
+              </div>
+            )}
           </div>
 
           {profile?.resume?.url && (
