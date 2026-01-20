@@ -185,19 +185,27 @@ export const CV: React.FC<Props> = ({
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.5 }}
         >
-          <Avatar className="h-32 w-32 md:h-40 md:w-40 border border-border/50 shadow-sm">
-            <AvatarImage
-              src={profile?.profilePicture?.url}
-              alt={profile?.name}
-              className="object-cover"
-            />
-            <AvatarFallback className="text-3xl bg-secondary text-secondary-foreground font-light">
-              {profile?.name
-                ?.split(' ')
-                .map((n: string) => n[0])
-                .join('')}
-            </AvatarFallback>
-          </Avatar>
+          {profile?.profilePicture?.url ? (
+            <div className="relative h-32 w-32 md:h-40 md:w-40 border border-border/50 shadow-sm rounded-full overflow-hidden shrink-0">
+              <Image
+                src={profile.profilePicture.url}
+                alt={profile.name || 'Profile Picture'}
+                fill
+                priority
+                className="object-cover"
+                sizes="(max-width: 768px) 128px, 160px"
+              />
+            </div>
+          ) : (
+            <Avatar className="h-32 w-32 md:h-40 md:w-40 border border-border/50 shadow-sm">
+              <AvatarFallback className="text-3xl bg-secondary text-secondary-foreground font-light">
+                {profile?.name
+                  ?.split(' ')
+                  .map((n: string) => n[0])
+                  .join('')}
+              </AvatarFallback>
+            </Avatar>
+          )}
         </motion.div>
 
         <div className="flex-1 text-center md:text-left space-y-5 pt-2">
