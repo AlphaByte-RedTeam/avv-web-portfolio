@@ -15,7 +15,12 @@ export async function POST(req: Request) {
     }
 
     const ai = new GoogleGenAI({})
-    const prompt = `Please summarize the following blog post content concisely in 2-3 paragraphs. Focus on the main ideas and key takeaways. Translate the content into its native language if possible.
+    const prompt = `
+      Please summarize the following blog post content concisely in 2-3 paragraphs.
+      Focus on the main ideas and key takeaways. Use bullet points with hyphens symbols to highlight the main points.
+      Only show what the main ideas and key takeaways. Translate the content based on content language if possible.
+      Do not use any formatting or special characters. Do not use external links or references.
+      Focus only on the blog content.
 
     Content:
     ${content}`

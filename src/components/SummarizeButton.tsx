@@ -1,6 +1,6 @@
 'use client'
 
-import { Sparkles, Loader2 } from 'lucide-react'
+import { Sparkles, Loader2, RefreshCw } from 'lucide-react'
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,12 +19,13 @@ type Props = {
 export const SummarizeButton: React.FC<Props> = ({ content }) => {
   const [summary, setSummary] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [isError, setIsError] = useState(false)
   const [open, setOpen] = useState(false)
 
-  const handleSummarize = async () => {
-    if (summary) return
-
+  const generateSummary = async () => {
     setLoading(true)
+    setIsError(false)
+
     try {
       const response = await fetch('/api/summarize', {
         method: 'POST',
@@ -42,16 +43,22 @@ export const SummarizeButton: React.FC<Props> = ({ content }) => {
       setSummary(data.summary)
     } catch (error) {
       console.error('Error summarizing:', error)
-      setSummary('Failed to generate summary. Please try again.')
+      setIsError(true)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleOpen = () => {
+    if (!summary && !loading && !isError) {
+      generateSummary()
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2 text-xs" onClick={handleSummarize}>
+        <Button variant="outline" size="sm" className="gap-2 text-xs" onClick={handleOpen}>
           <Sparkles className="h-3.5 w-3.5 text-yellow-500" />
           Summarize with AI
         </Button>
@@ -71,6 +78,14 @@ export const SummarizeButton: React.FC<Props> = ({ content }) => {
             <div className="flex flex-col items-center justify-center py-8 gap-3">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
               <p className="text-xs">Analyzing content...</p>
+            </div>
+          ) : isError ? (
+            <div className="flex flex-col items-center justify-center py-6 gap-4 text-center">
+              <p className="text-destructive">Failed to generate summary.</p>
+              <Button onClick={generateSummary} variant="outline" size="sm" className="gap-2">
+                <RefreshCw className="h-3.5 w-3.5" />
+                Retry
+              </Button>
             </div>
           ) : (
             <p className="whitespace-pre-line">{summary}</p>
