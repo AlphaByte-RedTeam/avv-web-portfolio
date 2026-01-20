@@ -1,26 +1,27 @@
-import type { Metadata } from 'next'
-import { IBM_Plex_Mono, Manrope } from 'next/font/google'
-import './globals.css'
-import { Analytics } from '@vercel/analytics/next'
-import { ThemeProvider } from 'next-themes'
+import type { Metadata } from "next";
+import { IBM_Plex_Mono, Manrope } from "next/font/google";
+import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ThemeProvider } from "next-themes";
 
 const manrope = Manrope({
-  variable: '--font-manrope',
-  subsets: ['latin'],
-  display: 'swap',
-})
+	variable: "--font-manrope",
+	subsets: ["latin"],
+	display: "swap",
+});
 
 const ibmPlexMono = IBM_Plex_Mono({
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-ibm-plex-mono',
-  subsets: ['latin'],
-  display: 'swap',
-})
+	weight: ["400", "500", "600", "700"],
+	variable: "--font-ibm-plex-mono",
+	subsets: ["latin"],
+	display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: 'AVV | Portfolio',
-  description: 'Andrew V. Personal Portfolio and Resume',
-}
+	title: "AVV | Portfolio",
+	description: "Andrew V. Personal Portfolio and Resume",
+};
 
 export default function RootLayout({
   children,
@@ -40,6 +41,7 @@ export default function RootLayout({
         >
           {children}
           <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>
