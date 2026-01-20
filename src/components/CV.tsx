@@ -11,7 +11,6 @@ import {
   Building2,
   Code,
   Database,
-  Download,
   ExternalLink,
   Folder,
   Globe,
@@ -30,7 +29,7 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import { RichText } from '@/components/RichText'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -136,13 +135,15 @@ export const CV: React.FC<Props> = ({
       {/* Absolute Theme Toggle & Actions */}
       <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-2 z-10">
         <ThemeToggle />
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/resume" target="_blank">Download CV</Link>
-        </Button>
         <Button variant="ghost" size="sm" asChild>
           <Link href="/blog">Blog</Link>
         </Button>
-        <Button variant="default" size="default" onClick={() => setIsHireMeOpen(true)}>
+        <Button variant="outline" size="sm" asChild>
+          <Link href="/resume" target="_blank">
+            Download CV
+          </Link>
+        </Button>
+        <Button variant="default" size="sm" onClick={() => setIsHireMeOpen(true)}>
           Hire Me!
         </Button>
       </div>
@@ -700,7 +701,7 @@ export const CV: React.FC<Props> = ({
         className="mt-32 pt-8 border-t border-border/40 text-center space-y-2"
       >
         <p className="text-xs text-muted-foreground/60 tracking-wide">
-          © {new Date().getFullYear()} {profile?.name} • Built with minimal principles
+          © {new Date().getFullYear()} {profile?.name} • Built with love.
         </p>
       </motion.footer>
     </motion.div>
