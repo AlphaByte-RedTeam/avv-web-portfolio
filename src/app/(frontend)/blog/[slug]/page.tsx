@@ -138,6 +138,28 @@ export default async function BlogPostPage({ params }: Props) {
   const plainTextContent = richTextToPlainText(post.content)
   const readingTime = calculateReadingTime(plainTextContent)
 
+  // Fetch Recommended Posts
+  const { docs: recommendedPosts } = await payload.find({
+    collection: 'blog',
+    where: {
+      and: [
+        {
+          category: {
+            equals: post.category,
+          },
+        },
+        {
+          id: {
+            not_equals: post.id,
+          },
+        },
+      ],
+    },
+    limit: 3,
+    sort: '-date',
+    locale,
+  })
+
   return (
     <div className="min-h-screen bg-background text-foreground py-20 px-6 sm:px-12 font-sans">
       <AutoRefresh intervalMs={5000} />
@@ -214,6 +236,46 @@ export default async function BlogPostPage({ params }: Props) {
           <RichText content={post.content} />
         </div>
       </article>
+
+      {/* Recommended Posts Section */}
+      {recommendedPosts.length > 0 && (
+        <div className="max-w-4xl mx-auto mt-32 pt-16 border-t border-border/40">
+          <h2 className="text-2xl font-semibold mb-8 text-center">More in {post.category}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {recommendedPosts.map((recPost) => {
+              const recPlainText = richTextToPlainText(recPost.content)
+              const recReadingTime = calculateReadingTime(recPlainText)
+
+              return (
+                <Link key={recPost.id} href={`/blog/${recPost.slug}`} className="group block">
+                  <div className="bg-secondary/20 rounded-lg p-6 h-full transition-colors hover:bg-secondary/40 flex flex-col">
+                    <div className="text-xs text-muted-foreground mb-3 flex items-center gap-2">
+                      <span>
+                        {new Date(recPost.date).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </span>
+                      <span>•</span>
+                      <span>{recReadingTime} min read</span>
+                    </div>
+                    <h3 className="text-lg font-medium leading-tight mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                      {recPost.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed flex-1">
+                      {recPost.description}
+                    </p>
+                    <div className="mt-4 text-xs font-medium text-primary flex items-center gap-1">
+                      Read article <ArrowLeft className="h-3 w-3 rotate-180" />
+                    </div>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
