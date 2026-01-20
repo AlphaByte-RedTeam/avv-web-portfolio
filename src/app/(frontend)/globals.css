@@ -122,6 +122,8 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    scroll-behavior: smooth;
+    scroll-padding-top: 64px;
   }
   body {
     @apply bg-background text-foreground antialiased;
