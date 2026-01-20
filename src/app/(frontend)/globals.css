@@ -4,8 +4,9 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: #f4f7f5;
+  --background-gradient: oklch(0.97 0 0 / 0.5);
+  --foreground: #08090a;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -41,8 +42,9 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
+  --background: #08090a;
+  --background-gradient: oklch(0.205 0 0 / 0.3);
+  --foreground: #eeeeee;
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
@@ -123,6 +125,11 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
+    background-image: radial-gradient(
+      circle at center top,
+      var(--background-gradient),
+      transparent 70%
+    );
     font-feature-settings:
       'rlig' 1,
       'calt' 1;
