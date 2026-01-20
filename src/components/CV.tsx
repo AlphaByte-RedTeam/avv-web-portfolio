@@ -33,7 +33,13 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 
 type Props = {
@@ -80,6 +86,7 @@ export const CV: React.FC<Props> = ({
   technologies = [],
 }) => {
   const [selectedProject, setSelectedProject] = useState<any>(null)
+  const [isHireMeOpen, setIsHireMeOpen] = useState(false)
 
   const programmingLanguages = technologies
     .filter((t) => t.category === 'programming_language')
@@ -132,7 +139,41 @@ export const CV: React.FC<Props> = ({
         <Button variant="ghost" size="sm" asChild>
           <Link href="/blog">Blog</Link>
         </Button>
+        <Button variant="default" size="default" onClick={() => setIsHireMeOpen(true)}>
+          Hire Me!
+        </Button>
       </div>
+
+      {/* Hire Me Dialog */}
+      <Dialog open={isHireMeOpen} onOpenChange={setIsHireMeOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Let's work together!</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col gap-4 py-4">
+            <Button size="lg" variant="outline" className="w-full justify-between" asChild>
+              <Link href="https://cal.com/avv210/15min" target="_blank">
+                <span>Quick 15 min chat</span>
+                <Phone className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="w-full justify-between" asChild>
+              <Link href="https://cal.com/avv210/30min" target="_blank">
+                <span>Book a 30 min call</span>
+                <Phone className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+          <DialogFooter className="sm:justify-center">
+            <p className="text-sm text-muted-foreground">
+              Scheduled with{' '}
+              <Link className="text-primary underline" href="https://cal.com/avv210">
+                Cal.com
+              </Link>
+            </p>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Header / Hero Section */}
       <motion.header
