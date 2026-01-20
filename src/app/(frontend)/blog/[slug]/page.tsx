@@ -16,7 +16,26 @@ type Props = {
   params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata({ params }: Props) {
+import { Metadata } from 'next'
+import { ArrowLeft, Clock, CalendarDays } from 'lucide-react'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { getPayload } from 'payload'
+import React from 'react'
+import { AutoRefresh } from '@/components/AutoRefresh'
+import { PageActions } from '@/components/PageActions'
+import { RichText } from '@/components/RichText'
+import { SummarizeButton } from '@/components/SummarizeButton'
+import { ThemeToggle } from '@/components/theme-toggle'
+import { Badge } from '@/components/ui/badge'
+import { calculateReadingTime, richTextToPlainText } from '@/lib/utils'
+import config from '@/payload.config'
+
+type Props = {
+  params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
@@ -39,9 +58,31 @@ export async function generateMetadata({ params }: Props) {
     }
   }
 
+  // Fetch author info from profile
+  const { docs: profileDocs } = await payload.find({
+    collection: 'profile',
+    limit: 1,
+  })
+  const authorName = profileDocs[0]?.name || 'Portfolio Owner'
+
   return {
-    title: `${post.title} | Blog`,
-    description: post.description || post.title,
+    title: post.title,
+    description: post.description || `Read ${post.title}`,
+    openGraph: {
+      title: post.title,
+      description: post.description || `Read ${post.title}`,
+      type: 'article',
+      publishedTime: post.date,
+      modifiedTime: post.lastUpdated,
+      authors: [authorName],
+      section: post.category || 'Technology',
+      url: `/blog/${post.slug}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description || `Read ${post.title}`,
+    },
   }
 }
 
