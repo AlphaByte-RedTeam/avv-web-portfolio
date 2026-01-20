@@ -20,6 +20,14 @@ export const Educations: CollectionConfig = {
       label: 'Degree',
     },
     {
+      name: 'gpa',
+      type: 'number',
+      label: 'GPA',
+      admin: {
+        description: 'e.g. 3.80',
+      },
+    },
+    {
       name: 'institution',
       type: 'text',
       required: true,
