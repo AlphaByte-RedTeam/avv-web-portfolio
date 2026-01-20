@@ -22,6 +22,7 @@ import {
   Phone,
   Trophy,
   User,
+  ArrowRight,
 } from 'lucide-react'
 import * as motion from 'motion/react-client'
 import Image from 'next/image'
@@ -40,6 +41,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
+import { richTextToPlainText } from '@/lib/utils'
 
 type Props = {
   profile: any
@@ -51,6 +53,7 @@ type Props = {
   organizations: any[]
   languages: any[]
   technologies: any[]
+  blogPosts?: any[]
 }
 
 const containerVariants: any = {
@@ -83,6 +86,7 @@ export const CV: React.FC<Props> = ({
   organizations,
   languages,
   technologies = [],
+  blogPosts = [],
 }) => {
   const [selectedProject, setSelectedProject] = useState<any>(null)
   const [isHireMeOpen, setIsHireMeOpen] = useState(false)
@@ -695,6 +699,41 @@ export const CV: React.FC<Props> = ({
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Latest Thoughts */}
+      {blogPosts.length > 0 && (
+        <motion.section variants={itemVariants} className="mt-32">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-light tracking-tight text-foreground">Latest Thoughts</h2>
+            <Button variant="ghost" className="gap-2" asChild>
+              <Link href="/blog">
+                View all posts <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {blogPosts.map((post) => (
+              <Link key={post.id} href={`/blog/${post.slug}`} className="group block h-full">
+                <div className="bg-secondary/20 rounded-lg p-6 h-full transition-colors hover:bg-secondary/40 flex flex-col border border-transparent hover:border-border/50">
+                  <div className="text-xs text-muted-foreground mb-3 font-mono">
+                    {formatDate(post.date)}
+                  </div>
+                  <h3 className="text-lg font-medium leading-tight mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                    {post.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed flex-1 mb-4">
+                    {post.description || richTextToPlainText(post.content).substring(0, 150)}
+                  </p>
+                  <div className="text-xs font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+                    Read article <ArrowRight className="h-3 w-3" />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </motion.section>
+      )}
 
       <motion.footer
         variants={itemVariants}
