@@ -48,12 +48,14 @@ export const Blog: CollectionConfig = {
       type: 'text',
       required: true,
       label: 'Blog Title',
+      localized: true,
     },
     {
       name: 'slug',
       type: 'text',
       required: true,
       unique: true,
+      localized: true,
       admin: {
         position: 'sidebar',
       },
@@ -66,6 +68,7 @@ export const Blog: CollectionConfig = {
       type: 'textarea',
       label: 'Short Summary',
       required: true,
+      localized: true,
     },
     {
       name: 'lastUpdated',
@@ -82,6 +85,7 @@ export const Blog: CollectionConfig = {
       name: 'content',
       type: 'richText',
       label: 'Blog Content',
+      localized: true,
     },
     {
       name: 'date',

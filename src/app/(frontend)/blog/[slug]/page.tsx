@@ -1,23 +1,5 @@
-import { ArrowLeft, Clock, CalendarDays } from 'lucide-react'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { getPayload } from 'payload'
-import React from 'react'
-import { AutoRefresh } from '@/components/AutoRefresh'
-import { PageActions } from '@/components/PageActions'
-import { RichText } from '@/components/RichText'
-import { SummarizeButton } from '@/components/SummarizeButton'
-import { ThemeToggle } from '@/components/theme-toggle'
-import { Badge } from '@/components/ui/badge'
-import { calculateReadingTime, richTextToPlainText } from '@/lib/utils'
-import config from '@/payload.config'
-
-type Props = {
-  params: Promise<{ slug: string }>
-}
-
-import { Metadata } from 'next'
-import { ArrowLeft, Clock, CalendarDays } from 'lucide-react'
+import { ArrowLeft, CalendarDays, Clock } from 'lucide-react'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
@@ -40,17 +22,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
 
-  const { docs } = await payload.find({
+  let post: any = null
+  let locale: 'en' | 'id' = 'en'
+
+  // Try EN
+  const { docs: docsEn } = await payload.find({
     collection: 'blog',
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
+    where: { slug: { equals: slug } },
     limit: 1,
+    locale: 'en',
   })
 
-  const post = docs[0]
+  if (docsEn.length > 0) {
+    post = docsEn[0]
+    locale = 'en'
+  } else {
+    // Try ID
+    const { docs: docsId } = await payload.find({
+      collection: 'blog',
+      where: { slug: { equals: slug } },
+      limit: 1,
+      locale: 'id',
+    })
+    if (docsId.length > 0) {
+      post = docsId[0]
+      locale = 'id'
+    }
+  }
 
   if (!post) {
     return {
@@ -77,6 +75,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       authors: [authorName],
       section: post.category || 'Technology',
       url: `/blog/${post.slug}`,
+      locale: locale === 'en' ? 'en_US' : 'id_ID',
     },
     twitter: {
       card: 'summary_large_image',
@@ -91,21 +90,48 @@ export default async function BlogPostPage({ params }: Props) {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
 
-  const { docs } = await payload.find({
+  let post: any = null
+  let locale: 'en' | 'id' = 'en'
+
+  // Try EN
+  const { docs: docsEn } = await payload.find({
     collection: 'blog',
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
+    where: { slug: { equals: slug } },
     limit: 1,
+    locale: 'en',
   })
 
-  const post = docs[0]
+  if (docsEn.length > 0) {
+    post = docsEn[0]
+    locale = 'en'
+  } else {
+    // Try ID
+    const { docs: docsId } = await payload.find({
+      collection: 'blog',
+      where: { slug: { equals: slug } },
+      limit: 1,
+      locale: 'id',
+    })
+    if (docsId.length > 0) {
+      post = docsId[0]
+      locale = 'id'
+    }
+  }
 
   if (!post) {
     notFound()
   }
+
+  // Fetch all locales to get alternate slug
+  const docAllLocales = await payload.findByID({
+    collection: 'blog',
+    id: post.id,
+    locale: 'all',
+  })
+
+  const alternateLocale = locale === 'en' ? 'id' : 'en'
+  // @ts-expect-error
+  const alternateSlug = docAllLocales.slug?.[alternateLocale]
 
   const plainTextContent = richTextToPlainText(post.content)
   const readingTime = calculateReadingTime(plainTextContent)
@@ -114,6 +140,14 @@ export default async function BlogPostPage({ params }: Props) {
     <div className="min-h-screen bg-background text-foreground py-20 px-6 sm:px-12 font-sans">
       <AutoRefresh intervalMs={5000} />
       <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-2">
+        {alternateSlug && (
+          <Link
+            href={`/blog/${alternateSlug}`}
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
+          >
+            {locale === 'en' ? '🇮🇩 ID' : '🇺🇸 EN'}
+          </Link>
+        )}
         <SummarizeButton content={plainTextContent} />
         <PageActions title={post.title} text={post.description || undefined} />
         <ThemeToggle />
