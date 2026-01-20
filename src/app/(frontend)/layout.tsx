@@ -18,10 +18,37 @@ const ibmPlexMono = IBM_Plex_Mono({
 	display: "swap",
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://avv-portfolio.vercel.app'
+
 export const metadata: Metadata = {
-	title: "AVV | Portfolio",
-	description: "Andrew V. Personal Portfolio and Resume",
-};
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: 'AVV | Portfolio',
+    template: '%s | AVV',
+  },
+  description: 'Andrew V. Personal Portfolio and Resume',
+  openGraph: {
+    title: 'AVV | Portfolio',
+    description: 'Andrew V. Personal Portfolio and Resume',
+    url: './',
+    siteName: 'AVV Portfolio',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AVV | Portfolio',
+    description: 'Andrew V. Personal Portfolio and Resume',
+    images: ['/opengraph-image'],
+  },
+}
 
 export default function RootLayout({
   children,
