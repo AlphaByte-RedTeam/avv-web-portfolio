@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Printer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { richTextToPlainText } from '@/lib/utils'
@@ -25,6 +25,11 @@ export const ResumeTemplate: React.FC<Props> = ({
   technologies,
   socialLinks,
 }) => {
+  useEffect(() => {
+    const date = new Date().toISOString().split('T')[0]
+    document.title = `CV-Andrew-Virya-Victorio-${date}`
+  }, [])
+
   const formatDate = (dateString: string) => {
     if (!dateString) return 'Present'
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -149,7 +154,17 @@ export const ResumeTemplate: React.FC<Props> = ({
                     </div>
                     {edu.description && (
                        <div className="text-sm mt-1 text-gray-700">
-                           {richTextToPlainText(edu.description)}
+                          <div className="list-disc pl-0 space-y-1">
+                            {richTextToPlainText(edu.description)
+                              .split('\n')
+                              .filter(line => line.trim())
+                              .map((line, idx) => (
+                                <div key={idx} className="flex gap-2">
+                                  <span>•</span>
+                                  <span>{line.trim()}</span>
+                                </div>
+                              ))}
+                          </div>
                        </div>
                     )}
                   </div>
