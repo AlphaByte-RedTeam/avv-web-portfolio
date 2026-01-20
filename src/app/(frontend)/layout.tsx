@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { IBM_Plex_Mono, Manrope } from 'next/font/google'
 import './globals.css'
+import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from 'next-themes'
 
 const manrope = Manrope({
@@ -38,6 +39,7 @@ export default function RootLayout({
           defaultTheme="system"
         >
           {children}
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
