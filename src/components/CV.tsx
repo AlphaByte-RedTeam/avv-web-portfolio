@@ -27,7 +27,8 @@ import {
 import * as motion from 'motion/react-client'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { RichText } from '@/components/RichText'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -86,13 +87,38 @@ export const CV: React.FC<Props> = ({
   socialLinks,
   organizations,
   languages,
-      technologies = [],
-      blogPosts = [],
-      activities = [],
-    }) => {
-      const [selectedProject, setSelectedProject] = useState<any>(null)
-  
+  technologies = [],
+  blogPosts = [],
+  activities = [],
+}) => {
+  const [selectedProject, setSelectedProject] = useState<any>(null)
   const [isHireMeOpen, setIsHireMeOpen] = useState(false)
+  const [timeString, setTimeString] = useState('')
+  const [greeting, setGreeting] = useState('')
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date()
+      const timeStr = now.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      })
+      
+      const offset = -now.getTimezoneOffset() / 60
+      const gmtStr = `GMT${offset >= 0 ? '+' : ''}${offset}`
+      
+      setTimeString(`${gmtStr} ${timeStr}`)
+
+      const hour = now.getHours()
+      if (hour < 12) setGreeting('Good Morning')
+      else if (hour < 18) setGreeting('Good Afternoon')
+      else setGreeting('Good Evening')
+    }
+    updateTime()
+    const interval = setInterval(updateTime, 1000 * 60)
+    return () => clearInterval(interval)
+  }, [])
 
   const programmingLanguages = technologies
     .filter((t) => t.category === 'programming_language')
@@ -123,6 +149,28 @@ export const CV: React.FC<Props> = ({
     if (p.includes('whatsapp')) return <Phone className="h-3.5 w-3.5" />
     if (p.includes('mail') || p.includes('email')) return <Mail className="h-3.5 w-3.5" />
     return <Globe className="h-3.5 w-3.5" />
+  }
+
+  const handleSocialClick = (e: React.MouseEvent, link: any) => {
+    const platform = link.platform.toLowerCase()
+    if (platform.includes('mail') || platform.includes('email')) {
+      e.preventDefault()
+      // Extract email from mailto: if present, otherwise assume it's the url or label
+      let email = link.url.replace('mailto:', '')
+      if (!email && link.label.includes('@')) {
+        email = link.label
+      }
+
+      if (email) {
+        navigator.clipboard.writeText(email)
+        toast.success('Email copied to clipboard!', {
+          description: email,
+        })
+      } else {
+        // Fallback if extraction fails but it is a mail link
+        window.open(link.url, '_blank')
+      }
+    }
   }
 
   const formatProficiency = (p: string) => {
@@ -205,6 +253,9 @@ export const CV: React.FC<Props> = ({
 
         <div className="flex-1 text-center md:text-left space-y-5 pt-2">
           <div className="space-y-2">
+            <div className="text-sm font-medium text-muted-foreground tracking-wide uppercase">
+              {greeting}, I&apos;m
+            </div>
             <h1 className="text-3xl md:text-4xl tracking-tight text-foreground">
               {profile?.name || 'Your Name'}
             </h1>
@@ -220,6 +271,7 @@ export const CV: React.FC<Props> = ({
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => handleSocialClick(e, link)}
                 className="flex items-center gap-1.5 hover:text-primary transition-colors cursor-pointer"
               >
                 {getSocialIcon(link.platform)}
@@ -228,12 +280,18 @@ export const CV: React.FC<Props> = ({
             ))}
           </div>
 
-          <div className="flex flex-wrap justify-center md:justify-start gap-4 text-xs md:text-sm text-muted-foreground">
+          <div className="flex flex-wrap justify-center md:justify-start gap-4 text-xs md:text-sm text-muted-foreground items-center">
             {profile?.location && (
               <div className="flex items-center gap-1.5">
                 <MapPin className="h-3.5 w-3.5" />
                 <span>{profile.location}</span>
               </div>
+            )}
+            {timeString && (
+              <>
+                <span className="text-border">•</span>
+                <span>{timeString}</span>
+              </>
             )}
           </div>
         </div>
