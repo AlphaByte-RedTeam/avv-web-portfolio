@@ -161,16 +161,15 @@ export default async function BlogPostPage({ params }: Props) {
   })
 
   return (
-    <div className="min-h-screen bg-background text-foreground py-20 px-6 sm:px-12 font-sans">
+    <div className="min-h-screen bg-background text-foreground pt-8 pb-20 px-4 sm:px-6 md:py-20 md:px-12 font-sans relative">
       <AutoRefresh intervalMs={5000} />
-      <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-2">
+      <div className="flex items-center justify-end gap-2 mb-6 md:absolute md:top-12 md:right-12 md:mb-0">
         <LanguageSwitcher
           currentLocale={locale}
           currentSlug={slug}
           alternateSlug={alternateSlug}
         />
         <SummarizeButton content={plainTextContent} />
-        <PageActions title={post.title} text={post.description || undefined} />
         <ThemeToggle />
       </div>
 
@@ -230,6 +229,10 @@ export default async function BlogPostPage({ params }: Props) {
               {post.description}
             </p>
           )}
+
+          <div className="flex flex-wrap justify-center items-center gap-4 py-6">
+            <PageActions title={post.title} text={post.description || undefined} />
+          </div>
         </header>
 
         <div className="prose prose-neutral dark:prose-invert max-w-none leading-loose text-muted-foreground">

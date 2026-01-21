@@ -7,6 +7,7 @@ import {
   IconBrandTiktok,
 } from '@tabler/icons-react'
 import {
+  ArrowRight,
   Briefcase,
   Building2,
   Code,
@@ -22,7 +23,6 @@ import {
   Phone,
   Trophy,
   User,
-  ArrowRight,
 } from 'lucide-react'
 import * as motion from 'motion/react-client'
 import Image from 'next/image'
@@ -347,7 +347,8 @@ export const CV: React.FC<Props> = ({
                         {project.repoUrl && (
                           <Button variant="outline" asChild onClick={(e) => e.stopPropagation()}>
                             <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-                              <IconBrandGithub className="h-4 w-4" /> View Code
+                              <IconBrandGithub className="h-4 w-4" />{' '}
+                              <p className="hidden md:block">View Code</p>
                               <span className="sr-only">View Code</span>
                             </Link>
                           </Button>
@@ -683,7 +684,9 @@ export const CV: React.FC<Props> = ({
                 {selectedProject?.repoUrl && (
                   <Button variant="outline" size="sm" className="h-9 gap-2 px-6" asChild>
                     <Link href={selectedProject.repoUrl} target="_blank" rel="noopener noreferrer">
-                      <IconBrandGithub className="h-4 w-4" /> View Code
+                      <IconBrandGithub className="h-4 w-4" />{' '}
+                      <p className="hidden md:block">View Code</p>
+                      <span className="sr-only">View Code</span>
                     </Link>
                   </Button>
                 )}

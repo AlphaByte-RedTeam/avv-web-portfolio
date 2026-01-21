@@ -37,22 +37,22 @@ export const PageActions: React.FC<Props> = ({ title, text }) => {
   return (
     <>
       <Button
-        variant="ghost"
-        size="icon"
-        className="h-9 w-9 rounded-full"
+        variant="outline"
         onClick={handleCopyLink}
         title="Copy Link"
+        className="gap-2"
       >
         {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+        Copy Link
       </Button>
       <Button
-        variant="ghost"
-        size="icon"
-        className="h-9 w-9 rounded-full"
+        variant="outline"
         onClick={handleShare}
         title="Share"
+        className="gap-2"
       >
         <Share2 className="h-4 w-4" />
+        Share Post
       </Button>
     </>
   )
