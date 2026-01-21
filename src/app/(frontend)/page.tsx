@@ -21,6 +21,7 @@ export default async function HomePage() {
     languagesData,
     technologiesData,
     blogPostsData,
+    activitiesData,
   ] = await Promise.all([
     payload.find({
       collection: 'profile',
@@ -62,6 +63,11 @@ export default async function HomePage() {
       sort: '-date',
       limit: 3,
     }),
+    payload.find({
+      collection: 'activity',
+      sort: '-date',
+      limit: 6,
+    }),
   ])
 
   const profile = profileData.docs[0] || null
@@ -74,6 +80,7 @@ export default async function HomePage() {
   const languages = languagesData.docs
   const technologies = technologiesData.docs
   const blogPosts = blogPostsData.docs
+  const activities = activitiesData.docs
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -89,6 +96,7 @@ export default async function HomePage() {
         languages={languages}
         technologies={technologies}
         blogPosts={blogPosts}
+        activities={activities}
       />
     </div>
   )

@@ -54,6 +54,7 @@ type Props = {
   languages: any[]
   technologies: any[]
   blogPosts?: any[]
+  activities?: any[]
 }
 
 const containerVariants: any = {
@@ -85,10 +86,12 @@ export const CV: React.FC<Props> = ({
   socialLinks,
   organizations,
   languages,
-  technologies = [],
-  blogPosts = [],
-}) => {
-  const [selectedProject, setSelectedProject] = useState<any>(null)
+      technologies = [],
+      blogPosts = [],
+      activities = [],
+    }) => {
+      const [selectedProject, setSelectedProject] = useState<any>(null)
+  
   const [isHireMeOpen, setIsHireMeOpen] = useState(false)
 
   const programmingLanguages = technologies
@@ -136,22 +139,6 @@ export const CV: React.FC<Props> = ({
       variants={containerVariants}
       className="max-w-5xl mx-auto py-20 px-6 sm:px-12 font-sans text-sm md:text-base leading-relaxed relative overflow-x-hidden"
     >
-      {/* Absolute Theme Toggle & Actions */}
-      <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-2 z-10">
-        <ThemeToggle />
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/blog">Blog</Link>
-        </Button>
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/resume" target="_blank">
-            Download CV
-          </Link>
-        </Button>
-        <Button variant="default" size="sm" onClick={() => setIsHireMeOpen(true)}>
-          Hire Me!
-        </Button>
-      </div>
-
       {/* Hire Me Dialog */}
       <Dialog open={isHireMeOpen} onOpenChange={setIsHireMeOpen}>
         <DialogContent className="sm:max-w-sm">
@@ -732,6 +719,38 @@ export const CV: React.FC<Props> = ({
                     Read article <ArrowRight className="h-3 w-3" />
                   </div>
                 </div>
+              </Link>
+            ))}
+          </div>
+        </motion.section>
+      )}
+
+      {/* Activity Gallery Preview */}
+      {activities.length > 0 && (
+        <motion.section variants={itemVariants} className="mt-32">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-light tracking-tight text-foreground">Activity Gallery</h2>
+            <Button variant="ghost" className="gap-2" asChild>
+              <Link href="/activity">
+                View gallery <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+            {activities.slice(0, 6).map((activity) => (
+              <Link
+                key={activity.id}
+                href="/activity"
+                className="group relative aspect-square overflow-hidden rounded-md bg-secondary/20"
+              >
+                <Image
+                  src={activity.image.url}
+                  alt={activity.image.alt || 'Activity'}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  sizes="(max-width: 768px) 33vw, 16vw"
+                />
               </Link>
             ))}
           </div>

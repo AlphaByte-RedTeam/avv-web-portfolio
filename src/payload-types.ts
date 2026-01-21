@@ -79,6 +79,7 @@ export interface Config {
     languages: Language;
     technologies: Technology;
     blog: Blog;
+    activity: Activity;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -98,6 +99,7 @@ export interface Config {
     languages: LanguagesSelect<false> | LanguagesSelect<true>;
     technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
+    activity: ActivitySelect<false> | ActivitySelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -450,6 +452,19 @@ export interface Blog {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activity".
+ */
+export interface Activity {
+  id: number;
+  image: number | Media;
+  caption?: string | null;
+  location?: string | null;
+  date: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -519,6 +534,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'blog';
         value: number | Blog;
+      } | null)
+    | ({
+        relationTo: 'activity';
+        value: number | Activity;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -748,6 +767,18 @@ export interface BlogSelect<T extends boolean = true> {
   content?: T;
   date?: T;
   category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activity_select".
+ */
+export interface ActivitySelect<T extends boolean = true> {
+  image?: T;
+  caption?: T;
+  location?: T;
+  date?: T;
   updatedAt?: T;
   createdAt?: T;
 }
