@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
@@ -101,6 +102,26 @@ const serialize = (children: any[]): React.ReactNode[] => {
         >
           <code className="text-sm font-mono text-foreground">{serialize(node.children)}</code>
         </pre>
+      )
+    }
+
+    if (node.type === 'upload') {
+      const { value } = node
+      if (!value?.url) return null
+
+      return (
+        <div
+          key={`${node.type}-${index}`}
+          className="my-8 relative w-full rounded-lg overflow-hidden"
+        >
+          <Image
+            src={value.url}
+            alt={value.alt || 'Blog post image'}
+            width={value.width || 800}
+            height={value.height || 600}
+            className="w-full h-auto object-cover"
+          />
+        </div>
       )
     }
 
