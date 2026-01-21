@@ -4,14 +4,20 @@ import { Briefcase, FileText, Home, Image as ImageIcon, Menu, X } from 'lucide-r
 import { AnimatePresence, motion, type Variants } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 
 export const BottomNav = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const [shortcut, setShortcut] = useState('⌘K')
   const pathname = usePathname()
+
+  useEffect(() => {
+    const isMac = typeof window !== 'undefined' && navigator.platform.toUpperCase().indexOf('MAC') >= 0
+    setShortcut(isMac ? '⌘K' : 'Ctrl+K')
+  }, [])
 
   const links = [
     { href: '/', label: 'Home', icon: Home },
@@ -99,6 +105,10 @@ export const BottomNav = () => {
           >
             AVV
           </Link>
+
+          <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/10 dark:bg-black/10 border border-white/10 dark:border-black/5 text-[10px] font-medium tracking-widest opacity-50">
+            {shortcut}
+          </div>
 
           <motion.button
             whileTap={{ scale: 0.9 }}
