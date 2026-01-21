@@ -1,8 +1,7 @@
 'use client'
 
 import { Briefcase, FileText, Home, Image as ImageIcon, Menu, X } from 'lucide-react'
-import { AnimatePresence } from 'motion/react'
-import * as motion from 'motion/react-client'
+import { AnimatePresence, motion, type Variants } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -21,7 +20,7 @@ export const BottomNav = () => {
     { href: '/resume', label: 'Resume', icon: Briefcase, external: true },
   ]
 
-  const menuVariants = {
+  const menuVariants: Variants = {
     hidden: {
       opacity: 0,
       y: 20,
