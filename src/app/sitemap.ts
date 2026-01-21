@@ -42,6 +42,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/microlink`,
       lastModified: new Date(),
     },
+    {
+      url: `${baseUrl}/prompts`,
+      lastModified: new Date(),
+    },
     ...postsUrls,
   ]
 }

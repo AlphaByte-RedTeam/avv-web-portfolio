@@ -16,7 +16,8 @@ import {
   Sun,
   Moon,
   Laptop,
-  Link2
+  Link2,
+  Terminal
 } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
@@ -114,6 +115,10 @@ export function CommandMenu({ socialLinks }: CommandMenuProps) {
             <CommandItem onSelect={() => runCommand(() => router.push('/microlink'))}>
               <Link2 className="mr-2 h-4 w-4" />
               <span>Microlinks</span>
+            </CommandItem>
+            <CommandItem onSelect={() => runCommand(() => router.push('/prompts'))}>
+              <Terminal className="mr-2 h-4 w-4" />
+              <span>Prompts</span>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />

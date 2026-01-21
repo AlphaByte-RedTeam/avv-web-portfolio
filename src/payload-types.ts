@@ -81,6 +81,7 @@ export interface Config {
     blog: Blog;
     activity: Activity;
     referrals: Referral;
+    prompts: Prompt;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -102,6 +103,7 @@ export interface Config {
     blog: BlogSelect<false> | BlogSelect<true>;
     activity: ActivitySelect<false> | ActivitySelect<true>;
     referrals: ReferralsSelect<false> | ReferralsSelect<true>;
+    prompts: PromptsSelect<false> | PromptsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -486,6 +488,27 @@ export interface Referral {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "prompts".
+ */
+export interface Prompt {
+  id: string;
+  title: string;
+  description?: string | null;
+  /**
+   * The actual prompt text to be copied.
+   */
+  content: string;
+  tags?:
+    | {
+        tag?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -563,6 +586,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'referrals';
         value: string | Referral;
+      } | null)
+    | ({
+        relationTo: 'prompts';
+        value: string | Prompt;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -822,6 +849,23 @@ export interface ReferralsSelect<T extends boolean = true> {
   link?: T;
   description?: T;
   image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "prompts_select".
+ */
+export interface PromptsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  content?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
