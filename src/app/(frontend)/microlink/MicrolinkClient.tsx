@@ -58,9 +58,7 @@ export const MicrolinkClient = ({ referrals }: { referrals: Referral[] }) => {
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col gap-4 text-center items-center"
       >
-        <h1 className="text-3xl tracking-tighter sm:text-4xl md:text-5xl">
-          Referral Links
-        </h1>
+        <h1 className="text-3xl tracking-tighter sm:text-4xl md:text-5xl">Referral Links</h1>
         <p className="text-muted-foreground max-w-175 mx-auto">
           Explore my curated list of tools and services. Use the search to find specific referrals
           or codes.
@@ -117,7 +115,7 @@ export const MicrolinkClient = ({ referrals }: { referrals: Referral[] }) => {
                       {item.code && (
                         <Badge
                           variant="secondary"
-                          className="font-mono text-xs shrink-0 cursor-pointer hover:bg-secondary/80 transition-colors"
+                          className="font-mono truncate text-xs shrink-0 cursor-pointer hover:bg-secondary/80 transition-colors"
                           onClick={() => copyCode(item.code!, item.id)}
                         >
                           {item.code}
