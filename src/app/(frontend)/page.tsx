@@ -89,9 +89,16 @@ export default async function HomePage() {
     name: profile?.name,
     jobTitle: profile?.title,
     url: process.env.NEXT_PUBLIC_SERVER_URL || 'https://avv-portfolio.vercel.app',
-    image: profile?.profilePicture?.url,
+    image:
+      profile?.profilePicture &&
+      typeof profile.profilePicture === 'object' &&
+      profile.profilePicture.url
+        ? profile.profilePicture.url
+        : undefined,
     sameAs: socialLinks.map((link) => link.url),
-    description: profile?.about ? (profile.about as any).root?.children?.[0]?.children?.[0]?.text : undefined,
+    description: profile?.about
+      ? (profile.about as any).root?.children?.[0]?.children?.[0]?.text
+      : undefined,
   }
 
   return (
