@@ -1,7 +1,8 @@
 'use client'
 
 import { Briefcase, FileText, Home, Image as ImageIcon, Menu, X } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
+import * as motion from 'motion/react-client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
