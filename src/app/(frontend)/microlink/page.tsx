@@ -14,6 +14,11 @@ export default async function MicrolinkPage() {
 
   const referrals = await payload.find({
     collection: 'referrals',
+    where: {
+      isShow: {
+        equals: true,
+      },
+    },
     depth: 1,
     limit: 100,
     sort: 'name',

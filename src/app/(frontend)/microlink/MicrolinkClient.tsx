@@ -22,6 +22,7 @@ interface Referral {
   id: string
   name: string
   code?: string | null
+  idCode?: string | null
   link: string
   description?: string | null
   image?: Media | string | null
@@ -37,7 +38,8 @@ export const MicrolinkClient = ({ referrals }: { referrals: Referral[] }) => {
     const lowerSearch = debouncedSearch.toLowerCase()
     return referrals.filter(ref =>
       ref.name.toLowerCase().includes(lowerSearch) ||
-      (ref.code && ref.code.toLowerCase().includes(lowerSearch))
+      (ref.code && ref.code.toLowerCase().includes(lowerSearch)) ||
+      (ref.idCode && ref.idCode.includes(lowerSearch))
     )
   }, [debouncedSearch, referrals])
 

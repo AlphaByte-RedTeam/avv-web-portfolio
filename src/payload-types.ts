@@ -474,6 +474,8 @@ export interface Activity {
  */
 export interface Referral {
   id: string;
+  idCode?: string | null;
+  isShow?: boolean | null;
   name: string;
   code?: string | null;
   link: string;
@@ -813,6 +815,8 @@ export interface ActivitySelect<T extends boolean = true> {
  * via the `definition` "referrals_select".
  */
 export interface ReferralsSelect<T extends boolean = true> {
+  idCode?: T;
+  isShow?: T;
   name?: T;
   code?: T;
   link?: T;
