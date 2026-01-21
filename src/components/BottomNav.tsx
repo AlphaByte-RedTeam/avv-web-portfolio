@@ -50,9 +50,16 @@ export const BottomNav = () => {
   }
 
   return (
-    <div className="fixed bottom-8 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none print:hidden">
-      <div className="relative pointer-events-auto group">
-        {/* Expanded Menu */}
+    <>
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+      <div className="fixed bottom-8 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none print:hidden">
+        <div className="relative pointer-events-auto group">
+          {/* Expanded Menu */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -128,5 +135,6 @@ export const BottomNav = () => {
         </motion.div>
       </div>
     </div>
+    </>
   )
 }
