@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { revalidatePage } from '../hooks/revalidatePage'
+import { revalidatePage } from '../lib/revalidatePage'
 
 export const Accomplishments: CollectionConfig = {
   slug: 'accomplishments',

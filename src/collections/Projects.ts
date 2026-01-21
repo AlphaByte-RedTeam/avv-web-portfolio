@@ -1,5 +1,5 @@
 import type { CollectionConfig, FieldHook } from 'payload'
-import { revalidatePage } from '../hooks/revalidatePage'
+import { revalidatePage } from '../lib/revalidatePage'
 
 const format = (val: string): string =>
   val
