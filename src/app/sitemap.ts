@@ -6,7 +6,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
 
-  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://example.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
 
   const { docs: posts } = await payload.find({
     collection: 'blog',
@@ -31,6 +32,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/resume`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${baseUrl}/activity`,
+      lastModified: new Date(),
+    },
+    {
+      url: `${baseUrl}/microlink`,
       lastModified: new Date(),
     },
     ...postsUrls,
