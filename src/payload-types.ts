@@ -106,7 +106,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'id') | ('en' | 'id')[];
   globals: {};
@@ -143,7 +143,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -167,7 +167,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -186,7 +186,7 @@ export interface Media {
  * via the `definition` "work-experience".
  */
 export interface WorkExperience {
-  id: number;
+  id: string;
   title: string;
   company: string;
   jobType?: ('full-time' | 'self-employed' | 'internship' | 'freelance' | 'contract') | null;
@@ -220,7 +220,7 @@ export interface WorkExperience {
  * via the `definition` "educations".
  */
 export interface Education {
-  id: number;
+  id: string;
   degree?: string | null;
   /**
    * e.g. 3.80
@@ -256,7 +256,7 @@ export interface Education {
  * via the `definition` "accomplishments".
  */
 export interface Accomplishment {
-  id: number;
+  id: string;
   title: string;
   category: 'certification' | 'project' | 'language' | 'organization' | 'award' | 'other';
   issuer?: string | null;
@@ -286,11 +286,11 @@ export interface Accomplishment {
  * via the `definition` "profile".
  */
 export interface Profile {
-  id: number;
+  id: string;
   name: string;
   title?: string | null;
   location?: string | null;
-  profilePicture?: (number | null) | Media;
+  profilePicture?: (string | null) | Media;
   about?: {
     root: {
       type: string;
@@ -314,7 +314,7 @@ export interface Profile {
  * via the `definition` "social-links".
  */
 export interface SocialLink {
-  id: number;
+  id: string;
   platform: string;
   url: string;
   label?: string | null;
@@ -327,7 +327,7 @@ export interface SocialLink {
  * via the `definition` "projects".
  */
 export interface Project {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   description?: {
@@ -345,10 +345,10 @@ export interface Project {
     };
     [k: string]: unknown;
   } | null;
-  coverImage?: (number | null) | Media;
+  coverImage?: (string | null) | Media;
   gallery?:
     | {
-        image?: (number | null) | Media;
+        image?: (string | null) | Media;
         id?: string | null;
       }[]
     | null;
@@ -369,7 +369,7 @@ export interface Project {
  * via the `definition` "organizations".
  */
 export interface Organization {
-  id: number;
+  id: string;
   organization: string;
   role: string;
   startDate: string;
@@ -377,7 +377,7 @@ export interface Organization {
    * Leave blank if currently active
    */
   endDate?: string | null;
-  logo?: (number | null) | Media;
+  logo?: (string | null) | Media;
   description?: {
     root: {
       type: string;
@@ -402,7 +402,7 @@ export interface Organization {
  * via the `definition` "languages".
  */
 export interface Language {
-  id: number;
+  id: string;
   language: string;
   proficiency: 'native_bilingual' | 'full_professional' | 'professional_working' | 'limited_working' | 'elementary';
   updatedAt: string;
@@ -413,7 +413,7 @@ export interface Language {
  * via the `definition` "technologies".
  */
 export interface Technology {
-  id: number;
+  id: string;
   name: string;
   category: 'programming_language' | 'framework' | 'database';
   priority?: number | null;
@@ -425,7 +425,7 @@ export interface Technology {
  * via the `definition` "blog".
  */
 export interface Blog {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   description: string;
@@ -455,8 +455,8 @@ export interface Blog {
  * via the `definition` "activity".
  */
 export interface Activity {
-  id: number;
-  image: number | Media;
+  id: string;
+  image: string | Media;
   caption?: string | null;
   location?: string | null;
   date: string;
@@ -468,7 +468,7 @@ export interface Activity {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number;
+  id: string;
   key: string;
   data:
     | {
@@ -485,64 +485,64 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'users';
-        value: number | User;
+        value: string | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'work-experience';
-        value: number | WorkExperience;
+        value: string | WorkExperience;
       } | null)
     | ({
         relationTo: 'educations';
-        value: number | Education;
+        value: string | Education;
       } | null)
     | ({
         relationTo: 'accomplishments';
-        value: number | Accomplishment;
+        value: string | Accomplishment;
       } | null)
     | ({
         relationTo: 'profile';
-        value: number | Profile;
+        value: string | Profile;
       } | null)
     | ({
         relationTo: 'social-links';
-        value: number | SocialLink;
+        value: string | SocialLink;
       } | null)
     | ({
         relationTo: 'projects';
-        value: number | Project;
+        value: string | Project;
       } | null)
     | ({
         relationTo: 'organizations';
-        value: number | Organization;
+        value: string | Organization;
       } | null)
     | ({
         relationTo: 'languages';
-        value: number | Language;
+        value: string | Language;
       } | null)
     | ({
         relationTo: 'technologies';
-        value: number | Technology;
+        value: string | Technology;
       } | null)
     | ({
         relationTo: 'blog';
-        value: number | Blog;
+        value: string | Blog;
       } | null)
     | ({
         relationTo: 'activity';
-        value: number | Activity;
+        value: string | Activity;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -552,10 +552,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -575,7 +575,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
