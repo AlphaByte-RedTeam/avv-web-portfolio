@@ -52,9 +52,9 @@ export const BottomNav = () => {
               animate="visible"
               exit="exit"
               variants={menuVariants}
-              className="absolute bottom-full mb-6 w-[calc(100vw-2.5rem)] max-w-sm -left-1/2 translate-x-[calc(50%-1rem)] sm:translate-x-0 sm:left-auto sm:w-80 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-2xl border border-white/20 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden"
+              className="absolute bottom-full mb-3 w-[calc(100vw-2rem)] sm:w-72 left-1/2 -translate-x-1/2 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-2xl border border-white/20 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden"
             >
-              <div className="p-3 space-y-1">
+              <div className="p-2 space-y-1">
                 {links.map((link) => {
                   const Icon = link.icon
                   const isActive = pathname === link.href
@@ -66,7 +66,7 @@ export const BottomNav = () => {
                       target={link.external ? '_blank' : undefined}
                       onClick={() => setIsOpen(false)}
                       className={cn(
-                        'flex items-center gap-4 px-5 py-3.5 rounded-2xl transition-all duration-200',
+                        'flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200',
                         isActive
                           ? 'bg-zinc-900/5 dark:bg-white/10 text-zinc-900 dark:text-white font-semibold'
                           : 'hover:bg-zinc-900/5 dark:hover:bg-white/5 text-muted-foreground hover:text-foreground font-medium',
@@ -77,8 +77,8 @@ export const BottomNav = () => {
                     </Link>
                   )
                 })}
-                <Separator className="my-2 bg-zinc-200/50 dark:bg-zinc-800/50" />
-                <div className="flex items-center justify-between px-5 py-3">
+                <Separator className="my-1 bg-zinc-200/50 dark:bg-zinc-800/50" />
+                <div className="flex items-center justify-between px-4 py-2">
                   <span className="text-sm font-medium text-muted-foreground">Appearance</span>
                   <ThemeToggle />
                 </div>
@@ -90,7 +90,7 @@ export const BottomNav = () => {
         {/* Floating Pill Bar */}
         <motion.div
           layout
-          className="bg-zinc-900/80 dark:bg-zinc-100/80 backdrop-blur-2xl text-zinc-50 dark:text-zinc-900 border border-white/10 dark:border-white/20 rounded-full px-6 pl-8 py-4 flex items-center justify-between gap-16 shadow-[0_12px_40px_-10px_rgba(0,0,0,0.3)] min-w-[220px]"
+          className="bg-zinc-900/80 dark:bg-zinc-100/80 backdrop-blur-2xl text-zinc-50 dark:text-zinc-900 border border-white/10 dark:border-white/20 rounded-full px-5 pl-6 py-1 flex items-center justify-between gap-8 shadow-[0_12px_40px_-10px_rgba(0,0,0,0.3)] min-w-45"
         >
           <Link
             href="/"
