@@ -80,6 +80,7 @@ export interface Config {
     technologies: Technology;
     blog: Blog;
     activity: Activity;
+    referrals: Referral;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -100,6 +101,7 @@ export interface Config {
     technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
     activity: ActivitySelect<false> | ActivitySelect<true>;
+    referrals: ReferralsSelect<false> | ReferralsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -468,6 +470,20 @@ export interface Activity {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "referrals".
+ */
+export interface Referral {
+  id: string;
+  name: string;
+  code?: string | null;
+  link: string;
+  description?: string | null;
+  image?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -541,6 +557,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'activity';
         value: string | Activity;
+      } | null)
+    | ({
+        relationTo: 'referrals';
+        value: string | Referral;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -785,6 +805,19 @@ export interface ActivitySelect<T extends boolean = true> {
   caption?: T;
   location?: T;
   date?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "referrals_select".
+ */
+export interface ReferralsSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  link?: T;
+  description?: T;
+  image?: T;
   updatedAt?: T;
   createdAt?: T;
 }
