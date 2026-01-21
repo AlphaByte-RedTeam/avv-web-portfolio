@@ -24,30 +24,31 @@ const getPost = cache(async (slug: string) => {
   const payload = await getPayload({ config: payloadConfig })
 
   let post: any = null
-  let locale: 'en' | 'id' = 'en'
+  let locale: 'en' | 'id' = 'id'
 
-  // Try EN
-  const { docs: docsEn } = await payload.find({
+  // Try ID (Local) first
+  const { docs: docsId } = await payload.find({
     collection: 'blog',
     where: { slug: { equals: slug } },
     limit: 1,
-    locale: 'en',
+    locale: 'id',
   })
 
-  if (docsEn.length > 0) {
-    post = docsEn[0]
-    locale = 'en'
+  if (docsId.length > 0) {
+    post = docsId[0]
+    locale = 'id'
   } else {
-    // Try ID
-    const { docs: docsId } = await payload.find({
+    // Try EN
+    const { docs: docsEn } = await payload.find({
       collection: 'blog',
       where: { slug: { equals: slug } },
       limit: 1,
-      locale: 'id',
+      locale: 'en',
     })
-    if (docsId.length > 0) {
-      post = docsId[0]
-      locale = 'id'
+
+    if (docsEn.length > 0) {
+      post = docsEn[0]
+      locale = 'en'
     }
   }
 
