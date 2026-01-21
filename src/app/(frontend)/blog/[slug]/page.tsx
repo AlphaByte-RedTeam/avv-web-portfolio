@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
-import React from 'react'
+import { cache } from 'react'
 import { AutoRefresh } from '@/components/AutoRefresh'
 import { PageActions } from '@/components/PageActions'
 import { RichText } from '@/components/RichText'
@@ -19,8 +19,7 @@ type Props = {
   params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
+const getPost = cache(async (slug: string) => {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
 
@@ -51,6 +50,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale = 'id'
     }
   }
+
+  return { post, locale, payload }
+})
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const { post, locale, payload } = await getPost(slug)
 
   if (!post) {
     return {
@@ -89,47 +95,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-
-  let post: any = null
-  let locale: 'en' | 'id' = 'en'
-
-  // Try EN
-  const { docs: docsEn } = await payload.find({
-    collection: 'blog',
-    where: { slug: { equals: slug } },
-    limit: 1,
-    locale: 'en',
-  })
-
-  if (docsEn.length > 0) {
-    post = docsEn[0]
-    locale = 'en'
-  } else {
-    // Try ID
-    const { docs: docsId } = await payload.find({
-      collection: 'blog',
-      where: { slug: { equals: slug } },
-      limit: 1,
-      locale: 'id',
-    })
-    if (docsId.length > 0) {
-      post = docsId[0]
-      locale = 'id'
-    }
-  }
+  const { post, locale, payload } = await getPost(slug)
 
   if (!post) {
     notFound()
   }
 
-  // Fetch all locales to get alternate slug
-  const docAllLocales = await payload.findByID({
-    collection: 'blog',
-    id: post.id,
-    locale: 'all',
-  })
+  // Fetch all locales and recommended posts in parallel
+  const [docAllLocales, { docs: recommendedPosts }] = await Promise.all([
+    payload.findByID({
+      collection: 'blog',
+      id: post.id,
+      locale: 'all',
+    }),
+    payload.find({
+      collection: 'blog',
+      where: {
+        and: [
+          {
+            category: {
+              equals: post.category,
+            },
+          },
+          {
+            id: {
+              not_equals: post.id,
+            },
+          },
+        ],
+      },
+      limit: 3,
+      sort: '-date',
+      locale,
+    }),
+  ])
 
   const alternateLocale = locale === 'en' ? 'id' : 'en'
   // @ts-expect-error
@@ -138,37 +137,11 @@ export default async function BlogPostPage({ params }: Props) {
   const plainTextContent = richTextToPlainText(post.content)
   const readingTime = calculateReadingTime(plainTextContent)
 
-  // Fetch Recommended Posts
-  const { docs: recommendedPosts } = await payload.find({
-    collection: 'blog',
-    where: {
-      and: [
-        {
-          category: {
-            equals: post.category,
-          },
-        },
-        {
-          id: {
-            not_equals: post.id,
-          },
-        },
-      ],
-    },
-    limit: 3,
-    sort: '-date',
-    locale,
-  })
-
   return (
     <div className="min-h-screen bg-background text-foreground pt-8 pb-20 px-4 sm:px-6 md:py-20 md:px-12 font-sans relative">
       <AutoRefresh intervalMs={5000} />
       <div className="flex items-center justify-end gap-2 mb-6 md:absolute md:top-12 md:right-12 md:mb-0">
-        <LanguageSwitcher
-          currentLocale={locale}
-          currentSlug={slug}
-          alternateSlug={alternateSlug}
-        />
+        <LanguageSwitcher currentLocale={locale} currentSlug={slug} alternateSlug={alternateSlug} />
         <SummarizeButton content={plainTextContent} />
         <ThemeToggle />
       </div>
