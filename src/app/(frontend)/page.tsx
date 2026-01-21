@@ -102,7 +102,14 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[500px] -translate-y-1/2 opacity-[0.15]"
+        style={{
+          background: `radial-gradient(circle at center, #ADFF00 0%, transparent 70%)`,
+          filter: 'blur(120px)',
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
