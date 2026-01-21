@@ -6,16 +6,40 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import * as motion from 'motion/react-client'
 
-const ActivityCalendar = dynamic(
+const ActivityCalendar = dynamic<ActivityCalendarProps>(
   () =>
     import('react-activity-calendar').then(
-      (mod: any) => mod.default || mod.ActivityCalendar || mod,
+      (mod: any) => mod.ActivityCalendar || mod.default || mod,
     ),
   {
     ssr: false,
     loading: () => <div>Loading...</div>,
   },
 )
+
+interface ActivityCalendarProps {
+  data: Array<{
+    date: string
+    count: number
+    level: number
+  }>
+  colorScheme?: 'light' | 'dark'
+  blockSize?: number
+  blockMargin?: number
+  fontSize?: number
+  theme?: {
+    light: string[]
+    dark: string[]
+  }
+  labels?: {
+    totalCount?: string
+    legend?: {
+      less: string
+      more: string
+    }
+  }
+  showWeekdayLabels?: boolean
+}
 
 interface GithubCalendarProps {
   username?: string
