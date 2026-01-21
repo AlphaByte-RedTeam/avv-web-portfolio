@@ -119,6 +119,11 @@ export const MicrolinkClient = ({ referrals }: { referrals: Referral[] }) => {
                         )}
                     </div>
                     {item.description && <CardDescription className="line-clamp-2 min-h-[40px]">{item.description}</CardDescription>}
+                    {item.idCode && (
+                      <p className="text-[10px] text-muted-foreground/50 font-mono mt-1">
+                        Code: {item.idCode}
+                      </p>
+                    )}
                   </CardHeader>
                   <CardContent className="mt-auto pt-0 pb-4">
                      <Button asChild className="w-full" variant="default">
