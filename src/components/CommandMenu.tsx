@@ -86,7 +86,7 @@ export function CommandMenu({ socialLinks }: CommandMenuProps) {
 
   return (
     <>
-      <div className="fixed bottom-4 right-4 z-50 md:hidden">
+      <div className="fixed bottom-4 right-4 z-50 md:hidden print:hidden">
         {/* Mobile trigger could go here if needed, but we rely on BottomNav/Gestures usually */}
       </div>
       <CommandDialog open={open} onOpenChange={setOpen}>

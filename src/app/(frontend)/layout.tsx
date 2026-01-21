@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "next-themes";
 import { BottomNav } from '@/components/BottomNav'
 import { Toaster } from '@/components/ui/sonner'
+import { ReadingProgress } from '@/components/ReadingProgress'
 
 const manrope = Manrope({
 	variable: "--font-manrope",
@@ -68,6 +69,7 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="system"
         >
+          <ReadingProgress />
           {children}
           <BottomNav />
           <Toaster />

@@ -306,6 +306,9 @@ export interface Profile {
     };
     [k: string]: unknown;
   } | null;
+  currentStatus?: string | null;
+  currentProject?: string | null;
+  currentLearning?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -677,6 +680,9 @@ export interface ProfileSelect<T extends boolean = true> {
   location?: T;
   profilePicture?: T;
   about?: T;
+  currentStatus?: T;
+  currentProject?: T;
+  currentLearning?: T;
   updatedAt?: T;
   createdAt?: T;
 }

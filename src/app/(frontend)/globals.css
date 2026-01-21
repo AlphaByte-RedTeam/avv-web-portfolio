@@ -173,3 +173,44 @@
   /* background-color: var(--color-custom-highlight); */
   /* color: var(--color-text-primary); */
 }
+
+@media print {
+  @page {
+    margin: 2cm;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+    background-image: none !important;
+  }
+
+  /* Hide interactive elements */
+  .fixed,
+  button,
+  [role="dialog"],
+  .toaster,
+  [aria-label="Toggle Menu"] {
+    display: none !important;
+  }
+
+  /* Ensure text readability */
+  p, h1, h2, h3, h4, h5, h6, span, div {
+    color: black !important;
+    text-shadow: none !important;
+  }
+
+  /* Clean up links */
+  a {
+    text-decoration: none !important;
+    color: black !important;
+  }
+  
+  /* Show href for external links if needed, or hide them for a cleaner look. 
+     Here we keep it clean. */
+
+  /* Specific component hiding */
+  .now-widget-container { /* We will add this class to the wrapper in CV.tsx or NowWidget */
+    display: none !important;
+  }
+}

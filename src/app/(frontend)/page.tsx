@@ -83,8 +83,23 @@ export default async function HomePage() {
   const blogPosts = blogPostsData.docs
   const activities = activitiesData.docs
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: profile?.name,
+    jobTitle: profile?.title,
+    url: process.env.NEXT_PUBLIC_SERVER_URL || 'https://avv-portfolio.vercel.app',
+    image: profile?.profilePicture?.url,
+    sameAs: socialLinks.map((link) => link.url),
+    description: profile?.about ? (profile.about as any).root?.children?.[0]?.children?.[0]?.text : undefined,
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <AutoRefresh intervalMs={5000} />
       <CommandMenu socialLinks={socialLinks} />
       <CV 

@@ -29,6 +29,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { NowWidget } from '@/components/NowWidget'
 import { RichText } from '@/components/RichText'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -662,6 +663,15 @@ export const CV: React.FC<Props> = ({
               </div>
             </motion.section>
           )}
+
+          {/* Now / Current Status Widget */}
+          <div className="pt-4">
+            <NowWidget 
+              status={profile?.currentStatus} 
+              project={profile?.currentProject} 
+              learning={profile?.currentLearning} 
+            />
+          </div>
         </div>
       </div>
 

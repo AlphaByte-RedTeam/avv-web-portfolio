@@ -41,5 +41,20 @@ export const Profile: CollectionConfig = {
       type: 'richText',
       label: 'About Me',
     },
+    {
+      name: 'currentStatus',
+      type: 'text',
+      label: 'Current Status (e.g., "Building cool stuff")',
+    },
+    {
+      name: 'currentProject',
+      type: 'text',
+      label: 'Currently Working On',
+    },
+    {
+      name: 'currentLearning',
+      type: 'text',
+      label: 'Currently Learning/Reading',
+    },
   ],
 }
