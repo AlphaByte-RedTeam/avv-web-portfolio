@@ -1,20 +1,11 @@
 'use client'
 
-import { AnimatePresence, motion } from 'framer-motion'
-import {
-  Briefcase,
-  FileText,
-  Home,
-  Image as ImageIcon,
-  Menu,
-  MessageSquare,
-  X,
-} from 'lucide-react'
+import { Briefcase, FileText, Home, Image as ImageIcon, Menu, X } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 
@@ -78,7 +69,7 @@ export const BottomNav = () => {
                         'flex items-center gap-4 px-5 py-3.5 rounded-2xl transition-all duration-200',
                         isActive
                           ? 'bg-zinc-900/5 dark:bg-white/10 text-zinc-900 dark:text-white font-semibold'
-                          : 'hover:bg-zinc-900/5 dark:hover:bg-white/5 text-muted-foreground hover:text-foreground font-medium'
+                          : 'hover:bg-zinc-900/5 dark:hover:bg-white/5 text-muted-foreground hover:text-foreground font-medium',
                       )}
                     >
                       <Icon className={cn('h-5 w-5', isActive ? 'stroke-[2.5px]' : 'stroke-2')} />
