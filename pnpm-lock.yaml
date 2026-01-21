@@ -92,6 +92,9 @@ importers:
       react:
         specifier: 19.2.1
         version: 19.2.1
+      react-activity-calendar:
+        specifier: ^3.0.5
+        version: 3.0.5(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       react-dom:
         specifier: 19.2.1
         version: 19.2.1(react@19.2.1)
@@ -4776,6 +4779,11 @@ packages:
   range-parser@1.2.1:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
     engines: {node: '>= 0.6'}
+
+  react-activity-calendar@3.0.5:
+    resolution: {integrity: sha512-OwySecGFNRq5uuIenBOHGyzFXiHbwD/hHobX0HTJt3G60/FZWKDd+v7uchS/62GznVrXoiY47vAXOxJrAcnW8A==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
 
   react-datepicker@7.6.0:
     resolution: {integrity: sha512-9cQH6Z/qa4LrGhzdc3XoHbhrxNcMi9MKjZmYgF/1MNNaJwvdSjv3Xd+jjvrEEbKEf71ZgCA3n7fQbdwd70qCRw==}
@@ -10872,6 +10880,14 @@ snapshots:
   quick-format-unescaped@4.0.4: {}
 
   range-parser@1.2.1: {}
+
+  react-activity-calendar@3.0.5(react-dom@19.2.1(react@19.2.1))(react@19.2.1):
+    dependencies:
+      '@floating-ui/react': 0.27.16(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      date-fns: 4.1.0
+      react: 19.2.1
+    transitivePeerDependencies:
+      - react-dom
 
   react-datepicker@7.6.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1):
     dependencies:

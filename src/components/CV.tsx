@@ -29,6 +29,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { GithubCalendar } from '@/components/GithubCalendar'
 import { NowWidget } from '@/components/NowWidget'
 import { RichText } from '@/components/RichText'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -180,6 +181,9 @@ export const CV: React.FC<Props> = ({
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ')
   }
+
+  const githubLink = socialLinks.find((link) => link.platform.toLowerCase().includes('github'))
+  const githubUsername = githubLink ? githubLink.url.replace(/\/$/, '').split('/').pop() : undefined
 
   return (
     <motion.div
@@ -671,6 +675,11 @@ export const CV: React.FC<Props> = ({
               project={profile?.currentProject} 
               learning={profile?.currentLearning} 
             />
+          </div>
+
+          {/* Github Calendar */}
+          <div className="pt-4">
+             <GithubCalendar username={githubUsername} />
           </div>
         </div>
       </div>
