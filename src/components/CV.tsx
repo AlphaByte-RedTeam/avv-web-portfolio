@@ -32,7 +32,6 @@ import { toast } from 'sonner'
 import { GithubCalendar } from '@/components/GithubCalendar'
 import { NowWidget } from '@/components/NowWidget'
 import { RichText } from '@/components/RichText'
-import { ThemeToggle } from '@/components/theme-toggle'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -106,10 +105,10 @@ export const CV: React.FC<Props> = ({
         minute: '2-digit',
         hour12: true,
       })
-      
+
       const offset = -now.getTimezoneOffset() / 60
       const gmtStr = `GMT${offset >= 0 ? '+' : ''}${offset}`
-      
+
       setTimeString(`${gmtStr} ${timeStr}`)
 
       const hour = now.getHours()
@@ -197,7 +196,7 @@ export const CV: React.FC<Props> = ({
       <Dialog open={isHireMeOpen} onOpenChange={setIsHireMeOpen}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle>Let's work together!</DialogTitle>
+            <DialogTitle>Let&apos;s work together!</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-4 py-4">
             <Button size="lg" variant="outline" className="w-full justify-between" asChild>
@@ -458,7 +457,7 @@ export const CV: React.FC<Props> = ({
               <div className="space-y-8 border-l border-border/40 pl-6 ml-2">
                 {educations.map((edu) => (
                   <div key={edu.id} className="relative space-y-1.5">
-                    <span className="absolute -left-[29px] top-1.5 h-1.5 w-1.5 rounded-full bg-primary/40 ring-4 ring-background" />
+                    <span className="absolute -left-7.25 top-1.5 h-1.5 w-1.5 rounded-full bg-primary/40 ring-4 ring-background" />
                     <div className="flex justify-between items-baseline">
                       <h3 className="text-base text-foreground">{edu.institution}</h3>
                       <span className="text-xs text-muted-foreground tabular-nums">
@@ -672,16 +671,16 @@ export const CV: React.FC<Props> = ({
 
           {/* Now / Current Status Widget */}
           <div className="pt-4">
-            <NowWidget 
-              status={profile?.currentStatus} 
-              project={profile?.currentProject} 
-              learning={profile?.currentLearning} 
+            <NowWidget
+              status={profile?.currentStatus}
+              project={profile?.currentProject}
+              learning={profile?.currentLearning}
             />
           </div>
 
           {/* Github Calendar */}
           <div className="pt-4">
-             <GithubCalendar username={githubUsername} />
+            <GithubCalendar username={githubUsername} />
           </div>
         </div>
       </div>

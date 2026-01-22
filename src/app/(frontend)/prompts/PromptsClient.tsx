@@ -109,7 +109,7 @@ export const PromptsClient = ({ prompts }: { prompts: Prompt[] }) => {
                         </CardDescription>
                       )}
                     </CardHeader>
-                    <CardContent className="flex-grow">
+                    <CardContent className="grow">
                       <div className="bg-muted/30 p-3 rounded-md text-xs font-mono text-muted-foreground line-clamp-3 overflow-hidden relative">
                         <div className="absolute inset-0 bg-linear-to-b from-transparent to-muted/10 pointer-events-none" />
                         {prompt.content}
@@ -137,7 +137,7 @@ export const PromptsClient = ({ prompts }: { prompts: Prompt[] }) => {
                     <DialogDescription>{prompt.description}</DialogDescription>
                   </DialogHeader>
                   <ScrollArea className="flex-1 bg-muted/30 rounded-md border p-4 font-mono text-sm">
-                    <pre className="whitespace-pre-wrap break-words font-mono text-sm leading-relaxed">
+                    <pre className="whitespace-pre-wrap wrap-break-word font-mono text-sm leading-relaxed">
                       {prompt.content}
                     </pre>
                   </ScrollArea>
@@ -170,7 +170,7 @@ export const PromptsClient = ({ prompts }: { prompts: Prompt[] }) => {
           animate={{ opacity: 1 }}
           className="text-center py-20 text-muted-foreground"
         >
-          No prompts found matching "{debouncedSearch}"
+          No prompts found matching &quot;{debouncedSearch}&quot;
         </motion.div>
       )}
     </div>

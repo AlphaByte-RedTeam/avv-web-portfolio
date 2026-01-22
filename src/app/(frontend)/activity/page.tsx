@@ -59,10 +59,10 @@ export default async function ActivityPage() {
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center space-y-4 opacity-70">
             <p className="text-xl text-muted-foreground font-light">
-              Sorry, there's nothing here.
+              Sorry, there&apos;s nothing here.
             </p>
             <p className="text-sm text-muted-foreground/60">
-              The author may be busy or there's something wrong.
+              The author may be busy or there&apos;s something wrong.
             </p>
           </div>
         )}

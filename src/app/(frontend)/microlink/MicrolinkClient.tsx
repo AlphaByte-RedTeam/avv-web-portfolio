@@ -128,7 +128,7 @@ export const MicrolinkClient = ({ referrals }: { referrals: Referral[] }) => {
                       )}
                     </div>
                     {item.description && (
-                      <CardDescription className="line-clamp-2 min-h-[40px]">
+                      <CardDescription className="line-clamp-2 min-h-10">
                         {item.description}
                       </CardDescription>
                     )}
@@ -163,7 +163,7 @@ export const MicrolinkClient = ({ referrals }: { referrals: Referral[] }) => {
           animate={{ opacity: 1 }}
           className="text-center py-20 text-muted-foreground"
         >
-          No referrals found matching "{debouncedSearch}"
+          No referrals found matching &quot;{debouncedSearch}&quot;
         </motion.div>
       )}
     </div>

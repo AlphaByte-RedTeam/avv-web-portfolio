@@ -132,7 +132,7 @@ export default async function BlogPostPage({ params }: Props) {
   ])
 
   const alternateLocale = locale === 'en' ? 'id' : 'en'
-  // @ts-expect-error
+  // @ts-expect-error - slug might not exist on docAllLocales type but it is in the data
   const alternateSlug = docAllLocales.slug?.[alternateLocale]
 
   const plainTextContent = richTextToPlainText(post.content)
