@@ -184,6 +184,7 @@ export const CV: React.FC<Props> = ({
 
   const githubLink = socialLinks.find((link) => link.platform.toLowerCase().includes('github'))
   const githubUsername = githubLink ? githubLink.url.replace(/\/$/, '').split('/').pop() : undefined
+  const calUsername = process.env.NEXT_PUBLIC_CAL_USERNAME || 'avv210'
 
   return (
     <motion.div
@@ -200,13 +201,13 @@ export const CV: React.FC<Props> = ({
           </DialogHeader>
           <div className="flex flex-col gap-4 py-4">
             <Button size="lg" variant="outline" className="w-full justify-between" asChild>
-              <Link href="https://cal.com/avv210/15min" target="_blank">
+              <Link href={`https://cal.com/${calUsername}/15min`} target="_blank">
                 <span>Quick 15 min chat</span>
                 <Phone className="h-4 w-4" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="w-full justify-between" asChild>
-              <Link href="https://cal.com/avv210/30min" target="_blank">
+              <Link href={`https://cal.com/${calUsername}/30min`} target="_blank">
                 <span>Book a 30 min call</span>
                 <Phone className="h-4 w-4" />
               </Link>
@@ -215,7 +216,7 @@ export const CV: React.FC<Props> = ({
           <DialogFooter className="sm:justify-center">
             <p className="text-sm text-muted-foreground">
               Scheduled with{' '}
-              <Link className="text-primary underline" href="https://cal.com/avv210">
+              <Link className="text-primary underline" href={`https://cal.com/${calUsername}`}>
                 Cal.com
               </Link>
             </p>

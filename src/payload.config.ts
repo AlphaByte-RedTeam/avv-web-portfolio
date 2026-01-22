@@ -72,7 +72,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
     idType: 'uuid',
-    schemaName: 'dtavv',
+    schemaName: process.env.DB_SCHEMA || 'dtavv',
   }),
   sharp,
   plugins: [

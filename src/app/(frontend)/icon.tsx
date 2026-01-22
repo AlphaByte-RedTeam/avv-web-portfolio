@@ -23,7 +23,7 @@ export default function Icon() {
           borderRadius: '50%',
         }}
       >
-        A
+        {(process.env.NEXT_PUBLIC_SITE_NAME || 'A').charAt(0)}
       </div>
     ),
     {

@@ -112,7 +112,7 @@ export const BottomNav = () => {
             className="font-mono font-medium tracking-[0.2em] text-lg hover:opacity-70 transition-opacity"
             onClick={() => setIsOpen(false)}
           >
-            AVV
+            {process.env.NEXT_PUBLIC_SITE_NAME || 'AVV'}
           </Link>
 
           <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/10 dark:bg-black/10 border border-white/10 dark:border-black/5 text-[10px] font-medium tracking-widest opacity-50">

@@ -22,19 +22,23 @@ const ibmPlexMono = IBM_Plex_Mono({
 })
 
 const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://avv-portfolio.vercel.app'
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'AVV'
+const siteTitle = process.env.NEXT_PUBLIC_SITE_TITLE || 'AVV | Portfolio'
+const siteDescription =
+  process.env.NEXT_PUBLIC_SITE_DESCRIPTION || 'Andrew V. Personal Portfolio and Resume'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'AVV | Portfolio',
-    template: '%s | AVV',
+    default: siteTitle,
+    template: `%s | ${siteName}`,
   },
-  description: 'Andrew V. Personal Portfolio and Resume',
+  description: siteDescription,
   openGraph: {
-    title: 'AVV | Portfolio',
-    description: 'Andrew V. Personal Portfolio and Resume',
+    title: siteTitle,
+    description: siteDescription,
     url: './',
-    siteName: 'AVV Portfolio',
+    siteName: `${siteName} Portfolio`,
     images: [
       {
         url: '/opengraph-image',
@@ -47,8 +51,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AVV | Portfolio',
-    description: 'Andrew V. Personal Portfolio and Resume',
+    title: siteTitle,
+    description: siteDescription,
     images: ['/opengraph-image'],
   },
 }
