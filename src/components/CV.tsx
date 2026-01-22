@@ -373,6 +373,7 @@ export const CV: React.FC<Props> = ({
               <div className="space-y-12">
                 {projects.map((project) => (
                   <div
+                    id={project.slug}
                     key={project.id}
                     className="group space-y-4 cursor-pointer"
                     onClick={() => setSelectedProject(project)}
