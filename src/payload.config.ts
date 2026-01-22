@@ -14,6 +14,8 @@ import { Media } from './collections/Media'
 import { Organizations } from './collections/Organizations'
 import { Profile } from './collections/Profile'
 import { Projects } from './collections/Projects'
+import { Prompts } from './collections/Prompts'
+import { Referrals } from './collections/Referrals'
 import { SocialLinks } from './collections/SocialLinks'
 import { Technologies } from './collections/Technologies'
 import { Users } from './collections/Users'
@@ -57,6 +59,8 @@ export default buildConfig({
     Technologies,
     Blog,
     Activity,
+    Referrals,
+    Prompts,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
