@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useDebounce } from '@/hooks/useDebounce'
-import { Search, Copy, Check, Terminal } from 'lucide-react'
+import { Search, Copy, Check } from 'lucide-react'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'motion/react'
 

@@ -697,7 +697,6 @@ export const CV: React.FC<Props> = ({
           <div className="space-y-8">
             {selectedProject?.coverImage && (
               <div className="aspect-video w-full overflow-hidden rounded-lg bg-secondary/20">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <Image
                   src={selectedProject.coverImage.url}
                   width={selectedProject.coverImage.width}
@@ -727,14 +726,12 @@ export const CV: React.FC<Props> = ({
               {selectedProject?.gallery?.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                   {selectedProject.gallery.map((item: any, idx: number) => (
-                    <div
-                      key={`${idx}-${item.id}`}
-                      className="aspect-video relative rounded-md overflow-hidden border border-border/50"
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <Image
-                        src={item.image.url}
-                        width={item.image.width}
+                                          <div
+                                            key={`${idx}-${item.id}`}
+                                            className="aspect-video relative rounded-md overflow-hidden border border-border/50"
+                                          >
+                                            <Image
+                                              src={item.image.url}                        width={item.image.width}
                         height={item.image.height}
                         alt={`${selectedProject.title} gallery ${idx}`}
                         className="w-full h-full object-cover"

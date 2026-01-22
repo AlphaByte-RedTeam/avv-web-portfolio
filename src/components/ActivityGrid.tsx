@@ -1,12 +1,11 @@
 'use client'
 
 import { DialogTitle } from '@radix-ui/react-dialog'
-import { CalendarDays, MapPin, X } from 'lucide-react'
+import { CalendarDays, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import type React from 'react'
 import { useState } from 'react'
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog'
-import { cn } from '@/lib/utils'
 
 type ActivityItem = {
   id: string
@@ -66,7 +65,7 @@ export const ActivityGrid: React.FC<Props> = ({ activities }) => {
           {selectedActivity && (
             <>
               {/* Image Section */}
-              <div className="relative w-full sm:w-1/2 md:w-3/5 bg-black flex items-center justify-center min-h-[300px] sm:min-h-0">
+              <div className="relative w-full sm:w-1/2 md:w-3/5 bg-black flex items-center justify-center min-h-75 sm:min-h-0">
                 <Image
                   src={selectedActivity.image.url}
                   alt={selectedActivity.image.alt || 'Activity photo'}

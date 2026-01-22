@@ -12,13 +12,11 @@ import {
 
 type Props = {
   currentLocale: 'en' | 'id'
-  currentSlug: string
   alternateSlug?: string
 }
 
 export const LanguageSwitcher: React.FC<Props> = ({
   currentLocale,
-  currentSlug,
   alternateSlug,
 }) => {
   const router = useRouter()

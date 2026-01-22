@@ -2,12 +2,6 @@
 
 import * as React from "react"
 import {
-  Calculator,
-  Calendar,
-  CreditCard,
-  Settings,
-  Smile,
-  User,
   Home,
   FileText,
   Image as ImageIcon,

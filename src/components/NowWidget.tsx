@@ -1,6 +1,6 @@
 'use client'
 
-import { BookOpen, Code2, Sparkles, Zap } from 'lucide-react'
+import { BookOpen, Code2, Zap } from 'lucide-react'
 import * as motion from 'motion/react-client'
 
 interface NowWidgetProps {
