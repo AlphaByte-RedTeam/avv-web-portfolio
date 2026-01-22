@@ -142,7 +142,7 @@ export default async function BlogPostPage({ params }: Props) {
     <div className="min-h-screen bg-background text-foreground pt-8 pb-20 px-4 sm:px-6 md:py-20 md:px-12 font-sans relative">
       <AutoRefresh intervalMs={5000} />
       <div className="flex items-center justify-end gap-2 mb-6 md:absolute md:top-12 md:right-12 md:mb-0">
-        <LanguageSwitcher currentLocale={locale} currentSlug={slug} alternateSlug={alternateSlug} />
+        <LanguageSwitcher currentLocale={locale} alternateSlug={alternateSlug} />
         <SummarizeButton content={plainTextContent} />
         <ThemeToggle />
       </div>
