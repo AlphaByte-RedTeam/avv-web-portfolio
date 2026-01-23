@@ -24,6 +24,7 @@ const formatSlug =
 
 export const Blog: CollectionConfig = {
   slug: 'blog',
+  versions: true,
   admin: {
     useAsTitle: 'title',
   },
