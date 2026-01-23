@@ -18,7 +18,15 @@ const serialize = (children: any[]): React.ReactNode[] => {
       if (node.format & 2) text = <em key={`${node.type}-${index}`}>{text}</em>
       if (node.format & 4) text = <s key={`${node.type}-${index}`}>{text}</s>
       if (node.format & 8) text = <u key={`${node.type}-${index}`}>{text}</u>
-      if (node.format & 16) text = <code key={`${node.type}-${index}`}>{text}</code>
+      if (node.format & 16)
+        text = (
+          <code
+            className="bg-orange-200 dark:bg-orange-300 px-2 py-0.5 rounded-sm text-orange-700 dark:text-orange-700"
+            key={`${node.type}-${index}`}
+          >
+            {text}
+          </code>
+        )
 
       return text
     }
