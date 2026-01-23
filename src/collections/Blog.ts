@@ -26,6 +26,7 @@ export const Blog: CollectionConfig = {
   slug: 'blog',
   versions: true,
   admin: {
+    group: 'Content',
     useAsTitle: 'title',
   },
   access: {

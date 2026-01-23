@@ -4,6 +4,7 @@ import { revalidatePage } from '../lib/revalidatePage'
 export const Technologies: CollectionConfig = {
   slug: 'technologies',
   admin: {
+    group: 'System',
     useAsTitle: 'name',
     defaultColumns: ['name', 'category', 'priority'],
   },

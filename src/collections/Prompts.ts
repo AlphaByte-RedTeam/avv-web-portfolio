@@ -4,6 +4,7 @@ import { revalidatePage } from '../lib/revalidatePage'
 export const Prompts: CollectionConfig = {
   slug: 'prompts',
   admin: {
+    group: 'Content',
     useAsTitle: 'title',
     defaultColumns: ['title', 'tags', 'updatedAt'],
   },

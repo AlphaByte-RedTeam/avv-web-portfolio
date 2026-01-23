@@ -4,6 +4,7 @@ import { revalidatePage } from '../lib/revalidatePage'
 export const Activity: CollectionConfig = {
   slug: 'activity',
   admin: {
+    group: 'Content',
     useAsTitle: 'caption',
     defaultColumns: ['date', 'caption', 'image'],
   },

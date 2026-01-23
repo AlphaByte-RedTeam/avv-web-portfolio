@@ -5,6 +5,7 @@ import { generateIdCode } from '../lib/generateIdCode'
 export const Referrals: CollectionConfig = {
   slug: 'referrals',
   admin: {
+    group: 'Resume',
     useAsTitle: 'name',
     defaultColumns: ['name', 'idCode', 'isShow', 'updatedAt'],
   },

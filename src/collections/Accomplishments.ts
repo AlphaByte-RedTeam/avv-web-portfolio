@@ -4,6 +4,7 @@ import { revalidatePage } from '../lib/revalidatePage'
 export const Accomplishments: CollectionConfig = {
   slug: 'accomplishments',
   admin: {
+    group: 'Resume',
     useAsTitle: 'title',
     defaultColumns: ['title', 'category', 'issuer', 'date'],
   },

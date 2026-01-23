@@ -25,6 +25,7 @@ const formatSlug =
 export const Projects: CollectionConfig = {
   slug: 'projects',
   admin: {
+    group: 'Content',
     useAsTitle: 'title',
   },
   access: {

@@ -4,6 +4,7 @@ import { revalidatePage } from '../lib/revalidatePage'
 export const SocialLinks: CollectionConfig = {
   slug: 'social-links',
   admin: {
+    group: 'System',
     useAsTitle: 'platform',
   },
   access: {

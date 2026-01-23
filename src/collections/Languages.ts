@@ -4,6 +4,7 @@ import { revalidatePage } from '../lib/revalidatePage'
 export const Languages: CollectionConfig = {
   slug: 'languages',
   admin: {
+    group: 'System',
     useAsTitle: 'language',
   },
   access: {

@@ -4,6 +4,7 @@ import { revalidatePage } from '../lib/revalidatePage'
 export const Educations: CollectionConfig = {
   slug: 'educations',
   admin: {
+    group: 'Resume',
     useAsTitle: 'institution',
   },
   access: {

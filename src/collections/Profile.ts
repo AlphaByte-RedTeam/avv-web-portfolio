@@ -4,6 +4,7 @@ import { revalidatePage } from '../lib/revalidatePage'
 export const Profile: CollectionConfig = {
   slug: 'profile',
   admin: {
+    group: 'System',
     useAsTitle: 'name',
   },
   access: {

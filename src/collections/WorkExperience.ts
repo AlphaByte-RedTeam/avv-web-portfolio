@@ -4,6 +4,7 @@ import { revalidatePage } from '../lib/revalidatePage'
 export const WorkExperience: CollectionConfig = {
   slug: 'work-experience',
   admin: {
+    group: 'Resume',
     useAsTitle: 'title',
   },
   access: {
