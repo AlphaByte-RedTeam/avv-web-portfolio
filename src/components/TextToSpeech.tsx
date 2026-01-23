@@ -27,33 +27,46 @@ export const TextToSpeech: React.FC<Props> = ({ title, summary, content }) => {
   const isFetchingRef = useRef<Set<number>>(new Set()) // Track active fetches
   const abortControllerRef = useRef<AbortController | null>(null)
 
-  useEffect(() => {
-    // Cleanup on unmount
-    return () => {
-      stopPlayback()
+    useEffect(() => {
+      // Cleanup on unmount or when content changes
+      return () => {
+        cleanupResources()
+      }
+    }, [title, summary, content])
+  
+    const cleanupResources = () => {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current = null
+      }
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+        abortControllerRef.current = null
+      }
+      // Revoke all blob URLs to free memory
+      audioCache.current.forEach((url) => URL.revokeObjectURL(url))
+      audioCache.current.clear()
+      isFetchingRef.current.clear()
+      
+      setChunks([])
+      setIsPlaying(false)
+      setIsPaused(false)
+      setIsLoading(false)
     }
-  }, [])
-
-  const stopPlayback = () => {
-    if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current = null
+  
+    const stopPlayback = () => {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
+      }
+      // We don't abort fetching here so that in-flight requests can finish and populate cache
+      // But we do reset the UI state
+      
+      setIsPlaying(false)
+      setIsPaused(false)
+      setIsLoading(false)
+      setChunks([]) // Clearing chunks forces a fresh start (re-calculation) on next play, which hits cache
     }
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort()
-      abortControllerRef.current = null
-    }
-    // Revoke all blob URLs to free memory
-    audioCache.current.forEach((url) => URL.revokeObjectURL(url))
-    audioCache.current.clear()
-    isFetchingRef.current.clear()
-
-    setIsPlaying(false)
-    setIsPaused(false)
-    setIsLoading(false)
-    setChunks([])
-  }
-
   // Helper to add WAV header to raw PCM data
   const writeWavHeader = (samples: Uint8Array, sampleRate = 24000) => {
     const buffer = new ArrayBuffer(44 + samples.length)
@@ -206,34 +219,43 @@ export const TextToSpeech: React.FC<Props> = ({ title, summary, content }) => {
   // Chunking utility
   const splitTextIntoChunks = (text: string, maxChars = 250): string[] => {
     // 1. Split by double newlines first (paragraphs)
-    const paragraphs = text
-      .split(/\n\s*\n/)
-      .map((p) => p.trim())
-      .filter(Boolean)
-
+    const paragraphs = text.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean)
+    
     const chunks: string[] = []
-
+    let currentChunk = ''
+    
     for (const paragraph of paragraphs) {
-      if (paragraph.length <= maxChars) {
-        chunks.push(paragraph)
+      // Check if adding this paragraph exceeds the limit
+      if ((currentChunk.length + paragraph.length + 2) <= maxChars) {
+        currentChunk += (currentChunk ? '\n\n' : '') + paragraph
       } else {
-        // 2. If paragraph is too long, split by sentences
-        // Match sentence endings (.!?) followed by space or end of string
-        const sentences = paragraph.match(/[^.!?]+[.!?]+(?=\s|$)|[^.!?]+$/g) || [paragraph]
-
-        let currentChunk = ''
-
-        for (const sentence of sentences) {
-          if ((currentChunk + sentence).length <= maxChars) {
-            currentChunk += (currentChunk ? ' ' : '') + sentence
-          } else {
-            if (currentChunk) chunks.push(currentChunk)
-            currentChunk = sentence
-          }
+        // Current chunk is full, push it
+        if (currentChunk) {
+          chunks.push(currentChunk)
+          currentChunk = ''
         }
-        if (currentChunk) chunks.push(currentChunk)
+
+        // If the new paragraph itself is huge (> maxChars), we must split it internally
+        if (paragraph.length > maxChars) {
+           const sentences = paragraph.match(/[^.!?]+[.!?]+(?=\s|$)|[^.!?]+$/g) || [paragraph]
+           for (const sentence of sentences) {
+             if ((currentChunk.length + sentence.length + 1) <= maxChars) {
+               currentChunk += (currentChunk ? ' ' : '') + sentence
+             } else {
+               if (currentChunk) chunks.push(currentChunk)
+               currentChunk = sentence
+             }
+           }
+        } else {
+          // Paragraph fits in a new chunk
+          currentChunk = paragraph
+        }
       }
     }
+    
+    // Push any remainder
+    if (currentChunk) chunks.push(currentChunk)
+    
     return chunks
   }
 
@@ -253,41 +275,37 @@ export const TextToSpeech: React.FC<Props> = ({ title, summary, content }) => {
 
       // Clean content
       const cleanContent = content.replace(/[#*`_~]/g, '')
-
+      
       // Construct the text flow
       const intro = `Title: ${title}. ${summary ? `Summary: ${summary}.` : ''}`
-
+      
       // Generate chunks
-      // Intro chunk is critical for immediate feedback, keep it separate and small
+      // 1. Intro: Keep small (200 chars) for instant start (Request #1)
       const introChunks = splitTextIntoChunks(intro, 200)
-      const contentChunks = splitTextIntoChunks(cleanContent, 300) // Slightly larger for body
-
+      
+      // 2. Body: Allow large chunks (4000 chars) to minimize requests (Requests #2, #3...)
+      // 4000 chars is roughly 3-5 mins of audio, which generates in <10s on Gemini Flash.
+      // Since intro plays for ~15s, this should be seamless.
+      const contentChunks = splitTextIntoChunks(cleanContent, 4000) 
+      
       const allChunks = [...introChunks, ...contentChunks]
-
+      
+      console.log(`Optimization: Merged ${paragraphsCount(cleanContent)} paragraphs into ${contentChunks.length} API requests.`)
       setChunks(allChunks)
 
       // Fetch first chunk immediately
       if (allChunks.length > 0) {
         try {
-          // Note: fetchAudioForChunk uses index, so it caches based on index.
-          // playChunk relies on 'chunks' state for length check.
-          // Since setState is async, we should pass the chunks explicitly or ensure state is ready?
-          // Actually, playChunk uses 'chunks' from closure if defined inside component?
-          // No, it uses 'chunks' from state which might be stale in this same render cycle!
-
-          // Fix: Modify playChunk to accept optional chunks array override
-
           const url = await fetchAudioForChunk(allChunks[0], 0, abortControllerRef.current.signal)
           if (!url) throw new Error('Initial fetch failed')
-
+          
           setIsLoading(false)
-          // Pass the fresh chunks array to avoid stale state issues
           playChunk(0, allChunks)
         } catch (error: any) {
           console.error('Initial Playback Failed:', error)
           setIsLoading(false)
           toast.error('Failed to start playback', {
-            description: error.message || 'Please check your connection or API key.',
+            description: error.message || 'Please check your connection or API key.'
           })
           stopPlayback()
         }
@@ -304,6 +322,9 @@ export const TextToSpeech: React.FC<Props> = ({ title, summary, content }) => {
       playChunk(0)
     }
   }
+
+  // Helper to count paragraphs for debug log
+  const paragraphsCount = (t: string) => t.split(/\n\s*\n/).filter(Boolean).length
 
   const handlePause = () => {
     if (audioRef.current) {
