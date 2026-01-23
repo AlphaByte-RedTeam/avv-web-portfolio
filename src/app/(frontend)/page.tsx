@@ -23,6 +23,7 @@ export default async function HomePage() {
     technologiesData,
     blogPostsData,
     activitiesData,
+    testScoresData,
   ] = await Promise.all([
     payload.find({
       collection: 'profile',
@@ -69,6 +70,10 @@ export default async function HomePage() {
       sort: '-date',
       limit: 6,
     }),
+    payload.find({
+      collection: 'test-scores',
+      sort: '-date',
+    }),
   ])
 
   const profile = profileData.docs[0] || null
@@ -82,6 +87,7 @@ export default async function HomePage() {
   const technologies = technologiesData.docs
   const blogPosts = blogPostsData.docs
   const activities = activitiesData.docs
+  const testScores = testScoresData.docs
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -128,6 +134,7 @@ export default async function HomePage() {
         technologies={technologies}
         blogPosts={blogPosts}
         activities={activities}
+        testScores={testScores}
       />
     </div>
   )

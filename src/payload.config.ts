@@ -18,6 +18,7 @@ import { Prompts } from './collections/Prompts'
 import { Referrals } from './collections/Referrals'
 import { SocialLinks } from './collections/SocialLinks'
 import { Technologies } from './collections/Technologies'
+import { TestScores } from './collections/TestScores'
 import { Users } from './collections/Users'
 import { WorkExperience } from './collections/WorkExperience'
 
@@ -57,6 +58,7 @@ export default buildConfig({
     Organizations,
     Languages,
     Technologies,
+    TestScores,
     Blog,
     Activity,
     Referrals,

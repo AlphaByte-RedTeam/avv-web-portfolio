@@ -78,6 +78,7 @@ export interface Config {
     organizations: Organization;
     languages: Language;
     technologies: Technology;
+    'test-scores': TestScore;
     blog: Blog;
     activity: Activity;
     referrals: Referral;
@@ -100,6 +101,7 @@ export interface Config {
     organizations: OrganizationsSelect<false> | OrganizationsSelect<true>;
     languages: LanguagesSelect<false> | LanguagesSelect<true>;
     technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
+    'test-scores': TestScoresSelect<false> | TestScoresSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
     activity: ActivitySelect<false> | ActivitySelect<true>;
     referrals: ReferralsSelect<false> | ReferralsSelect<true>;
@@ -429,6 +431,42 @@ export interface Technology {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "test-scores".
+ */
+export interface TestScore {
+  id: string;
+  title: string;
+  associatedWith?: string | null;
+  score: string;
+  date?: string | null;
+  documents?:
+    | {
+        title?: string | null;
+        file: string | Media;
+        externalUrl?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "blog".
  */
 export interface Blog {
@@ -574,6 +612,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'technologies';
         value: string | Technology;
+      } | null)
+    | ({
+        relationTo: 'test-scores';
+        value: string | TestScore;
       } | null)
     | ({
         relationTo: 'blog';
@@ -807,6 +849,27 @@ export interface TechnologiesSelect<T extends boolean = true> {
   name?: T;
   category?: T;
   priority?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "test-scores_select".
+ */
+export interface TestScoresSelect<T extends boolean = true> {
+  title?: T;
+  associatedWith?: T;
+  score?: T;
+  date?: T;
+  documents?:
+    | T
+    | {
+        title?: T;
+        file?: T;
+        externalUrl?: T;
+        id?: T;
+      };
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }

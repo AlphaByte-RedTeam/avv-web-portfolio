@@ -10,9 +10,13 @@ import {
   ArrowRight,
   Briefcase,
   Building2,
+  ClipboardCheck,
   Code,
   Database,
+  Download,
   ExternalLink,
+  Eye,
+  FileText,
   Folder,
   Globe,
   GraduationCap,
@@ -57,6 +61,7 @@ type Props = {
   technologies: any[]
   blogPosts?: any[]
   activities?: any[]
+  testScores?: any[]
 }
 
 const containerVariants: any = {
@@ -91,8 +96,10 @@ export const CV: React.FC<Props> = ({
   technologies = [],
   blogPosts = [],
   activities = [],
+  testScores = [],
 }) => {
   const [selectedProject, setSelectedProject] = useState<any>(null)
+  const [selectedTestScore, setSelectedTestScore] = useState<any>(null)
   const [isHireMeOpen, setIsHireMeOpen] = useState(false)
   const [timeString, setTimeString] = useState('')
   const [greeting, setGreeting] = useState('')
@@ -520,6 +527,63 @@ export const CV: React.FC<Props> = ({
             </motion.section>
           )}
 
+          {/* Test Scores */}
+          {testScores.length > 0 && (
+            <motion.section variants={itemVariants} className="space-y-6">
+              <div className="flex items-center gap-3 text-primary mb-6">
+                <ClipboardCheck className="h-4 w-4" />
+                <h2 className="text-lg tracking-widest uppercase text-muted-foreground">
+                  Test Score
+                </h2>
+              </div>
+
+              <div className="grid gap-6">
+                {testScores.map((score) => {
+                  return (
+                    <div
+                      key={score.id}
+                      onClick={() => setSelectedTestScore(score)}
+                      className="group flex gap-4 items-start p-4 rounded-lg bg-secondary/20 hover:bg-secondary/40 transition-colors cursor-pointer"
+                    >
+                      <div className="mt-1 text-primary opacity-50 group-hover:opacity-100 transition-opacity">
+                        <ClipboardCheck className="h-3.5 w-3.5" />
+                      </div>
+                      <div className="space-y-1.5 w-full">
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-sm text-foreground leading-tight group-hover:text-primary transition-colors">
+                              {score.title}
+                            </h4>
+                            <Eye className="h-3 w-3 text-muted-foreground/50 group-hover:text-primary transition-colors" />
+                          </div>
+                          <Badge variant="secondary" className="text-[10px] font-medium shrink-0 ml-2">
+                            {score.score}
+                          </Badge>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
+                          {score.associatedWith && <span>{score.associatedWith}</span>}
+                          {score.date && (
+                            <>
+                              {score.associatedWith && <span className="opacity-50">•</span>}
+                              <span>{formatDate(score.date)}</span>
+                            </>
+                          )}
+                        </div>
+
+                        {score.description && (
+                          <div className="text-xs text-muted-foreground pt-1 leading-relaxed line-clamp-2">
+                            <RichText content={score.description} />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </motion.section>
+          )}
+
           {/* Accomplishments */}
           {accomplishments.length > 0 && (
             <motion.section variants={itemVariants} className="space-y-6">
@@ -761,6 +825,123 @@ export const CV: React.FC<Props> = ({
                 )}
               </div>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Test Score Dialog */}
+      <Dialog open={!!selectedTestScore} onOpenChange={() => setSelectedTestScore(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-normal tracking-tight flex items-center justify-between gap-4">
+              <span>{selectedTestScore?.title}</span>
+              {selectedTestScore?.score && (
+                <Badge variant="secondary" className="text-sm font-medium">
+                  {selectedTestScore.score}
+                </Badge>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-6">
+            <div className="flex flex-col gap-1 text-sm text-muted-foreground">
+              {selectedTestScore?.associatedWith && (
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-foreground">Associated with:</span>
+                  <span>{selectedTestScore.associatedWith}</span>
+                </div>
+              )}
+              {selectedTestScore?.date && (
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-foreground">Date:</span>
+                  <span>{formatDate(selectedTestScore.date)}</span>
+                </div>
+              )}
+            </div>
+
+            {selectedTestScore?.description && (
+              <div className="prose prose-neutral dark:prose-invert max-w-none text-muted-foreground leading-relaxed text-sm">
+                <RichText content={selectedTestScore.description} />
+              </div>
+            )}
+
+            {selectedTestScore?.documents?.length > 0 && (
+              <div className="space-y-3 pt-2">
+                <h4 className="text-sm font-medium text-foreground flex items-center gap-2">
+                  <Folder className="h-4 w-4" />
+                  Documents & Certificates
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {selectedTestScore.documents.map((doc: any, idx: number) => {
+                    // Determine file url and type
+                    const fileUrl = doc.file?.url || doc.externalUrl
+                    const fileName = doc.title || doc.file?.filename || 'Document'
+                    const isImage = doc.file?.mimeType?.startsWith('image/')
+                    const fileSize = doc.file?.filesize
+                      ? `${(doc.file.filesize / 1024).toFixed(0)} KB`
+                      : ''
+
+                    if (!fileUrl) return null
+
+                    return (
+                      <div
+                        key={idx}
+                        className="group relative flex flex-col gap-2 p-3 rounded-lg border border-border/50 bg-secondary/10 hover:bg-secondary/20 transition-colors"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-center gap-3 overflow-hidden">
+                            <div className="shrink-0 h-10 w-10 rounded-md bg-background flex items-center justify-center text-primary/50 border border-border/50">
+                              {isImage ? (
+                                <Image
+                                  src={fileUrl}
+                                  alt={fileName}
+                                  width={40}
+                                  height={40}
+                                  className="h-full w-full object-cover rounded-md"
+                                />
+                              ) : (
+                                <FileText className="h-5 w-5" />
+                              )}
+                            </div>
+                            <div className="flex flex-col overflow-hidden">
+                              <span className="text-sm font-medium truncate text-foreground/90 group-hover:text-primary transition-colors">
+                                {fileName}
+                              </span>
+                              {fileSize && (
+                                <span className="text-[10px] text-muted-foreground">{fileSize}</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/30">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 text-xs flex-1 gap-1.5"
+                            asChild
+                          >
+                            <Link href={fileUrl} target="_blank" rel="noopener noreferrer">
+                              <Eye className="h-3 w-3" /> View
+                            </Link>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 text-xs flex-1 gap-1.5"
+                            asChild
+                          >
+                            <Link href={fileUrl} download target="_blank" rel="noopener noreferrer">
+                              <Download className="h-3 w-3" /> Download
+                            </Link>
+                          </Button>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>
