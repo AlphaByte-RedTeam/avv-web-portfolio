@@ -8,6 +8,7 @@ import { AutoRefresh } from '@/components/AutoRefresh'
 import { PageActions } from '@/components/PageActions'
 import { RichText } from '@/components/RichText'
 import { SummarizeButton } from '@/components/SummarizeButton'
+import { TextToSpeech } from '@/components/TextToSpeech'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Badge } from '@/components/ui/badge'
 import { calculateReadingTime, richTextToPlainText } from '@/lib/utils'
@@ -143,7 +144,6 @@ export default async function BlogPostPage({ params }: Props) {
       <AutoRefresh intervalMs={5000} />
       <div className="flex items-center justify-end gap-2 mb-6 md:absolute md:top-12 md:right-12 md:mb-0">
         <LanguageSwitcher currentLocale={locale} alternateSlug={alternateSlug} />
-        <SummarizeButton content={plainTextContent} />
         <ThemeToggle />
       </div>
 
@@ -167,6 +167,14 @@ export default async function BlogPostPage({ params }: Props) {
             <h1 className="text-3xl md:text-5xl font-medium tracking-tight text-foreground leading-tight">
               {post.title}
             </h1>
+            <div className="flex flex-row justify-center align-middle gap-4">
+              <SummarizeButton content={plainTextContent} />
+              <TextToSpeech
+                title={post.title}
+                summary={post.description || ''}
+                content={plainTextContent}
+              />
+            </div>
             <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-1.5">
                 <CalendarDays className="h-4 w-4 opacity-70" />
