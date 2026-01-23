@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 type Props = {
   content: any
@@ -102,13 +104,33 @@ const serialize = (children: any[]): React.ReactNode[] => {
       )
     }
 
+    if (node.type === 'block' && node.fields?.blockType === 'code') {
+      const code = node.fields.code
+      const language = node.fields.language
+
+      return (
+        <div key={`${node.type}-${index}`} className="my-4 rounded-md overflow-hidden">
+          <SyntaxHighlighter
+            language={language}
+            style={vscDarkPlus}
+            customStyle={{ margin: 0, borderRadius: '0.375rem' }}
+          >
+            {code}
+          </SyntaxHighlighter>
+        </div>
+      )
+    }
+
     if (node.type === 'code') {
+      // Fallback for native code blocks if any exist
+      const code = node.children?.[0]?.text || ''
+
       return (
         <pre
           key={`${node.type}-${index}`}
           className="bg-secondary/50 p-4 rounded-md overflow-x-auto my-4"
         >
-          <code className="text-sm font-mono text-foreground">{serialize(node.children)}</code>
+          <code className="text-sm font-mono text-foreground">{code}</code>
         </pre>
       )
     }

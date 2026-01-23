@@ -974,6 +974,101 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CodeBlock".
+ */
+export interface CodeBlock {
+  language?:
+    | (
+        | 'actionscript'
+        | 'ada'
+        | 'apacheconf'
+        | 'apex'
+        | 'applescript'
+        | 'arduino'
+        | 'asm6502'
+        | 'autohotkey'
+        | 'bash'
+        | 'basic'
+        | 'batch'
+        | 'c'
+        | 'csharp'
+        | 'cpp'
+        | 'clojure'
+        | 'cmake'
+        | 'coffeescript'
+        | 'css'
+        | 'd'
+        | 'dart'
+        | 'diff'
+        | 'django'
+        | 'docker'
+        | 'elixir'
+        | 'elm'
+        | 'erlang'
+        | 'fsharp'
+        | 'fortran'
+        | 'go'
+        | 'graphql'
+        | 'groovy'
+        | 'haskell'
+        | 'hcl'
+        | 'html'
+        | 'http'
+        | 'java'
+        | 'javascript'
+        | 'json'
+        | 'jsx'
+        | 'julia'
+        | 'kotlin'
+        | 'latex'
+        | 'less'
+        | 'lisp'
+        | 'lua'
+        | 'makefile'
+        | 'markdown'
+        | 'matlab'
+        | 'nginx'
+        | 'objectivec'
+        | 'ocaml'
+        | 'pascal'
+        | 'perl'
+        | 'php'
+        | 'powershell'
+        | 'prolog'
+        | 'protobuf'
+        | 'python'
+        | 'r'
+        | 'ruby'
+        | 'rust'
+        | 'sas'
+        | 'sass'
+        | 'scss'
+        | 'scala'
+        | 'scheme'
+        | 'shell'
+        | 'solidity'
+        | 'sql'
+        | 'swift'
+        | 'toml'
+        | 'tsx'
+        | 'typescript'
+        | 'vbnet'
+        | 'verilog'
+        | 'vhdl'
+        | 'visual-basic'
+        | 'wasm'
+        | 'wiki'
+        | 'yaml'
+        | 'zig'
+      )
+    | null;
+  code: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
