@@ -7,6 +7,7 @@ import { ThemeProvider } from 'next-themes'
 import { BottomNav } from '@/components/BottomNav'
 import { Toaster } from '@/components/ui/sonner'
 import { ReadingProgress } from '@/components/ReadingProgress'
+import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
 
 const manrope = Manrope({
   variable: '--font-manrope',
@@ -64,6 +65,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <GoogleTagManager gtmId={process.env.GOOGLE_TAG_MANAGER_ID as string} />
+      <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID as string} />
       <body
         className={`${manrope.variable} ${ibmPlexMono.variable} font-sans antialiased bg-background text-foreground`}
       >
