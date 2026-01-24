@@ -5,11 +5,13 @@ import {
   IconBrandInstagram,
   IconBrandLinkedin,
   IconBrandTiktok,
+  IconEye,
 } from '@tabler/icons-react'
 import {
   ArrowRight,
   Briefcase,
   Building2,
+  ChartBar,
   ClipboardCheck,
   Code,
   Database,
@@ -62,6 +64,8 @@ type Props = {
   blogPosts?: any[]
   activities?: any[]
   testScores?: any[]
+  visitorCount?: number
+  totalVisitors?: number
 }
 
 const containerVariants: any = {
@@ -97,6 +101,8 @@ export const CV: React.FC<Props> = ({
   blogPosts = [],
   activities = [],
   testScores = [],
+  visitorCount = 0,
+  totalVisitors = 0,
 }) => {
   const [selectedProject, setSelectedProject] = useState<any>(null)
   const [selectedTestScore, setSelectedTestScore] = useState<any>(null)
@@ -157,6 +163,14 @@ export const CV: React.FC<Props> = ({
     if (p.includes('whatsapp')) return <Phone className="h-3.5 w-3.5" />
     if (p.includes('mail') || p.includes('email')) return <Mail className="h-3.5 w-3.5" />
     return <Globe className="h-3.5 w-3.5" />
+  }
+
+  const calculateReadingTime = (content: any) => {
+    const text = richTextToPlainText(content)
+    const wordsPerMinute = 200
+    const words = text.trim().split(/\s+/).length
+    const time = Math.ceil(words / wordsPerMinute)
+    return `${time} min read`
   }
 
   const handleSocialClick = (e: React.MouseEvent, link: any) => {
@@ -746,6 +760,35 @@ export const CV: React.FC<Props> = ({
           <div className="pt-4">
             <GithubCalendar username={githubUsername} />
           </div>
+
+          {/* Web Metrics */}
+          {visitorCount > 0 && (
+            <motion.section variants={itemVariants} className="space-y-6 pt-4">
+              <div className="flex items-center gap-3 text-primary mb-6">
+                <ChartBar className="h-4 w-4" />
+                <h2 className="text-lg tracking-widest uppercase text-muted-foreground">
+                  Web Metrics
+                </h2>
+              </div>
+              <div className="flex flex-col gap-2 border-l border-border/40 pl-6 ml-2">
+                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <span className="relative flex h-2 w-2 shrink-0">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <span>
+                      U&apos;re the <span className="font-mono font-medium text-foreground">{visitorCount}</span> visitors today!
+                    </span>
+                 </div>
+                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <span className="h-2 w-2 rounded-full bg-primary/40 shrink-0"></span>
+                    <span>
+                      Total visitors: <span className="font-mono font-medium text-foreground">{totalVisitors}</span>
+                    </span>
+                 </div>
+              </div>
+            </motion.section>
+          )}
         </div>
       </div>
 
@@ -962,8 +1005,17 @@ export const CV: React.FC<Props> = ({
             {blogPosts.map((post) => (
               <Link key={post.id} href={`/blog/${post.slug}`} className="group block h-full">
                 <div className="bg-secondary/20 rounded-lg p-6 h-full transition-colors hover:bg-secondary/40 flex flex-col border border-transparent hover:border-border/50">
-                  <div className="text-xs text-muted-foreground mb-3 font-mono">
-                    {formatDate(post.date)}
+                  <div className="text-xs text-muted-foreground mb-3 font-mono flex items-center justify-between">
+                    <span>{formatDate(post.date)}</span>
+                    <span className="flex items-center gap-3">
+                      <span>{calculateReadingTime(post.content)}</span>
+                      {post.views > 0 && (
+                        <span className="flex items-center gap-1">
+                          <IconEye className="h-3 w-3" />
+                          {post.views}
+                        </span>
+                      )}
+                    </span>
                   </div>
                   <h3 className="text-lg font-medium leading-tight mb-3 group-hover:text-primary transition-colors line-clamp-2">
                     {post.title}

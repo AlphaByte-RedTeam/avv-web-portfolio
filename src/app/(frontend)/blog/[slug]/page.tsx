@@ -11,6 +11,7 @@ import { SummarizeButton } from '@/components/SummarizeButton'
 import { TextToSpeech } from '@/components/TextToSpeech'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Badge } from '@/components/ui/badge'
+import { ViewTracker } from '@/components/ViewTracker'
 import { calculateReadingTime, richTextToPlainText } from '@/lib/utils'
 import config from '@/payload.config'
 
@@ -142,6 +143,7 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-background text-foreground pt-8 pb-20 px-4 sm:px-6 md:py-20 md:px-12 font-sans relative">
       <AutoRefresh intervalMs={5000} />
+      <ViewTracker slug={slug} />
       <div className="flex items-center justify-end gap-2 mb-6 md:absolute md:top-12 md:right-12 md:mb-0">
         <LanguageSwitcher currentLocale={locale} alternateSlug={alternateSlug} />
         <ThemeToggle />

@@ -1,5 +1,7 @@
 import { getPayload } from 'payload'
 import React from 'react'
+import { headers } from 'next/headers'
+import crypto from 'node:crypto'
 import config from '@/payload.config'
 import { CV } from '@/components/CV'
 import { AutoRefresh } from '@/components/AutoRefresh'
@@ -76,6 +78,52 @@ export default async function HomePage() {
     }),
   ])
 
+  // Visitor tracking logic
+  const today = new Date().toISOString().split('T')[0]
+  let visitorCount = 0
+  let totalVisitors = 0
+
+  try {
+    const headersList = await headers()
+    const ip = headersList.get('x-forwarded-for') || 'unknown'
+    const userAgent = headersList.get('user-agent') || 'unknown'
+    const hash = crypto.createHash('sha256').update(`${ip}-${userAgent}-${today}`).digest('hex')
+
+    const existing = await payload.find({
+      collection: 'visitors',
+      where: {
+        and: [
+          { hash: { equals: hash } },
+          { date: { equals: today } }
+        ]
+      },
+      limit: 1,
+    })
+
+    if (existing.docs.length === 0) {
+      await payload.create({
+        collection: 'visitors',
+        data: { hash, date: today },
+      })
+    }
+
+    const [todayCount, totalCount] = await Promise.all([
+      payload.count({
+        collection: 'visitors',
+        where: { date: { equals: today } },
+      }),
+      payload.count({
+        collection: 'visitors',
+      })
+    ])
+
+    visitorCount = todayCount.totalDocs
+    totalVisitors = totalCount.totalDocs
+
+  } catch (error) {
+    console.error('Error tracking visitors:', error)
+  }
+
   const profile = profileData.docs[0] || null
   const workExperience = workExperienceData.docs
   const educations = educationsData.docs
@@ -86,6 +134,23 @@ export default async function HomePage() {
   const languages = languagesData.docs
   const technologies = technologiesData.docs
   const blogPosts = blogPostsData.docs
+  
+  // Fetch views for blog posts
+  const blogPostsWithViews = await Promise.all(
+    blogPosts.map(async (post) => {
+      const views = await payload.count({
+        collection: 'blog-views',
+        where: {
+          blogSlug: { equals: post.slug },
+        },
+      })
+      return {
+        ...post,
+        views: views.totalDocs,
+      }
+    })
+  )
+
   const activities = activitiesData.docs
   const testScores = testScoresData.docs
 
@@ -132,9 +197,11 @@ export default async function HomePage() {
         organizations={organizations}
         languages={languages}
         technologies={technologies}
-        blogPosts={blogPosts}
+        blogPosts={blogPostsWithViews}
         activities={activities}
         testScores={testScores}
+        visitorCount={visitorCount}
+        totalVisitors={totalVisitors}
       />
     </div>
   )

@@ -9,6 +9,7 @@ import { Code } from './blocks/Code/config'
 import { Accomplishments } from './collections/Accomplishments'
 import { Activity } from './collections/Activity'
 import { Blog } from './collections/Blog'
+import { BlogViews } from './collections/BlogViews'
 import { Educations } from './collections/Educations'
 import { Languages } from './collections/Languages'
 import { Media } from './collections/Media'
@@ -21,6 +22,7 @@ import { SocialLinks } from './collections/SocialLinks'
 import { Technologies } from './collections/Technologies'
 import { TestScores } from './collections/TestScores'
 import { Users } from './collections/Users'
+import { Visitors } from './collections/Visitors'
 import { WorkExperience } from './collections/WorkExperience'
 
 const filename = fileURLToPath(import.meta.url)
@@ -64,6 +66,8 @@ export default buildConfig({
     Activity,
     Referrals,
     Prompts,
+    Visitors,
+    BlogViews,
   ],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [

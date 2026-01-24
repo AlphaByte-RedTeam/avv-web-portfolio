@@ -1,9 +1,11 @@
+import { IconEye } from '@tabler/icons-react'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import { AutoRefresh } from '@/components/AutoRefresh'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Badge } from '@/components/ui/badge'
+import { calculateReadingTime, richTextToPlainText } from '@/lib/utils'
 import config from '@/payload.config'
 import { BlogFilters } from './BlogFilters'
 
@@ -45,7 +47,20 @@ export default async function BlogPage({ searchParams }: Props) {
     where: query.and.length > 0 ? query : undefined,
   })
 
-  const posts = blogData.docs
+  const posts = await Promise.all(
+    blogData.docs.map(async (post) => {
+      const views = await payload.count({
+        collection: 'blog-views',
+        where: {
+          blogSlug: { equals: post.slug },
+        },
+      })
+      return {
+        ...post,
+        views: views.totalDocs,
+      }
+    })
+  )
 
   return (
     <div className="min-h-screen bg-background text-foreground py-20 px-6 sm:px-12 font-sans">
@@ -84,46 +99,60 @@ export default async function BlogPage({ searchParams }: Props) {
               <p>No posts found matching your criteria.</p>
             </div>
           ) : (
-            posts.map((post) => (
-              <Link key={post.id} href={`/blog/${post.slug}`} className="group block space-y-4">
-                <div className="space-y-3">
-                  <div className="flex flex-col gap-1 text-xs text-muted-foreground">
-                    <div className="flex items-center justify-between">
-                      <span>
-                        {new Date(post.date).toLocaleDateString('en-US', {
-                          month: 'long',
-                          day: 'numeric',
-                          year: 'numeric',
-                        })}
-                      </span>
-                      {post.category && (
-                        <Badge variant="secondary" className="uppercase tracking-wider text-[10px]">
-                          {post.category}
-                        </Badge>
+            posts.map((post) => {
+              const plainText = richTextToPlainText(post.content)
+              const readingTime = calculateReadingTime(plainText)
+
+              return (
+                <Link key={post.id} href={`/blog/${post.slug}`} className="group block space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <span>
+                            {new Date(post.date).toLocaleDateString('en-US', {
+                              month: 'long',
+                              day: 'numeric',
+                              year: 'numeric',
+                            })}
+                          </span>
+                          <span>{readingTime} min read</span>
+                          {(post.views as number) > 0 && (
+                            <span className="flex items-center gap-1">
+                              <IconEye className="h-3 w-3" />
+                              {post.views as number}
+                            </span>
+                          )}
+                        </div>
+                        {post.category && (
+                          <Badge variant="secondary" className="uppercase tracking-wider text-[10px]">
+                            {post.category}
+                          </Badge>
+                        )}
+                      </div>
+                      {post.lastUpdated && new Date(post.lastUpdated) > new Date(post.date) && (
+                        <span className="text-[10px] opacity-70">
+                          Updated:{' '}
+                          {new Date(post.lastUpdated).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          })}
+                        </span>
                       )}
                     </div>
-                    {post.lastUpdated && new Date(post.lastUpdated) > new Date(post.date) && (
-                      <span className="text-[10px] opacity-70">
-                        Updated:{' '}
-                        {new Date(post.lastUpdated).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                        })}
-                      </span>
+                    <h2 className="text-xl font-medium text-foreground group-hover:text-primary transition-colors">
+                      {post.title}
+                    </h2>
+                    {post.description && (
+                      <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+                        {post.description}
+                      </p>
                     )}
                   </div>
-                  <h2 className="text-xl font-medium text-foreground group-hover:text-primary transition-colors">
-                    {post.title}
-                  </h2>
-                  {post.description && (
-                    <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
-                      {post.description}
-                    </p>
-                  )}
-                </div>
-              </Link>
-            ))
+                </Link>
+              )
+            })
           )}
         </div>
       </div>

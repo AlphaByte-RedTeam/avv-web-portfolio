@@ -83,6 +83,8 @@ export interface Config {
     activity: Activity;
     referrals: Referral;
     prompts: Prompt;
+    visitors: Visitor;
+    'blog-views': BlogView;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -106,6 +108,8 @@ export interface Config {
     activity: ActivitySelect<false> | ActivitySelect<true>;
     referrals: ReferralsSelect<false> | ReferralsSelect<true>;
     prompts: PromptsSelect<false> | PromptsSelect<true>;
+    visitors: VisitorsSelect<false> | VisitorsSelect<true>;
+    'blog-views': BlogViewsSelect<false> | BlogViewsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -547,6 +551,28 @@ export interface Prompt {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "visitors".
+ */
+export interface Visitor {
+  id: string;
+  hash: string;
+  date: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-views".
+ */
+export interface BlogView {
+  id: string;
+  blogSlug: string;
+  hash: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -632,6 +658,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'prompts';
         value: string | Prompt;
+      } | null)
+    | ({
+        relationTo: 'visitors';
+        value: string | Visitor;
+      } | null)
+    | ({
+        relationTo: 'blog-views';
+        value: string | BlogView;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -929,6 +963,26 @@ export interface PromptsSelect<T extends boolean = true> {
         tag?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "visitors_select".
+ */
+export interface VisitorsSelect<T extends boolean = true> {
+  hash?: T;
+  date?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-views_select".
+ */
+export interface BlogViewsSelect<T extends boolean = true> {
+  blogSlug?: T;
+  hash?: T;
   updatedAt?: T;
   createdAt?: T;
 }
