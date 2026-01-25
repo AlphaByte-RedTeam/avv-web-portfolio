@@ -59,7 +59,7 @@ export default async function BlogPage({ searchParams }: Props) {
         ...post,
         views: views.totalDocs,
       }
-    })
+    }),
   )
 
   return (
@@ -125,7 +125,10 @@ export default async function BlogPage({ searchParams }: Props) {
                           )}
                         </div>
                         {post.category && (
-                          <Badge variant="secondary" className="uppercase tracking-wider text-[10px]">
+                          <Badge
+                            variant="secondary"
+                            className="uppercase tracking-wider text-[10px]"
+                          >
                             {post.category}
                           </Badge>
                         )}

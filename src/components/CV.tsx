@@ -4,6 +4,7 @@ import {
   IconBrandGithub,
   IconBrandInstagram,
   IconBrandLinkedin,
+  IconBrandThreads,
   IconBrandTiktok,
   IconEye,
 } from '@tabler/icons-react'
@@ -40,6 +41,8 @@ import { toast } from 'sonner'
 import { GithubCalendar } from '@/components/GithubCalendar'
 import { NowWidget } from '@/components/NowWidget'
 import { RichText } from '@/components/RichText'
+import { SettingsMenu } from '@/components/SettingsMenu'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -169,6 +172,7 @@ export const CV: React.FC<Props> = ({
     if (p.includes('instagram')) return <IconBrandInstagram className="h-3.5 w-3.5" />
     if (p.includes('tiktok')) return <IconBrandTiktok className="h-3.5 w-3.5" />
     if (p.includes('whatsapp')) return <Phone className="h-3.5 w-3.5" />
+    if (p.includes('threads')) return <IconBrandThreads className="h-3.5 w-3.5" />
     if (p.includes('mail') || p.includes('email')) return <Mail className="h-3.5 w-3.5" />
     return <Globe className="h-3.5 w-3.5" />
   }
@@ -221,6 +225,10 @@ export const CV: React.FC<Props> = ({
       variants={containerVariants}
       className="max-w-5xl mx-auto py-20 px-6 sm:px-12 font-sans text-sm md:text-base leading-relaxed relative overflow-x-hidden"
     >
+      <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-2 z-50 print:hidden">
+        <ThemeToggle />
+      </div>
+
       {/* Hire Me Dialog */}
       <Dialog open={isHireMeOpen} onOpenChange={setIsHireMeOpen}>
         <DialogContent className="sm:max-w-sm">
@@ -587,7 +595,10 @@ export const CV: React.FC<Props> = ({
                             </h4>
                             <Eye className="h-3 w-3 text-muted-foreground/50 group-hover:text-primary transition-colors" />
                           </div>
-                          <Badge variant="secondary" className="text-[10px] font-medium shrink-0 ml-2">
+                          <Badge
+                            variant="secondary"
+                            className="text-[10px] font-medium shrink-0 ml-2"
+                          >
                             {score.score}
                           </Badge>
                         </div>
@@ -788,45 +799,54 @@ export const CV: React.FC<Props> = ({
                 </h2>
               </div>
               <div className="flex flex-col gap-2 border-l border-border/40 pl-6 ml-2">
-                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <span className="relative flex h-2 w-2 shrink-0">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                    </span>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <span className="relative flex h-2 w-2 shrink-0">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                  <span>
+                    U&apos;re the{' '}
+                    <span className="font-mono font-medium text-foreground">{visitorCount}</span>{' '}
+                    visitors today!
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <span className="h-2 w-2 rounded-full bg-primary/40 shrink-0"></span>
+                  <span>
+                    Total visitors:{' '}
+                    <span className="font-mono font-medium text-foreground">{totalVisitors}</span>
+                  </span>
+                </div>
+                {globalReach > 0 && (
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <Globe className="h-3.5 w-3.5 text-blue-500 shrink-0" />
                     <span>
-                      U&apos;re the <span className="font-mono font-medium text-foreground">{visitorCount}</span> visitors today!
+                      Global Reach:{' '}
+                      <span className="font-medium text-foreground">{globalReach} Countries</span>
                     </span>
-                 </div>
-                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <span className="h-2 w-2 rounded-full bg-primary/40 shrink-0"></span>
+                  </div>
+                )}
+                {totalVisitors > 0 && (
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <Smartphone className="h-3.5 w-3.5 text-purple-500 shrink-0" />
                     <span>
-                      Total visitors: <span className="font-mono font-medium text-foreground">{totalVisitors}</span>
+                      Device Usage:{' '}
+                      <span className="font-medium text-foreground">
+                        {mobilePercentage}% Mobile
+                      </span>
                     </span>
-                 </div>
-                 {globalReach > 0 && (
-                   <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                      <Globe className="h-3.5 w-3.5 text-blue-500 shrink-0" />
-                      <span>
-                        Global Reach: <span className="font-medium text-foreground">{globalReach} Countries</span>
-                      </span>
-                   </div>
-                 )}
-                 {totalVisitors > 0 && (
-                   <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                      <Smartphone className="h-3.5 w-3.5 text-purple-500 shrink-0" />
-                      <span>
-                        Device Usage: <span className="font-medium text-foreground">{mobilePercentage}% Mobile</span>
-                      </span>
-                   </div>
-                 )}
-                 {trendingPost && (
-                   <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                      <Flame className="h-3.5 w-3.5 text-orange-500 shrink-0" />
-                      <span>
-                        Trending: <span className="font-medium text-foreground">{trendingPost.title}</span> <span className="text-xs opacity-70">({trendingPost.views} views)</span>
-                      </span>
-                   </div>
-                 )}
+                  </div>
+                )}
+                {trendingPost && (
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <Flame className="h-3.5 w-3.5 text-orange-500 shrink-0" />
+                    <span>
+                      Trending:{' '}
+                      <span className="font-medium text-foreground">{trendingPost.title}</span>{' '}
+                      <span className="text-xs opacity-70">({trendingPost.views} views)</span>
+                    </span>
+                  </div>
+                )}
               </div>
             </motion.section>
           )}
@@ -874,12 +894,13 @@ export const CV: React.FC<Props> = ({
               {selectedProject?.gallery?.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                   {selectedProject.gallery.map((item: any, idx: number) => (
-                                          <div
-                                            key={`${idx}-${item.id}`}
-                                            className="aspect-video relative rounded-md overflow-hidden border border-border/50"
-                                          >
-                                            <Image
-                                              src={item.image.url}                        width={item.image.width}
+                    <div
+                      key={`${idx}-${item.id}`}
+                      className="aspect-video relative rounded-md overflow-hidden border border-border/50"
+                    >
+                      <Image
+                        src={item.image.url}
+                        width={item.image.width}
                         height={item.image.height}
                         alt={`${selectedProject.title} gallery ${idx}`}
                         className="w-full h-full object-cover"
@@ -992,7 +1013,9 @@ export const CV: React.FC<Props> = ({
                                 {fileName}
                               </span>
                               {fileSize && (
-                                <span className="text-[10px] text-muted-foreground">{fileSize}</span>
+                                <span className="text-[10px] text-muted-foreground">
+                                  {fileSize}
+                                </span>
                               )}
                             </div>
                           </div>

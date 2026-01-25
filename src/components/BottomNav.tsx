@@ -1,11 +1,13 @@
 'use client'
 
-import { Briefcase, FileText, Home, Image as ImageIcon, Link2, Menu, Terminal, X } from 'lucide-react'
+import { Briefcase, FileText, Home, Image as ImageIcon, Link2, Menu, Terminal, Volume2, VolumeX, X } from 'lucide-react'
 import { AnimatePresence, motion, type Variants } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { usePreferences } from '@/components/PreferencesProvider'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 
@@ -13,6 +15,7 @@ export const BottomNav = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [shortcut, setShortcut] = useState('⌘K')
   const pathname = usePathname()
+  const { soundEnabled, toggleSound } = usePreferences()
 
   useEffect(() => {
     const isMac = typeof window !== 'undefined' && navigator.platform.toUpperCase().indexOf('MAC') >= 0
@@ -93,9 +96,23 @@ export const BottomNav = () => {
                   )
                 })}
                 <Separator className="my-1 bg-zinc-200/50 dark:bg-zinc-800/50" />
-                <div className="flex items-center justify-between px-4 py-2">
-                  <span className="text-sm font-medium text-muted-foreground">Appearance</span>
-                  <ThemeToggle />
+                <div className="px-4 py-2 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-muted-foreground">Appearance</span>
+                    <ThemeToggle />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-muted-foreground">Sound Effects</span>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-8 w-8 rounded-full" 
+                      onClick={toggleSound}
+                    >
+                      {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4 text-muted-foreground" />}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </motion.div>

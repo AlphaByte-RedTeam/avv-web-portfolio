@@ -8,6 +8,7 @@ import { BottomNav } from '@/components/BottomNav'
 import { Toaster } from '@/components/ui/sonner'
 import { ReadingProgress } from '@/components/ReadingProgress'
 import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
+import { PreferencesProvider } from '@/components/PreferencesProvider'
 
 const manrope = Manrope({
   variable: '--font-manrope',
@@ -76,12 +77,14 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="system"
         >
-          <ReadingProgress />
-          {children}
-          <BottomNav />
-          <Toaster />
-          <Analytics />
-          <SpeedInsights />
+          <PreferencesProvider>
+            <ReadingProgress />
+            {children}
+            <BottomNav />
+            <Toaster />
+            <Analytics />
+            <SpeedInsights />
+          </PreferencesProvider>
         </ThemeProvider>
       </body>
     </html>

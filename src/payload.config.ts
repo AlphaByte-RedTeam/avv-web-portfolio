@@ -9,6 +9,7 @@ import { Code } from './blocks/Code/config'
 import { Accomplishments } from './collections/Accomplishments'
 import { Activity } from './collections/Activity'
 import { Blog } from './collections/Blog'
+import { BlogLikes } from './collections/BlogLikes'
 import { BlogViews } from './collections/BlogViews'
 import { Educations } from './collections/Educations'
 import { Languages } from './collections/Languages'
@@ -53,6 +54,7 @@ export default buildConfig({
     Accomplishments,
     Activity,
     Blog,
+    BlogLikes,
     BlogViews,
     Educations,
     Languages,

@@ -70,6 +70,7 @@ export interface Config {
     accomplishments: Accomplishment;
     activity: Activity;
     blog: Blog;
+    'blog-likes': BlogLike;
     'blog-views': BlogView;
     educations: Education;
     languages: Language;
@@ -95,6 +96,7 @@ export interface Config {
     accomplishments: AccomplishmentsSelect<false> | AccomplishmentsSelect<true>;
     activity: ActivitySelect<false> | ActivitySelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
+    'blog-likes': BlogLikesSelect<false> | BlogLikesSelect<true>;
     'blog-views': BlogViewsSelect<false> | BlogViewsSelect<true>;
     educations: EducationsSelect<false> | EducationsSelect<true>;
     languages: LanguagesSelect<false> | LanguagesSelect<true>;
@@ -237,6 +239,17 @@ export interface Blog {
   } | null;
   date: string;
   category?: ('technology' | 'personal' | 'tutorial' | 'review' | 'other') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-likes".
+ */
+export interface BlogLike {
+  id: string;
+  blogSlug: string;
+  hash: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -611,6 +624,10 @@ export interface PayloadLockedDocument {
         value: string | Blog;
       } | null)
     | ({
+        relationTo: 'blog-likes';
+        value: string | BlogLike;
+      } | null)
+    | ({
         relationTo: 'blog-views';
         value: string | BlogView;
       } | null)
@@ -751,6 +768,16 @@ export interface BlogSelect<T extends boolean = true> {
   content?: T;
   date?: T;
   category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-likes_select".
+ */
+export interface BlogLikesSelect<T extends boolean = true> {
+  blogSlug?: T;
+  hash?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -10,8 +10,10 @@ import { RichText } from '@/components/RichText'
 import { SummarizeButton } from '@/components/SummarizeButton'
 import { TextToSpeech } from '@/components/TextToSpeech'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { SettingsMenu } from '@/components/SettingsMenu'
 import { Badge } from '@/components/ui/badge'
 import { ViewTracker } from '@/components/ViewTracker'
+import { LikeButton } from '@/components/LikeButton'
 import { calculateReadingTime, richTextToPlainText } from '@/lib/utils'
 import config from '@/payload.config'
 
@@ -170,6 +172,7 @@ export default async function BlogPostPage({ params }: Props) {
               {post.title}
             </h1>
             <div className="flex flex-row justify-center align-middle gap-4">
+              <LikeButton slug={slug} />
               <SummarizeButton content={plainTextContent} />
               <TextToSpeech
                 title={post.title}
