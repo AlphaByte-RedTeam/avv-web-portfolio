@@ -50,24 +50,24 @@ export default buildConfig({
     },
   },
   collections: [
-    Users,
-    Media,
-    WorkExperience,
-    Educations,
     Accomplishments,
-    Profile,
-    SocialLinks,
-    Projects,
-    Organizations,
+    Activity,
+    Blog,
+    BlogViews,
+    Educations,
     Languages,
+    Media,
+    Organizations,
+    Profile,
+    Projects,
+    Prompts,
+    Referrals,
+    SocialLinks,
     Technologies,
     TestScores,
-    Blog,
-    Activity,
-    Referrals,
-    Prompts,
+    Users,
     Visitors,
-    BlogViews,
+    WorkExperience,
   ],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
@@ -84,6 +84,9 @@ export default buildConfig({
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
+      ssl: {
+        rejectUnauthorized: false, // Required for Supabase/Neon in some environments
+      },
     },
     idType: 'uuid',
     schemaName: process.env.DB_SCHEMA || 'dtavv',

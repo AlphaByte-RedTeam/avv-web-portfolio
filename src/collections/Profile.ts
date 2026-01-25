@@ -57,5 +57,11 @@ export const Profile: CollectionConfig = {
       type: 'text',
       label: 'Currently Learning/Reading',
     },
+    {
+      name: 'isHireable',
+      type: 'checkbox',
+      label: 'Open to Work Status',
+      defaultValue: false,
+    },
   ],
 }

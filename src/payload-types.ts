@@ -67,24 +67,24 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
-    media: Media;
-    'work-experience': WorkExperience;
-    educations: Education;
     accomplishments: Accomplishment;
-    profile: Profile;
-    'social-links': SocialLink;
-    projects: Project;
-    organizations: Organization;
+    activity: Activity;
+    blog: Blog;
+    'blog-views': BlogView;
+    educations: Education;
     languages: Language;
+    media: Media;
+    organizations: Organization;
+    profile: Profile;
+    projects: Project;
+    prompts: Prompt;
+    referrals: Referral;
+    'social-links': SocialLink;
     technologies: Technology;
     'test-scores': TestScore;
-    blog: Blog;
-    activity: Activity;
-    referrals: Referral;
-    prompts: Prompt;
+    users: User;
     visitors: Visitor;
-    'blog-views': BlogView;
+    'work-experience': WorkExperience;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,24 +92,24 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
-    'work-experience': WorkExperienceSelect<false> | WorkExperienceSelect<true>;
-    educations: EducationsSelect<false> | EducationsSelect<true>;
     accomplishments: AccomplishmentsSelect<false> | AccomplishmentsSelect<true>;
-    profile: ProfileSelect<false> | ProfileSelect<true>;
-    'social-links': SocialLinksSelect<false> | SocialLinksSelect<true>;
-    projects: ProjectsSelect<false> | ProjectsSelect<true>;
-    organizations: OrganizationsSelect<false> | OrganizationsSelect<true>;
+    activity: ActivitySelect<false> | ActivitySelect<true>;
+    blog: BlogSelect<false> | BlogSelect<true>;
+    'blog-views': BlogViewsSelect<false> | BlogViewsSelect<true>;
+    educations: EducationsSelect<false> | EducationsSelect<true>;
     languages: LanguagesSelect<false> | LanguagesSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    organizations: OrganizationsSelect<false> | OrganizationsSelect<true>;
+    profile: ProfileSelect<false> | ProfileSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    prompts: PromptsSelect<false> | PromptsSelect<true>;
+    referrals: ReferralsSelect<false> | ReferralsSelect<true>;
+    'social-links': SocialLinksSelect<false> | SocialLinksSelect<true>;
     technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
     'test-scores': TestScoresSelect<false> | TestScoresSelect<true>;
-    blog: BlogSelect<false> | BlogSelect<true>;
-    activity: ActivitySelect<false> | ActivitySelect<true>;
-    referrals: ReferralsSelect<false> | ReferralsSelect<true>;
-    prompts: PromptsSelect<false> | PromptsSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     visitors: VisitorsSelect<false> | VisitorsSelect<true>;
-    'blog-views': BlogViewsSelect<false> | BlogViewsSelect<true>;
+    'work-experience': WorkExperienceSelect<false> | WorkExperienceSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -150,27 +150,46 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "accomplishments".
  */
-export interface User {
+export interface Accomplishment {
   id: string;
+  title: string;
+  category: 'certification' | 'project' | 'language' | 'organization' | 'award' | 'other';
+  issuer?: string | null;
+  date?: string | null;
+  credentialId?: string | null;
+  credentialUrl?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   updatedAt: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activity".
+ */
+export interface Activity {
+  id: string;
+  image: string | Media;
+  caption?: string | null;
+  location?: string | null;
+  date: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -193,20 +212,15 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "work-experience".
+ * via the `definition` "blog".
  */
-export interface WorkExperience {
+export interface Blog {
   id: string;
   title: string;
-  company: string;
-  jobType?: ('full-time' | 'self-employed' | 'internship' | 'freelance' | 'contract') | null;
-  location?: string | null;
-  startDate: string;
-  /**
-   * Leave blank if currently working here
-   */
-  endDate?: string | null;
-  description?: {
+  slug: string;
+  description: string;
+  lastUpdated?: string | null;
+  content?: {
     root: {
       type: string;
       children: {
@@ -221,7 +235,19 @@ export interface WorkExperience {
     };
     [k: string]: unknown;
   } | null;
-  linkedinUrl?: string | null;
+  date: string;
+  category?: ('technology' | 'personal' | 'tutorial' | 'review' | 'other') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-views".
+ */
+export interface BlogView {
+  id: string;
+  blogSlug: string;
+  hash: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -263,16 +289,29 @@ export interface Education {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "accomplishments".
+ * via the `definition` "languages".
  */
-export interface Accomplishment {
+export interface Language {
   id: string;
-  title: string;
-  category: 'certification' | 'project' | 'language' | 'organization' | 'award' | 'other';
-  issuer?: string | null;
-  date?: string | null;
-  credentialId?: string | null;
-  credentialUrl?: string | null;
+  language: string;
+  proficiency: 'native_bilingual' | 'full_professional' | 'professional_working' | 'limited_working' | 'elementary';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "organizations".
+ */
+export interface Organization {
+  id: string;
+  organization: string;
+  role: string;
+  startDate: string;
+  /**
+   * Leave blank if currently active
+   */
+  endDate?: string | null;
+  logo?: (string | null) | Media;
   description?: {
     root: {
       type: string;
@@ -288,6 +327,7 @@ export interface Accomplishment {
     };
     [k: string]: unknown;
   } | null;
+  website?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -319,19 +359,7 @@ export interface Profile {
   currentStatus?: string | null;
   currentProject?: string | null;
   currentLearning?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "social-links".
- */
-export interface SocialLink {
-  id: string;
-  platform: string;
-  url: string;
-  label?: string | null;
-  icon?: string | null;
+  isHireable?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -379,45 +407,51 @@ export interface Project {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "organizations".
+ * via the `definition` "prompts".
  */
-export interface Organization {
+export interface Prompt {
   id: string;
-  organization: string;
-  role: string;
-  startDate: string;
+  title: string;
+  description?: string | null;
   /**
-   * Leave blank if currently active
+   * The actual prompt text to be copied.
    */
-  endDate?: string | null;
-  logo?: (string | null) | Media;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  website?: string | null;
+  content: string;
+  tags?:
+    | {
+        tag?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "languages".
+ * via the `definition` "referrals".
  */
-export interface Language {
+export interface Referral {
   id: string;
-  language: string;
-  proficiency: 'native_bilingual' | 'full_professional' | 'professional_working' | 'limited_working' | 'elementary';
+  idCode?: string | null;
+  isShow?: boolean | null;
+  name: string;
+  code?: string | null;
+  link: string;
+  description?: string | null;
+  image?: (string | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links".
+ */
+export interface SocialLink {
+  id: string;
+  platform: string;
+  url: string;
+  label?: string | null;
+  icon?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -471,83 +505,27 @@ export interface TestScore {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog".
+ * via the `definition` "users".
  */
-export interface Blog {
+export interface User {
   id: string;
-  title: string;
-  slug: string;
-  description: string;
-  lastUpdated?: string | null;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  date: string;
-  category?: ('technology' | 'personal' | 'tutorial' | 'review' | 'other') | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "activity".
- */
-export interface Activity {
-  id: string;
-  image: string | Media;
-  caption?: string | null;
-  location?: string | null;
-  date: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "referrals".
- */
-export interface Referral {
-  id: string;
-  idCode?: string | null;
-  isShow?: boolean | null;
-  name: string;
-  code?: string | null;
-  link: string;
-  description?: string | null;
-  image?: (string | null) | Media;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "prompts".
- */
-export interface Prompt {
-  id: string;
-  title: string;
-  description?: string | null;
-  /**
-   * The actual prompt text to be copied.
-   */
-  content: string;
-  tags?:
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
     | {
-        tag?: string | null;
-        id?: string | null;
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
       }[]
     | null;
-  updatedAt: string;
-  createdAt: string;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -564,12 +542,35 @@ export interface Visitor {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog-views".
+ * via the `definition` "work-experience".
  */
-export interface BlogView {
+export interface WorkExperience {
   id: string;
-  blogSlug: string;
-  hash: string;
+  title: string;
+  company: string;
+  jobType?: ('full-time' | 'self-employed' | 'internship' | 'freelance' | 'contract') | null;
+  location?: string | null;
+  startDate: string;
+  /**
+   * Leave blank if currently working here
+   */
+  endDate?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  linkedinUrl?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -598,44 +599,56 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
-        relationTo: 'users';
-        value: string | User;
+        relationTo: 'accomplishments';
+        value: string | Accomplishment;
       } | null)
     | ({
-        relationTo: 'media';
-        value: string | Media;
+        relationTo: 'activity';
+        value: string | Activity;
       } | null)
     | ({
-        relationTo: 'work-experience';
-        value: string | WorkExperience;
+        relationTo: 'blog';
+        value: string | Blog;
+      } | null)
+    | ({
+        relationTo: 'blog-views';
+        value: string | BlogView;
       } | null)
     | ({
         relationTo: 'educations';
         value: string | Education;
       } | null)
     | ({
-        relationTo: 'accomplishments';
-        value: string | Accomplishment;
+        relationTo: 'languages';
+        value: string | Language;
       } | null)
     | ({
-        relationTo: 'profile';
-        value: string | Profile;
-      } | null)
-    | ({
-        relationTo: 'social-links';
-        value: string | SocialLink;
-      } | null)
-    | ({
-        relationTo: 'projects';
-        value: string | Project;
+        relationTo: 'media';
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'organizations';
         value: string | Organization;
       } | null)
     | ({
-        relationTo: 'languages';
-        value: string | Language;
+        relationTo: 'profile';
+        value: string | Profile;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: string | Project;
+      } | null)
+    | ({
+        relationTo: 'prompts';
+        value: string | Prompt;
+      } | null)
+    | ({
+        relationTo: 'referrals';
+        value: string | Referral;
+      } | null)
+    | ({
+        relationTo: 'social-links';
+        value: string | SocialLink;
       } | null)
     | ({
         relationTo: 'technologies';
@@ -646,28 +659,16 @@ export interface PayloadLockedDocument {
         value: string | TestScore;
       } | null)
     | ({
-        relationTo: 'blog';
-        value: string | Blog;
-      } | null)
-    | ({
-        relationTo: 'activity';
-        value: string | Activity;
-      } | null)
-    | ({
-        relationTo: 'referrals';
-        value: string | Referral;
-      } | null)
-    | ({
-        relationTo: 'prompts';
-        value: string | Prompt;
+        relationTo: 'users';
+        value: string | User;
       } | null)
     | ({
         relationTo: 'visitors';
         value: string | Visitor;
       } | null)
     | ({
-        relationTo: 'blog-views';
-        value: string | BlogView;
+        relationTo: 'work-experience';
+        value: string | WorkExperience;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -713,25 +714,80 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
+ * via the `definition` "accomplishments_select".
  */
-export interface UsersSelect<T extends boolean = true> {
+export interface AccomplishmentsSelect<T extends boolean = true> {
+  title?: T;
+  category?: T;
+  issuer?: T;
+  date?: T;
+  credentialId?: T;
+  credentialUrl?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activity_select".
+ */
+export interface ActivitySelect<T extends boolean = true> {
+  image?: T;
+  caption?: T;
+  location?: T;
+  date?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog_select".
+ */
+export interface BlogSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  description?: T;
+  lastUpdated?: T;
+  content?: T;
+  date?: T;
+  category?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-views_select".
+ */
+export interface BlogViewsSelect<T extends boolean = true> {
+  blogSlug?: T;
   hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "educations_select".
+ */
+export interface EducationsSelect<T extends boolean = true> {
+  degree?: T;
+  gpa?: T;
+  institution?: T;
+  startDate?: T;
+  endDate?: T;
+  description?: T;
+  linkedinUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "languages_select".
+ */
+export interface LanguagesSelect<T extends boolean = true> {
+  language?: T;
+  proficiency?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -753,47 +809,16 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "work-experience_select".
+ * via the `definition` "organizations_select".
  */
-export interface WorkExperienceSelect<T extends boolean = true> {
-  title?: T;
-  company?: T;
-  jobType?: T;
-  location?: T;
+export interface OrganizationsSelect<T extends boolean = true> {
+  organization?: T;
+  role?: T;
   startDate?: T;
   endDate?: T;
+  logo?: T;
   description?: T;
-  linkedinUrl?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "educations_select".
- */
-export interface EducationsSelect<T extends boolean = true> {
-  degree?: T;
-  gpa?: T;
-  institution?: T;
-  startDate?: T;
-  endDate?: T;
-  description?: T;
-  linkedinUrl?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "accomplishments_select".
- */
-export interface AccomplishmentsSelect<T extends boolean = true> {
-  title?: T;
-  category?: T;
-  issuer?: T;
-  date?: T;
-  credentialId?: T;
-  credentialUrl?: T;
-  description?: T;
+  website?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -810,18 +835,7 @@ export interface ProfileSelect<T extends boolean = true> {
   currentStatus?: T;
   currentProject?: T;
   currentLearning?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "social-links_select".
- */
-export interface SocialLinksSelect<T extends boolean = true> {
-  platform?: T;
-  url?: T;
-  label?: T;
-  icon?: T;
+  isHireable?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -854,26 +868,45 @@ export interface ProjectsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "organizations_select".
+ * via the `definition` "prompts_select".
  */
-export interface OrganizationsSelect<T extends boolean = true> {
-  organization?: T;
-  role?: T;
-  startDate?: T;
-  endDate?: T;
-  logo?: T;
+export interface PromptsSelect<T extends boolean = true> {
+  title?: T;
   description?: T;
-  website?: T;
+  content?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "languages_select".
+ * via the `definition` "referrals_select".
  */
-export interface LanguagesSelect<T extends boolean = true> {
-  language?: T;
-  proficiency?: T;
+export interface ReferralsSelect<T extends boolean = true> {
+  idCode?: T;
+  isShow?: T;
+  name?: T;
+  code?: T;
+  link?: T;
+  description?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links_select".
+ */
+export interface SocialLinksSelect<T extends boolean = true> {
+  platform?: T;
+  url?: T;
+  label?: T;
+  icon?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -911,62 +944,25 @@ export interface TestScoresSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog_select".
+ * via the `definition` "users_select".
  */
-export interface BlogSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  description?: T;
-  lastUpdated?: T;
-  content?: T;
-  date?: T;
-  category?: T;
+export interface UsersSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "activity_select".
- */
-export interface ActivitySelect<T extends boolean = true> {
-  image?: T;
-  caption?: T;
-  location?: T;
-  date?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "referrals_select".
- */
-export interface ReferralsSelect<T extends boolean = true> {
-  idCode?: T;
-  isShow?: T;
-  name?: T;
-  code?: T;
-  link?: T;
-  description?: T;
-  image?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "prompts_select".
- */
-export interface PromptsSelect<T extends boolean = true> {
-  title?: T;
-  description?: T;
-  content?: T;
-  tags?:
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
     | T
     | {
-        tag?: T;
         id?: T;
+        createdAt?: T;
+        expiresAt?: T;
       };
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -982,11 +978,17 @@ export interface VisitorsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog-views_select".
+ * via the `definition` "work-experience_select".
  */
-export interface BlogViewsSelect<T extends boolean = true> {
-  blogSlug?: T;
-  hash?: T;
+export interface WorkExperienceSelect<T extends boolean = true> {
+  title?: T;
+  company?: T;
+  jobType?: T;
+  location?: T;
+  startDate?: T;
+  endDate?: T;
+  description?: T;
+  linkedinUrl?: T;
   updatedAt?: T;
   createdAt?: T;
 }
