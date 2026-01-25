@@ -24,8 +24,10 @@ import {
   Folder,
   Globe,
   GraduationCap,
+  History,
   Languages as LanguagesIcon,
   Layers,
+  LayoutList,
   Mail,
   MapPin,
   Phone,
@@ -33,7 +35,7 @@ import {
   Trophy,
   User,
 } from 'lucide-react'
-import * as motion from 'motion/react-client'
+import { AnimatePresence, motion } from 'motion/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -43,6 +45,7 @@ import { NowWidget } from '@/components/NowWidget'
 import { RichText } from '@/components/RichText'
 import { SettingsMenu } from '@/components/SettingsMenu'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { TimelineView, type TimelineItem } from '@/components/TimelineView'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -54,7 +57,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import { richTextToPlainText } from '@/lib/utils'
+import { cn, richTextToPlainText } from '@/lib/utils'
 
 type Props = {
   profile: any
@@ -120,6 +123,7 @@ export const CV: React.FC<Props> = ({
   const [isHireMeOpen, setIsHireMeOpen] = useState(false)
   const [timeString, setTimeString] = useState('')
   const [greeting, setGreeting] = useState('')
+  const [viewMode, setViewMode] = useState<'list' | 'timeline'>('list')
 
   useEffect(() => {
     const updateTime = () => {
@@ -218,6 +222,49 @@ export const CV: React.FC<Props> = ({
   const githubUsername = githubLink ? githubLink.url.replace(/\/$/, '').split('/').pop() : undefined
   const calUsername = process.env.NEXT_PUBLIC_CAL_USERNAME || 'avv210'
 
+  // Normalize data for Timeline
+  const timelineItems: TimelineItem[] = [
+    ...workExperience.map((item) => ({
+      id: item.id,
+      type: 'work' as const,
+      title: item.title,
+      subtitle: item.company,
+      date: item.startDate,
+      endDate: item.endDate,
+      description: item.description,
+    })),
+    ...educations.map((item) => ({
+      id: item.id,
+      type: 'education' as const,
+      title: item.institution,
+      subtitle: item.degree,
+      date: item.startDate,
+      endDate: item.endDate,
+    })),
+    ...projects.map((item) => ({
+      id: item.id,
+      type: 'project' as const,
+      title: item.title,
+      date: item.date,
+      description: item.description,
+      tags: item.techStack?.map((t: any) => t.name),
+    })),
+    ...accomplishments.map((item) => ({
+      id: item.id,
+      type: 'accomplishment' as const,
+      title: item.title,
+      subtitle: item.issuer,
+      date: item.date,
+    })),
+  ].sort((a, b) => {
+    // Sort by date descending (newest first)
+    // Handle 'Present' or missing dates logic if needed, but ISO strings sort well.
+    // If date is missing, treat as oldest?
+    const dateA = a.date ? new Date(a.date).getTime() : 0
+    const dateB = b.date ? new Date(b.date).getTime() : 0
+    return dateB - dateA
+  })
+
   return (
     <motion.div
       initial="hidden"
@@ -226,6 +273,14 @@ export const CV: React.FC<Props> = ({
       className="max-w-5xl mx-auto py-20 px-6 sm:px-12 font-sans text-sm md:text-base leading-relaxed relative overflow-x-hidden"
     >
       <div className="absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-2 z-50 print:hidden">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setViewMode(viewMode === 'list' ? 'timeline' : 'list')}
+          title={viewMode === 'list' ? 'Switch to Timeline View' : 'Switch to List View'}
+        >
+          {viewMode === 'list' ? <History className="h-[1.2rem] w-[1.2rem]" /> : <LayoutList className="h-[1.2rem] w-[1.2rem]" />}
+        </Button>
         <ThemeToggle />
       </div>
 
@@ -348,9 +403,15 @@ export const CV: React.FC<Props> = ({
         </div>
       </motion.header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-        {/* LEFT COLUMN (Main Content) - Spans 7 cols */}
-        <div className="lg:col-span-7 space-y-20">
+      {/* Timeline View */}
+      <div className={cn(viewMode === 'list' && "hidden")}>
+        <TimelineView items={timelineItems} />
+      </div>
+
+      {/* List View */}
+      <div className={cn("grid grid-cols-1 lg:grid-cols-12 gap-16", viewMode === 'timeline' && "hidden")}>
+          {/* LEFT COLUMN (Main Content) - Spans 7 cols */}
+          <div className="lg:col-span-7 space-y-20">
           {/* About Me */}
           {profile?.about && (
             <motion.section variants={itemVariants} className="space-y-6">
