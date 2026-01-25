@@ -64,7 +64,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <GoogleTagManager gtmId={process.env.GOOGLE_TAG_MANAGER_ID as string} />
       <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID as string} />
       <body
