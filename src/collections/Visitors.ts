@@ -5,7 +5,7 @@ export const Visitors: CollectionConfig = {
   admin: {
     group: 'System',
     useAsTitle: 'hash',
-    defaultColumns: ['date', 'hash'],
+    defaultColumns: ['date', 'hash', 'country', 'deviceType'],
   },
   access: {
     read: () => true,
@@ -22,6 +22,22 @@ export const Visitors: CollectionConfig = {
       type: 'text', // YYYY-MM-DD
       required: true,
       index: true,
+    },
+    {
+      name: 'country',
+      type: 'text',
+      index: true,
+    },
+    {
+      name: 'deviceType',
+      type: 'select',
+      options: [
+        { label: 'Mobile', value: 'mobile' },
+        { label: 'Desktop', value: 'desktop' },
+        { label: 'Tablet', value: 'tablet' },
+        { label: 'Other', value: 'other' },
+      ],
+      defaultValue: 'desktop',
     },
   ],
 }

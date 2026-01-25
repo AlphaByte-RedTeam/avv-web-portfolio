@@ -557,6 +557,8 @@ export interface Visitor {
   id: string;
   hash: string;
   date: string;
+  country?: string | null;
+  deviceType?: ('mobile' | 'desktop' | 'tablet' | 'other') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -973,6 +975,8 @@ export interface PromptsSelect<T extends boolean = true> {
 export interface VisitorsSelect<T extends boolean = true> {
   hash?: T;
   date?: T;
+  country?: T;
+  deviceType?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -19,6 +19,7 @@ import {
   ExternalLink,
   Eye,
   FileText,
+  Flame,
   Folder,
   Globe,
   GraduationCap,
@@ -27,6 +28,7 @@ import {
   Mail,
   MapPin,
   Phone,
+  Smartphone,
   Trophy,
   User,
 } from 'lucide-react'
@@ -66,6 +68,9 @@ type Props = {
   testScores?: any[]
   visitorCount?: number
   totalVisitors?: number
+  globalReach?: number
+  mobilePercentage?: number
+  trendingPost?: { title: string; views: number } | null
 }
 
 const containerVariants: any = {
@@ -103,6 +108,9 @@ export const CV: React.FC<Props> = ({
   testScores = [],
   visitorCount = 0,
   totalVisitors = 0,
+  globalReach = 0,
+  mobilePercentage = 0,
+  trendingPost = null,
 }) => {
   const [selectedProject, setSelectedProject] = useState<any>(null)
   const [selectedTestScore, setSelectedTestScore] = useState<any>(null)
@@ -786,6 +794,30 @@ export const CV: React.FC<Props> = ({
                       Total visitors: <span className="font-mono font-medium text-foreground">{totalVisitors}</span>
                     </span>
                  </div>
+                 {globalReach > 0 && (
+                   <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                      <Globe className="h-3.5 w-3.5 text-blue-500 shrink-0" />
+                      <span>
+                        Global Reach: <span className="font-medium text-foreground">{globalReach} Countries</span>
+                      </span>
+                   </div>
+                 )}
+                 {totalVisitors > 0 && (
+                   <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                      <Smartphone className="h-3.5 w-3.5 text-purple-500 shrink-0" />
+                      <span>
+                        Device Usage: <span className="font-medium text-foreground">{mobilePercentage}% Mobile</span>
+                      </span>
+                   </div>
+                 )}
+                 {trendingPost && (
+                   <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                      <Flame className="h-3.5 w-3.5 text-orange-500 shrink-0" />
+                      <span>
+                        Trending: <span className="font-medium text-foreground">{trendingPost.title}</span> <span className="text-xs opacity-70">({trendingPost.views} views)</span>
+                      </span>
+                   </div>
+                 )}
               </div>
             </motion.section>
           )}
