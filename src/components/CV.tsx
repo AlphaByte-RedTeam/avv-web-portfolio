@@ -1197,15 +1197,6 @@ export const CV: React.FC<Props> = ({
           </div>
         </motion.section>
       )}
-
-      <motion.footer
-        variants={itemVariants}
-        className="mt-32 pt-8 border-t border-border/40 text-center space-y-2"
-      >
-        <p className="text-xs text-muted-foreground/60 tracking-wide">
-          © {new Date().getFullYear()} {profile?.name} • Built with love.
-        </p>
-      </motion.footer>
     </motion.div>
   )
 }

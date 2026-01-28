@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { ThemeProvider } from 'next-themes'
 import { BottomNav } from '@/components/BottomNav'
+import { Footer } from '@/components/Footer'
 import { Toaster } from '@/components/ui/sonner'
 import { ReadingProgress } from '@/components/ReadingProgress'
 import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
@@ -80,6 +81,7 @@ export default function RootLayout({
           <PreferencesProvider>
             <ReadingProgress />
             {children}
+            <Footer />
             <BottomNav />
             <Toaster />
             <Analytics />
