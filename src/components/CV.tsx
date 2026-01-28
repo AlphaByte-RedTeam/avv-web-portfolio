@@ -35,7 +35,7 @@ import {
   Trophy,
   User,
 } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
+import { motion } from 'motion/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -43,9 +43,8 @@ import { toast } from 'sonner'
 import { GithubCalendar } from '@/components/GithubCalendar'
 import { NowWidget } from '@/components/NowWidget'
 import { RichText } from '@/components/RichText'
-import { SettingsMenu } from '@/components/SettingsMenu'
+import { type TimelineItem, TimelineView } from '@/components/TimelineView'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { TimelineView, type TimelineItem } from '@/components/TimelineView'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -279,7 +278,11 @@ export const CV: React.FC<Props> = ({
           onClick={() => setViewMode(viewMode === 'list' ? 'timeline' : 'list')}
           title={viewMode === 'list' ? 'Switch to Timeline View' : 'Switch to List View'}
         >
-          {viewMode === 'list' ? <History className="h-[1.2rem] w-[1.2rem]" /> : <LayoutList className="h-[1.2rem] w-[1.2rem]" />}
+          {viewMode === 'list' ? (
+            <History className="h-[1.2rem] w-[1.2rem]" />
+          ) : (
+            <LayoutList className="h-[1.2rem] w-[1.2rem]" />
+          )}
         </Button>
         <ThemeToggle />
       </div>
@@ -404,14 +407,19 @@ export const CV: React.FC<Props> = ({
       </motion.header>
 
       {/* Timeline View */}
-      <div className={cn(viewMode === 'list' && "hidden")}>
+      <div className={cn(viewMode === 'list' && 'hidden')}>
         <TimelineView items={timelineItems} />
       </div>
 
       {/* List View */}
-      <div className={cn("grid grid-cols-1 lg:grid-cols-12 gap-16", viewMode === 'timeline' && "hidden")}>
-          {/* LEFT COLUMN (Main Content) - Spans 7 cols */}
-          <div className="lg:col-span-7 space-y-20">
+      <div
+        className={cn(
+          'grid grid-cols-1 lg:grid-cols-12 gap-16',
+          viewMode === 'timeline' && 'hidden',
+        )}
+      >
+        {/* LEFT COLUMN (Main Content) - Spans 7 cols */}
+        <div className="lg:col-span-7 space-y-20">
           {/* About Me */}
           {profile?.about && (
             <motion.section variants={itemVariants} className="space-y-6">
