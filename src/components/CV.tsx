@@ -926,7 +926,7 @@ export const CV: React.FC<Props> = ({
       <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-normal lowercase tracking-tight mb-2">
+            <DialogTitle className="text-2xl font-normal tracking-tight mb-2">
               {selectedProject?.title}
             </DialogTitle>
           </DialogHeader>
