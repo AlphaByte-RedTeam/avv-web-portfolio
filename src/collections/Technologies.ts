@@ -30,8 +30,17 @@ export const Technologies: CollectionConfig = {
         { label: 'Programming Language', value: 'programming_language' },
         { label: 'Framework', value: 'framework' },
         { label: 'Database', value: 'database' },
+        { label: 'Dev Tools', value: 'devtools' },
       ],
       label: 'Category',
+    },
+    {
+      name: 'tool_url',
+      type: 'text',
+      label: 'Tool URL',
+      admin: {
+        description: 'URL to the tool (e.g., download or home page)',
+      },
     },
     {
       name: 'priority',

@@ -32,6 +32,7 @@ import {
   MapPin,
   Phone,
   Smartphone,
+  Terminal,
   Trophy,
   User,
 } from 'lucide-react'
@@ -153,6 +154,7 @@ export const CV: React.FC<Props> = ({
     .slice(0, 5)
   const frameworks = technologies.filter((t) => t.category === 'framework')
   const databases = technologies.filter((t) => t.category === 'database')
+  const devtools = technologies.filter((t) => t.category === 'devtools')
 
   const formatDate = (dateString: string) => {
     if (!dateString) return 'Present'
@@ -838,6 +840,38 @@ export const CV: React.FC<Props> = ({
                   <React.Fragment key={tech.id}>
                     <div className="py-2 text-sm text-foreground">{tech.name}</div>
                     {index < databases.length - 1 && <Separator className="bg-border/40" />}
+                  </React.Fragment>
+                ))}
+              </div>
+            </motion.section>
+          )}
+
+          {/* Dev Tools */}
+          {devtools.length > 0 && (
+            <motion.section variants={itemVariants} className="space-y-6">
+              <div className="flex items-center gap-3 text-primary mb-6">
+                <Terminal className="h-4 w-4" />
+                <h2 className="text-lg tracking-widest uppercase text-muted-foreground">
+                  Dev Tools
+                </h2>
+              </div>
+              <div className="flex flex-col">
+                {devtools.map((tech, index) => (
+                  <React.Fragment key={tech.id}>
+                    <div className="py-2 text-sm text-foreground flex items-center justify-between group">
+                      <span>{tech.name}</span>
+                      {tech.tool_url && (
+                        <Link
+                          href={tech.tool_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity text-primary"
+                        >
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </Link>
+                      )}
+                    </div>
+                    {index < devtools.length - 1 && <Separator className="bg-border/40" />}
                   </React.Fragment>
                 ))}
               </div>

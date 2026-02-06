@@ -475,7 +475,11 @@ export interface SocialLink {
 export interface Technology {
   id: string;
   name: string;
-  category: 'programming_language' | 'framework' | 'database';
+  category: 'programming_language' | 'framework' | 'database' | 'devtools';
+  /**
+   * URL to the tool (e.g., download or home page)
+   */
+  tool_url?: string | null;
   priority?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -944,6 +948,7 @@ export interface SocialLinksSelect<T extends boolean = true> {
 export interface TechnologiesSelect<T extends boolean = true> {
   name?: T;
   category?: T;
+  tool_url?: T;
   priority?: T;
   updatedAt?: T;
   createdAt?: T;
