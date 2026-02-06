@@ -62,6 +62,8 @@ export default async function BlogPage({ searchParams }: Props) {
     }),
   )
 
+  const maxViews = Math.max(...posts.map((p) => (p.views as number) || 0))
+
   return (
     <div className="min-h-screen bg-background text-foreground py-20 px-6 sm:px-12 font-sans">
       <AutoRefresh intervalMs={5000} />
@@ -99,9 +101,15 @@ export default async function BlogPage({ searchParams }: Props) {
               <p>No posts found matching your criteria.</p>
             </div>
           ) : (
-            posts.map((post) => {
+            posts.map((post, index) => {
               const plainText = richTextToPlainText(post.content)
               const readingTime = calculateReadingTime(plainText)
+
+              const isLatest = index === 0
+              const postDate = new Date(post.date)
+              const isRecent = Date.now() - postDate.getTime() < 7 * 24 * 60 * 60 * 1000
+              const showNewBadge = isLatest && isRecent
+              const isPopular = (post.views as number) > 0 && (post.views as number) === maxViews
 
               return (
                 <Link key={post.id} href={`/blog/${post.slug}`} className="group block space-y-4">
@@ -124,14 +132,26 @@ export default async function BlogPage({ searchParams }: Props) {
                             </span>
                           )}
                         </div>
-                        {post.category && (
-                          <Badge
-                            variant="secondary"
-                            className="uppercase tracking-wider text-[10px]"
-                          >
-                            {post.category}
-                          </Badge>
-                        )}
+                        <div className="flex items-center gap-2">
+                          {isPopular && (
+                            <Badge className="uppercase tracking-wider text-[10px] bg-red-800 text-red-200">
+                              POPULAR
+                            </Badge>
+                          )}
+                          {showNewBadge && (
+                            <Badge className="uppercase tracking-wider text-[10px] bg-green-500">
+                              NEW
+                            </Badge>
+                          )}
+                          {post.category && (
+                            <Badge
+                              variant="secondary"
+                              className="uppercase tracking-wider text-[10px]"
+                            >
+                              {post.category}
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                       {post.lastUpdated && new Date(post.lastUpdated) > new Date(post.date) && (
                         <span className="text-[10px] opacity-70">
