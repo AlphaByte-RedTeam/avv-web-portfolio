@@ -56,6 +56,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
+import Autoplay from 'embla-carousel-autoplay'
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import {
   Dialog,
   DialogContent,
@@ -503,11 +505,17 @@ export const CV: React.FC<Props> = ({
                   align: 'start',
                   loop: true,
                 }}
+                plugins={[
+                  Autoplay({
+                    delay: 4000,
+                  }),
+                  WheelGesturesPlugin(),
+                ]}
                 className="w-full"
               >
                 <CarouselContent className="-ml-4">
                   {projects.map((project) => (
-                    <CarouselItem key={project.id} className="pl-4 md:basis-1/2 lg:basis-1/2">
+                    <CarouselItem key={project.id} className="pl-4 basis-full">
                       <div
                         id={project.slug}
                         className="group space-y-4 cursor-pointer h-full flex flex-col"
