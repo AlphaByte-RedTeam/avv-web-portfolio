@@ -50,6 +50,13 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
+import {
   Dialog,
   DialogContent,
   DialogFooter,
@@ -77,6 +84,8 @@ type Props = {
   globalReach?: number
   mobilePercentage?: number
   trendingPost?: { title: string; views: number } | null
+  totalBlogViews?: number
+  totalWordsWritten?: number
 }
 
 const containerVariants: any = {
@@ -117,6 +126,8 @@ export const CV: React.FC<Props> = ({
   globalReach = 0,
   mobilePercentage = 0,
   trendingPost = null,
+  totalBlogViews = 0,
+  totalWordsWritten = 0,
 }) => {
   const [selectedProject, setSelectedProject] = useState<any>(null)
   const [selectedTestScore, setSelectedTestScore] = useState<any>(null)
@@ -480,81 +491,112 @@ export const CV: React.FC<Props> = ({
           {/* Projects */}
           {projects.length > 0 && (
             <motion.section variants={itemVariants} className="space-y-8">
-              <div className="flex items-center gap-3 text-primary mb-8">
+              <div className="flex items-center gap-3 text-primary mb-2">
                 <Folder className="h-4 w-4" />
                 <h2 className="text-lg tracking-widest uppercase text-muted-foreground">
                   Projects
                 </h2>
               </div>
 
-              <div className="space-y-12">
-                {projects.map((project) => (
-                  <div
-                    id={project.slug}
-                    key={project.id}
-                    className="group space-y-4 cursor-pointer"
-                    onClick={() => setSelectedProject(project)}
-                  >
-                    {project.coverImage && (
-                      <div className="aspect-2/1 w-full overflow-hidden rounded-md bg-secondary/30 mb-4">
-                        <Image
-                          src={project.coverImage.url}
-                          width={project.coverImage.width}
-                          height={project.coverImage.height}
-                          alt={project.title}
-                          className="w-full h-full object-cover transition-all duration-700 opacity-90 group-hover:opacity-100 group-hover:scale-[1.02]"
-                        />
-                      </div>
-                    )}
-
-                    <div className="flex justify-between items-start gap-4">
-                      <h3 className="text-lg text-foreground group-hover:text-primary transition-colors">
-                        {project.title}
-                      </h3>
-                      <div className="flex gap-2 shrink-0">
-                        {project.repoUrl && (
-                          <Button variant="outline" asChild onClick={(e) => e.stopPropagation()}>
-                            <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-                              <IconBrandGithub className="h-4 w-4" />{' '}
-                              <p className="hidden md:block">View Code</p>
-                              <span className="sr-only">View Code</span>
-                            </Link>
-                          </Button>
+              <Carousel
+                opts={{
+                  align: 'start',
+                  loop: true,
+                }}
+                className="w-full"
+              >
+                <CarouselContent className="-ml-4">
+                  {projects.map((project) => (
+                    <CarouselItem key={project.id} className="pl-4 md:basis-1/2 lg:basis-1/2">
+                      <div
+                        id={project.slug}
+                        className="group space-y-4 cursor-pointer h-full flex flex-col"
+                        onClick={() => setSelectedProject(project)}
+                      >
+                        {project.coverImage && (
+                          <div className="aspect-2/1 w-full overflow-hidden rounded-md bg-secondary/30 relative">
+                            <Image
+                              src={project.coverImage.url}
+                              width={project.coverImage.width}
+                              height={project.coverImage.height}
+                              alt={project.title}
+                              className="w-full h-full object-cover transition-all duration-700 opacity-90 group-hover:opacity-100 group-hover:scale-[1.02]"
+                            />
+                          </div>
                         )}
-                        {project.demoUrl && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 rounded-full text-muted-foreground hover:text-primary"
-                            asChild
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Link href={project.demoUrl} target="_blank" rel="noopener noreferrer">
-                              <ExternalLink className="h-4 w-4" />
-                              <span className="sr-only">Demo</span>
-                            </Link>
-                          </Button>
-                        )}
+
+                        <div className="flex justify-between items-start gap-4">
+                          <h3 className="text-lg text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                            {project.title}
+                          </h3>
+                          <div className="flex gap-2 shrink-0">
+                            {project.repoUrl && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 rounded-full text-muted-foreground hover:text-primary"
+                                asChild
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Link
+                                  href={project.repoUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <IconBrandGithub className="h-4 w-4" />
+                                  <span className="sr-only">View Code</span>
+                                </Link>
+                              </Button>
+                            )}
+                            {project.demoUrl && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 rounded-full text-muted-foreground hover:text-primary"
+                                asChild
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Link
+                                  href={project.demoUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <ExternalLink className="h-4 w-4" />
+                                  <span className="sr-only">Demo</span>
+                                </Link>
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="text-sm text-muted-foreground leading-relaxed line-clamp-3 flex-1">
+                          <RichText content={project.description} />
+                        </div>
+
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {project.techStack?.slice(0, 4).map((tech: any, idx: number) => (
+                            <span
+                              key={`${idx}-${tech.id}`}
+                              className="text-[10px] uppercase tracking-wider text-muted-foreground/80 border border-border px-2 py-1 rounded-sm"
+                            >
+                              {tech.name}
+                            </span>
+                          ))}
+                          {project.techStack?.length > 4 && (
+                            <span className="text-[10px] uppercase tracking-wider text-muted-foreground/80 border border-border px-2 py-1 rounded-sm">
+                              +{project.techStack.length - 4}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-
-                    <div className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                      <RichText content={project.description} />
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {project.techStack?.map((tech: any, idx: number) => (
-                        <span
-                          key={`${idx}-${tech.id}`}
-                          className="text-[10px] uppercase tracking-wider text-muted-foreground/80 border border-border px-2 py-1 rounded-sm"
-                        >
-                          {tech.name}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <div className="flex justify-end gap-2 mt-4">
+                  <CarouselPrevious className="static translate-y-0 h-8 w-8" />
+                  <CarouselNext className="static translate-y-0 h-8 w-8" />
+                </div>
+              </Carousel>
             </motion.section>
           )}
         </div>
@@ -947,6 +989,28 @@ export const CV: React.FC<Props> = ({
                       Trending:{' '}
                       <span className="font-medium text-foreground">{trendingPost.title}</span>{' '}
                       <span className="text-xs opacity-70">({trendingPost.views} views)</span>
+                    </span>
+                  </div>
+                )}
+                {totalBlogViews > 0 && (
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <Eye className="h-3.5 w-3.5 text-cyan-500 shrink-0" />
+                    <span>
+                      Total Content Views:{' '}
+                      <span className="font-mono font-medium text-foreground">
+                        {totalBlogViews}
+                      </span>
+                    </span>
+                  </div>
+                )}
+                {totalWordsWritten > 0 && (
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <FileText className="h-3.5 w-3.5 text-yellow-500 shrink-0" />
+                    <span>
+                      Words Written:{' '}
+                      <span className="font-mono font-medium text-foreground">
+                        {totalWordsWritten.toLocaleString()}
+                      </span>
                     </span>
                   </div>
                 )}

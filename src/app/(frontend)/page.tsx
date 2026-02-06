@@ -1,11 +1,12 @@
+import crypto from 'node:crypto'
+import { headers } from 'next/headers'
 import { getPayload } from 'payload'
 import React from 'react'
-import { headers } from 'next/headers'
-import crypto from 'node:crypto'
-import config from '@/payload.config'
-import { CV } from '@/components/CV'
 import { AutoRefresh } from '@/components/AutoRefresh'
 import { CommandMenu } from '@/components/CommandMenu'
+import { CV } from '@/components/CV'
+import { richTextToPlainText } from '@/lib/utils'
+import config from '@/payload.config'
 import './globals.css'
 
 export default async function HomePage() {
@@ -26,6 +27,8 @@ export default async function HomePage() {
     blogPostsData,
     activitiesData,
     testScoresData,
+    totalBlogViewsData,
+    allBlogPostsData,
   ] = await Promise.all([
     payload.find({
       collection: 'profile',
@@ -76,7 +79,27 @@ export default async function HomePage() {
       collection: 'test-scores',
       sort: '-date',
     }),
+    payload.count({
+      collection: 'blog-views',
+    }),
+    payload.find({
+      collection: 'blog',
+      pagination: false,
+      select: {
+        content: true,
+      },
+    }),
   ])
+
+  const totalBlogViews = totalBlogViewsData.totalDocs
+
+  // Calculate total words written
+  let totalWordsWritten = 0
+  allBlogPostsData.docs.forEach((post) => {
+    const text = richTextToPlainText(post.content)
+    const words = text.trim().split(/\s+/).length
+    totalWordsWritten += words
+  })
 
   // Visitor tracking logic
   const today = new Date().toISOString().split('T')[0]
@@ -92,16 +115,13 @@ export default async function HomePage() {
     const country = headersList.get('x-vercel-ip-country') || 'Unknown'
     const isMobile = /mobile|android|iphone|ipad|ipod/i.test(userAgent)
     const deviceType = isMobile ? 'mobile' : 'desktop'
-    
+
     const hash = crypto.createHash('sha256').update(`${ip}-${userAgent}-${today}`).digest('hex')
 
     const existing = await payload.find({
       collection: 'visitors',
       where: {
-        and: [
-          { hash: { equals: hash } },
-          { date: { equals: today } }
-        ]
+        and: [{ hash: { equals: hash } }, { date: { equals: today } }],
       },
       limit: 1,
     })
@@ -109,8 +129,8 @@ export default async function HomePage() {
     if (existing.docs.length === 0) {
       await payload.create({
         collection: 'visitors',
-        data: { 
-          hash, 
+        data: {
+          hash,
           date: today,
           country,
           deviceType,
@@ -130,20 +150,21 @@ export default async function HomePage() {
         collection: 'visitors',
         limit: 10000, // Fetch for aggregation
         pagination: false,
-      })
+      }),
     ])
 
     visitorCount = todayCount.totalDocs
     totalVisitors = totalCount.totalDocs
 
     // Aggregate Global Reach (Unique Countries)
-    const countries = new Set(allVisitors.docs.map((d: any) => d.country).filter((c: string) => c && c !== 'Unknown'))
+    const countries = new Set(
+      allVisitors.docs.map((d: any) => d.country).filter((c: string) => c && c !== 'Unknown'),
+    )
     globalReach = countries.size
 
     // Aggregate Device Usage (Mobile Percentage)
     const mobileUsers = allVisitors.docs.filter((d: any) => d.deviceType === 'mobile').length
     mobilePercentage = totalVisitors > 0 ? Math.round((mobileUsers / totalVisitors) * 100) : 0
-
   } catch (error) {
     console.error('Error tracking visitors:', error)
   }
@@ -158,7 +179,7 @@ export default async function HomePage() {
   const languages = languagesData.docs
   const technologies = technologiesData.docs
   const blogPosts = blogPostsData.docs
-  
+
   // Fetch views for blog posts and find trending
   let trendingPost: { title: string; views: number } | null = null
   let maxViews = 0
@@ -181,30 +202,30 @@ export default async function HomePage() {
         ...post,
         views: views.totalDocs,
       }
-    })
+    }),
   )
-  
-  // Fallback: If no views in latest 3, check all posts? 
-  // For now, let's stick to the fetched blog posts to avoid extra heavy queries, 
-  // or we can do a quick separate aggregation if needed. 
+
+  // Fallback: If no views in latest 3, check all posts?
+  // For now, let's stick to the fetched blog posts to avoid extra heavy queries,
+  // or we can do a quick separate aggregation if needed.
   // Actually, to find the REAL trending post, we should query blog-views more intelligently.
   // But Payload doesn't support "groupBy" easily in the API yet without raw DB access.
   // So for MVP, let's assume the "Trending" is among the recent posts or just stick to the highest of the fetched ones.
   // OR: We iterate over *all* blogs if the count isn't huge.
   // Let's stick to the 'latest' posts for now to keep it fast, or maybe fetch top 10 recent blogs.
-  
+
   // A better approach for "Trending" is actually to look at `blog-views` but we need to know WHICH slug has most.
-  // Without direct SQL, we'd have to fetch all views or all blogs. 
+  // Without direct SQL, we'd have to fetch all views or all blogs.
   // Let's refine: We will check the `blogPosts` we already fetched (latest 3).
-  // If we want a global trending, we'd need a separate robust query. 
+  // If we want a global trending, we'd need a separate robust query.
   // Let's add a small separate query for "all time popular" if we want, or just use the current subset.
-  
+
   // Let's try to fetch a few more blogs just to check for a "hot" one if the main 3 aren't it.
   if (!trendingPost && blogPostsWithViews.length > 0) {
-     // If we have posts but all have 0 views, just pick the first one or none.
-     if (maxViews > 0) {
-        // trendingPost is already set
-     }
+    // If we have posts but all have 0 views, just pick the first one or none.
+    if (maxViews > 0) {
+      // trendingPost is already set
+    }
   }
 
   const activities = activitiesData.docs
@@ -243,7 +264,7 @@ export default async function HomePage() {
       />
       <AutoRefresh intervalMs={5000} />
       <CommandMenu socialLinks={socialLinks} />
-      <CV 
+      <CV
         profile={profile}
         workExperience={workExperience}
         educations={educations}
@@ -261,6 +282,8 @@ export default async function HomePage() {
         globalReach={globalReach}
         mobilePercentage={mobilePercentage}
         trendingPost={trendingPost}
+        totalBlogViews={totalBlogViews}
+        totalWordsWritten={totalWordsWritten}
       />
     </div>
   )
